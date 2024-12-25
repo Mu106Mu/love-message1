@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>想你了</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #000;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .heart {
+            position: absolute;
+            color: #ff0000;
+            font-size: 20px;
+            animation: float 4s ease-in-out infinite;
+            opacity: 0;
+        }
+
+        .message {
+            color: #fff;
+            font-size: 1.8em;
+            text-align: center;
+            display: none;
+            font-family: "Microsoft YaHei", sans-serif;
+            padding: 20px;
+            line-height: 1.5;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) scale(0);
+                opacity: 0;
+            }
+        }
+
+        .explosion {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
+            background-size: 400%;
+            display: none;
+            animation: explosion 5s linear infinite;
+            z-index: 1000;
+        }
+
+        .warning {
+            color: #ff0000;
+            font-size: 1.5em;
+            text-align: center;
+            display: none;
+            font-family: "Microsoft YaHei", sans-serif;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1001;
+            text-shadow: 0 0 10px #ff0000;
+            animation: blink 0.5s infinite;
+        }
+
+        @keyframes explosion {
+            0% {
+                background-position: 0 0;
+            }
+            50% {
+                background-position: 400% 0;
+            }
+            100% {
+                background-position: 0 0;
+            }
+        }
+
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        .options {
+            position: fixed;
+            top: 75%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none;
+            z-index: 1001;
+            width: 80%;
+            text-align: center;
+        }
+
+        .option-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid #fff;
+            color: #fff;
+            padding: 12px 25px;
+            margin: 8px;
+            border-radius: 25px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 80%;
+            font-family: "Microsoft YaHei", sans-serif;
+        }
+
+        .option-btn:active {
+            transform: scale(0.95);
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .kiss {
+            position: absolute;
+            color: #ff69b4;
+            font-size: 24px;
+            animation: float-kiss 4s ease-in-out infinite;
+            opacity: 0;
+        }
+
+        @keyframes float-kiss {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .kiss-message {
+            color: #ff69b4;
+            font-size: 1.5em;
+            text-align: center;
+            display: none;
+            font-family: "Microsoft YaHei", sans-serif;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1001;
+            text-shadow: 0 0 10px #ff69b4;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            border-radius: 15px;
+            width: 80%;
+        }
+    </style>
+</head>
+<body>
+    <div class="message">不是姐妹，一天到晚和闺蜜玩，也不知道想我，也不给我看看吃的什么，切，不想和你说话了</div>
+    <div class="options">
+        <button class="option-btn" onclick="chooseOption('A')">A. 我错了，立马亲亲 😘</button>
+        <button class="option-btn" onclick="chooseOption('B')">B. 我就是这么倔 😤</button>
+    </div>
+    <div class="explosion"></div>
+    <div class="warning">⚠️ 正在启动手机自爆系统 ⚠️<br>预计 3 秒后自爆</div>
+    <div class="kiss-message">那还不快到微信上亲亲66个 💕</div>
+
+    <script>
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.innerHTML = '❤';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = (Math.random() * 2 + 2) + 's';
+            document.body.appendChild(heart);
+            
+            setTimeout(() => {
+                heart.remove();
+            }, 4000);
+        }
+
+        // 创建爱心动画
+        const heartInterval = setInterval(() => {
+            for(let i = 0; i < 5; i++) {
+                createHeart();
+            }
+        }, 200);
+
+        function createKiss() {
+            const kiss = document.createElement('div');
+            kiss.className = 'kiss';
+            kiss.innerHTML = '💋';
+            kiss.style.left = Math.random() * 100 + 'vw';
+            kiss.style.animationDuration = (Math.random() * 2 + 2) + 's';
+            document.body.appendChild(kiss);
+            
+            setTimeout(() => {
+                kiss.remove();
+            }, 4000);
+        }
+
+        function chooseOption(option) {
+            document.querySelector('.options').style.display = 'none';
+            document.querySelector('.message').style.display = 'none';
+            
+            if (option === 'A') {
+                // 显示满屏亲亲
+                const kissInterval = setInterval(() => {
+                    for(let i = 0; i < 5; i++) {
+                        createKiss();
+                    }
+                }, 200);
+                
+                // 显示提示文字
+                document.querySelector('.kiss-message').style.display = 'block';
+                
+                // 10秒后停止亲亲动画
+                setTimeout(() => {
+                    clearInterval(kissInterval);
+                    document.querySelector('.kiss-message').style.display = 'none';
+                }, 10000);
+            } else {
+                // 显示炫彩和自爆警告
+                document.querySelector('.explosion').style.display = 'block';
+                setTimeout(() => {
+                    document.querySelector('.warning').style.display = 'block';
+                    let count = 5;
+                    const countInterval = setInterval(() => {
+                        count--;
+                        if (count > 0) {
+                            document.querySelector('.warning').innerHTML = 
+                                `⚠️ 正在启动手机自爆系统 ⚠️<br>预计 ${count} 秒后自爆`;
+                        } else {
+                            clearInterval(countInterval);
+                            document.querySelector('.warning').innerHTML = 
+                                `⚠️ 自爆程序已启动 ⚠️<br>再见了您嘞～`;
+                        }
+                    }, 1000);
+                }, 2000);
+            }
+        }
+
+        // 修改主要定时器
+        setTimeout(() => {
+            clearInterval(heartInterval);
+            document.querySelectorAll('.heart').forEach(heart => heart.remove());
+            document.querySelector('.message').style.display = 'block';
+            
+            // 3秒��显示选项
+            setTimeout(() => {
+                document.querySelector('.options').style.display = 'block';
+            }, 3000);
+        }, 5000);
+    </script>
+</body>
+</html> 
