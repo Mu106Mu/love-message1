@@ -735,10 +735,10 @@
             leftPhoto.src = `${basePath}/photo/0.png`;
             rightPhoto.src = `${basePath}/photo/-1.png`;
             
-            // 修改照片墙的照片路径
+            // 修改照片墙的照片路径，使用大写的 JPG
             const photos = document.querySelectorAll('.photo-front img');
             photos.forEach((photo, index) => {
-                photo.src = `${basePath}/photo/${index + 1}.jpg`;
+                photo.src = `${basePath}/photo/${index + 1}.JPG`;
             });
         });
 
