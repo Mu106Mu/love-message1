@@ -484,11 +484,11 @@
 </head>
 <body>
     <div class="photo-container-left">
-        <img src="photo/0.png" alt="Left Photo">
+        <img src="./photo/0.png" alt="Left Photo">
     </div>
     
     <div class="photo-container-right">
-        <img src="photo/-1.png" alt="Right Photo">
+        <img src="./photo/-1.png" alt="Right Photo">
     </div>
 
     <div class="title-container">
@@ -509,7 +509,7 @@
         <div class="photo-item">
             <div class="photo-card">
                 <div class="photo-front">
-                    <img src="photo/1.jpg" alt="Photo 1">
+                    <img src="./photo/1.jpg" alt="Photo 1">
                 </div>
                 <div class="photo-back">
                     每一次见到你，我的心跳都会加速，就像第一次见面时那样悸动。
@@ -519,7 +519,7 @@
         <div class="photo-item">
             <div class="photo-card">
                 <div class="photo-front">
-                    <img src="photo/2.jpg" alt="Photo 2">
+                    <img src="./photo/2.jpg" alt="Photo 2">
                 </div>
                 <div class="photo-back">
                     和在一起的每一刻都是那么珍贵，我想永远珍藏这些好回忆。
@@ -529,7 +529,7 @@
         <div class="photo-item">
             <div class="photo-card">
                 <div class="photo-front">
-                    <img src="photo/3.jpg" alt="Photo 3">
+                    <img src="./photo/3.jpg" alt="Photo 3">
                 </div>
                 <div class="photo-back">
                     你的笑容是这个世界上最美的风景，每次看到都会让我心动不已。
@@ -539,7 +539,7 @@
         <div class="photo-item">
             <div class="photo-card">
                 <div class="photo-front">
-                    <img src="photo/4.jpg" alt="Photo 4">
+                    <img src="./photo/4.jpg" alt="Photo 4">
                 </div>
                 <div class="photo-back">
                     有时候觉得时间过得太快，但只要和你在一起，每一分每一秒都是幸福的。
@@ -549,7 +549,7 @@
         <div class="photo-item">
             <div class="photo-card">
                 <div class="photo-front">
-                    <img src="photo/5.jpg" alt="Photo 5">
+                    <img src="./photo/5.jpg" alt="Photo 5">
                 </div>
                 <div class="photo-back">
                     遇见你是我生命中最美好的意外，感谢命运让我们相遇。
@@ -559,7 +559,7 @@
         <div class="photo-item">
             <div class="photo-card">
                 <div class="photo-front">
-                    <img src="photo/6.jpg" alt="Photo 6">
+                    <img src="./photo/6.jpg" alt="Photo 6">
                 </div>
                 <div class="photo-back">
                     和你在一起的每一刻都像是一场甜蜜的冒险，充满惊喜和期待。
@@ -569,7 +569,7 @@
         <div class="photo-item">
             <div class="photo-card">
                 <div class="photo-front">
-                    <img src="photo/7.jpg" alt="Photo 7">
+                    <img src="./photo/7.jpg" alt="Photo 7">
                 </div>
                 <div class="photo-back">
                     无论晴天还是雨天，只要有你在身边，每一天都是最好的日子。
@@ -579,7 +579,7 @@
         <div class="photo-item">
             <div class="photo-card">
                 <div class="photo-front">
-                    <img src="photo/8.jpg" alt="Photo 8">
+                    <img src="./photo/8.jpg" alt="Photo 8">
                 </div>
                 <div class="photo-back">
                     希望未来的每一天，我们都能一起看日出日落，数星星看月亮
@@ -629,7 +629,7 @@
 
     <!-- 添加音频元素 -->
     <audio id="bgMusic" preload="auto" controls style="display:none;">
-        <source src="music/1.mp3" type="audio/mpeg">
+        <source src="./music/1.mp3" type="audio/mpeg">
     </audio>
 
     <script>
@@ -660,9 +660,9 @@
 
         // 音乐播放器相关代码
         const songs = [
-            { path: 'music/1.mp3', title: 'Never Say Good Bye' },
-            { path: 'music/2.mp3', title: 'no idea' },
-            { path: 'music/3.mp3', title: '分身情人' }
+            { path: './music/1.mp3', title: 'Never Say Good Bye' },
+            { path: './music/2.mp3', title: 'no idea' },
+            { path: './music/3.mp3', title: '分身情人' }
         ];
 
         let currentSongIndex = 0;
@@ -839,7 +839,7 @@
         // 添加错误处理
         music.addEventListener('error', (e) => {
             console.error('音频加载错误:', e);
-            console.log('当前尝试加载的文���:', music.src);
+            console.log('当前尝试加载的文件:', music.src);
         });
 
         // 添加更多事件监听
