@@ -173,6 +173,7 @@
             perspective: 1000px;
             cursor: pointer;
             margin: auto;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .photo-card {
@@ -181,10 +182,11 @@
             height: 100%;
             transform-style: preserve-3d;
             transition: transform 0.8s;
+            -webkit-transform-style: preserve-3d;
         }
 
         .photo-item:hover .photo-card {
-            transform: rotateY(180deg);
+            transform: none;
         }
 
         .photo-front,
@@ -480,6 +482,41 @@
         .music-title.show {
             opacity: 1;
         }
+
+        /* 添加触摸设备支持 */
+        @media (hover: none) {
+            .photo-item:active .photo-card {
+                transform: rotateY(180deg);
+            }
+        }
+
+        /* 保持桌面端悬停效果 */
+        @media (hover: hover) {
+            .photo-item:hover .photo-card {
+                transform: rotateY(180deg);
+            }
+        }
+
+        /* 添加新的翻转类 */
+        .photo-card.flipped {
+            transform: rotateY(180deg);
+        }
+
+        /* 添加媒体查询 */
+        @media (hover: hover) {
+            /* 桌面端使用悬停效果 */
+            .photo-item:hover .photo-card {
+                transform: rotateY(180deg);
+            }
+        }
+
+        @media (hover: none) {
+            /* 移动端使用点击效果 */
+            .photo-item:active .photo-card,
+            .photo-card.flipped {
+                transform: rotateY(180deg);
+            }
+        }
     </style>
 </head>
 <body>
@@ -522,7 +559,7 @@
                     <img src="./photo/2.jpg" alt="Photo 2">
                 </div>
                 <div class="photo-back">
-                    和在一起的每一刻都是那么珍贵，我想永远珍藏这些好回忆。
+                    坐在摩天轮，世界仿佛是我们的，然后我们拥有了彼此，就已经拥有了世界。
                 </div>
             </div>
         </div>
@@ -532,7 +569,7 @@
                     <img src="./photo/3.jpg" alt="Photo 3">
                 </div>
                 <div class="photo-back">
-                    你的笑容是这个世界上最美的风景，每次看到都会让我心动不已。
+                    陪伴是我们给彼此最好的礼物。
                 </div>
             </div>
         </div>
@@ -542,7 +579,7 @@
                     <img src="./photo/4.jpg" alt="Photo 4">
                 </div>
                 <div class="photo-back">
-                    有时候觉得时间过得太快，但只要和你在一起，每一分每一秒都是幸福的。
+                    和你在一起的每一分，每一秒，都是超级幸福的。
                 </div>
             </div>
         </div>
@@ -552,7 +589,7 @@
                     <img src="./photo/5.jpg" alt="Photo 5">
                 </div>
                 <div class="photo-back">
-                    遇见你是我生命中最美好的意外，感谢命运让我们相遇。
+                    遇见你是我生命中最美好的意外，感谢命运让我们相遇，谁想分开我们，那就给ta竖你手上的友好手势。
                 </div>
             </div>
         </div>
@@ -572,7 +609,7 @@
                     <img src="./photo/7.jpg" alt="Photo 7">
                 </div>
                 <div class="photo-back">
-                    无论晴天还是雨天，只要有你在身边，每一天都是最好的日子。
+                    无论晴天还是雨天，只要有你在身边，每一天都是最甜美的日子。
                 </div>
             </div>
         </div>
@@ -632,7 +669,79 @@
         <source src="./music/1.mp3" type="audio/mpeg">
     </audio>
 
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+                apiKey: "AIzaSyCQ1urQvRb7aRMa8dlFzT23QWAziEErtFI",
+                authDomain: "love-message1.firebaseapp.com",
+                databaseURL: "https://love-message1-default-rtdb.firebaseio.com",
+                projectId: "love-message1",
+                storageBucket: "love-message1.firebasestorage.app",
+                messagingSenderId: "593303848127",
+                appId: "1:593303848127:web:15070e9bfcf5701795320a"
+                };
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+        const messagesRef = ref(database, 'messages');
+
+        // 修改加载消息函数
+        window.loadMessages = function() {
+            onValue(messagesRef, (snapshot) => {
+                const messages = [];
+                snapshot.forEach((childSnapshot) => {
+                    messages.push(childSnapshot.val());
+                });
+                
+                const messagesContainer = document.getElementById('messagesContainer');
+                messagesContainer.innerHTML = messages.map(msg => `
+                    <div class="message-item">
+                        <div class="message-content">${msg.content}</div>
+                        <div class="message-date">${msg.date}</div>
+                    </div>
+                `).join('');
+            });
+        }
+
+        // 修改提交消息函数
+        window.submitMessage = function() {
+            const input = document.getElementById('messageInput');
+            const content = input.value.trim();
+            
+            if (!content) return;
+
+            push(messagesRef, {
+                content: content,
+                date: new Date().toLocaleString()
+            });
+            
+            input.value = ''; // 清空输入框
+        }
+    </script>
+
     <script>
+        const basePath = location.hostname === 'mu106mu.github.io' ? '/love-message1' : '';
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // 修改左右两侧的照片路径
+            const leftPhoto = document.querySelector('.photo-container-left img');
+            const rightPhoto = document.querySelector('.photo-container-right img');
+            
+            // 使用相对路径
+            leftPhoto.src = './photo/0.png';
+            rightPhoto.src = './photo/-1.png';
+            
+            // 修改照片墙的照片路径
+            const photos = document.querySelectorAll('.photo-front img');
+            photos.forEach((photo, index) => {
+                photo.src = `./photo/${index + 1}.jpg`;
+            });
+        });
+
         function updateTimer() {
             const startDate = new Date('2024-02-14T00:00:00');
             const now = new Date();
@@ -694,7 +803,7 @@
                     console.log('尝试播放');
                     // 确保音频已加载
                     if (music.readyState < 2) {  // HAVE_CURRENT_DATA
-                        console.log('音频尚未加载完成，重新加载');
+                        console.log('音频尚未加载完成，新加载');
                         music.load();
                     }
                     
@@ -747,7 +856,7 @@
             const song = songs[index];
             console.log('加载歌曲:', song.path);
             music.src = song.path;
-            music.load(); // 强制重新加载
+            music.load();
             musicTitle.textContent = song.title;
             musicTitle.classList.add('show');
             
@@ -795,39 +904,6 @@
             document.getElementById('secondPage').classList.remove('active');
         }
 
-        // 加载保存的留言
-        function loadMessages() {
-            const messagesContainer = document.getElementById('messagesContainer');
-            const messages = JSON.parse(localStorage.getItem('loveMessages')) || [];
-            
-            messagesContainer.innerHTML = messages.map(msg => `
-                <div class="message-item">
-                    <div class="message-content">${msg.content}</div>
-                    <div class="message-date">${msg.date}</div>
-                </div>
-            `).join('');
-        }
-
-        // 提交新留言
-        function submitMessage() {
-            const input = document.getElementById('messageInput');
-            const content = input.value.trim();
-            
-            if (!content) return;
-
-            const messages = JSON.parse(localStorage.getItem('loveMessages')) || [];
-            const newMessage = {
-                content: content,
-                date: new Date().toLocaleString()
-            };
-
-            messages.unshift(newMessage);  // 新消息放在前面
-            localStorage.setItem('loveMessages', JSON.stringify(messages));
-            
-            input.value = '';  // 清空输入框
-            loadMessages();  // 重新加载留言
-        }
-
         // 支持按回车发送
         document.getElementById('messageInput').addEventListener('keypress', function(e) {
             if (e.key === 'Enter' && !e.shiftKey) {
@@ -848,7 +924,7 @@
         });
 
         music.addEventListener('canplaythrough', () => {
-            console.log('音频可以流畅播放');
+            console.log('音频可以畅播放');
         });
 
         music.addEventListener('stalled', () => {
@@ -857,6 +933,25 @@
 
         music.addEventListener('suspend', () => {
             console.log('音频加载已暂停');
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // 为所有照片添加点击事件
+            const photoItems = document.querySelectorAll('.photo-item');
+            photoItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const card = this.querySelector('.photo-card');
+                    // 切换翻转状态
+                    card.classList.toggle('flipped');
+                });
+                
+                // 添加触摸事件支持
+                item.addEventListener('touchstart', function(e) {
+                    e.preventDefault();  // 防止触摸事件的默认行为
+                    const card = this.querySelector('.photo-card');
+                    card.classList.toggle('flipped');
+                });
+            });
         });
     </script>
 </body>
