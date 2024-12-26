@@ -2,267 +2,205 @@
 <html lang="zh">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-    <meta name="format-detection" content="telephone=no">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <title>想你了</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>圣诞快乐，宝贝！</title>
     <style>
         body {
             margin: 0;
             padding: 0;
-            background: #000;
-            overflow: hidden;
-            height: 100vh;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
             display: flex;
             justify-content: center;
             align-items: center;
+            font-family: "Microsoft YaHei", sans-serif;
+            overflow: hidden;
+            position: relative;
         }
 
-        .heart {
-            position: absolute;
-            color: #ff0000;
-            font-size: 20px;
-            animation: float 4s ease-in-out infinite;
-            opacity: 0;
+        .container {
+            text-align: center;
+            z-index: 10;
         }
 
         .message {
             color: #fff;
             font-size: 1.8em;
-            text-align: center;
-            display: none;
-            font-family: "Microsoft YaHei", sans-serif;
-            padding: 20px;
-            line-height: 1.5;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 80%;
+            text-shadow: 0 0 10px rgba(255,255,255,0.5);
+            margin: 20px;
+            opacity: 0;
+            animation: fadeIn 2s forwards;
         }
 
-        @keyframes float {
+        .days {
+            font-size: 3em;
+            color: #ff0;
+            text-shadow: 0 0 15px rgba(255,255,0,0.5);
+            margin: 20px;
+            animation: pulse 2s infinite;
+        }
+
+        .snow {
+            position: absolute;
+            color: #fff;
+            font-size: 20px;
+            animation: snowfall linear infinite;
+        }
+
+        .christmas-tree {
+            font-size: 100px;
+            cursor: pointer;
+            transition: transform 0.3s;
+            animation: treePulse 2s infinite;
+        }
+
+        .christmas-tree:hover {
+            transform: scale(1.1);
+        }
+
+        .gift {
+            position: absolute;
+            font-size: 30px;
+            opacity: 0;
+            animation: giftFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes snowfall {
             0% {
-                transform: translateY(0) scale(1);
+                transform: translateY(-10vh) translateX(0);
                 opacity: 1;
             }
             100% {
-                transform: translateY(-100vh) scale(0);
+                transform: translateY(100vh) translateX(100px);
                 opacity: 0;
             }
         }
 
-        .explosion {
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes treePulse {
+            0% { text-shadow: 0 0 10px #ff0; }
+            50% { text-shadow: 0 0 20px #f00; }
+            100% { text-shadow: 0 0 10px #ff0; }
+        }
+
+        @keyframes giftFloat {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+        }
+
+        .music-control {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
-            background-size: 400%;
-            display: none;
-            animation: explosion 5s linear infinite;
-            z-index: 1000;
+            top: 20px;
+            right: 20px;
+            font-size: 30px;
+            color: #fff;
+            cursor: pointer;
+            z-index: 100;
         }
 
-        .warning {
-            color: #ff0000;
-            font-size: 1.5em;
-            text-align: center;
-            display: none;
-            font-family: "Microsoft YaHei", sans-serif;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 1001;
-            text-shadow: 0 0 10px #ff0000;
-            animation: blink 0.5s infinite;
-        }
-
-        @keyframes explosion {
-            0% {
-                background-position: 0 0;
-            }
-            50% {
-                background-position: 400% 0;
-            }
-            100% {
-                background-position: 0 0;
-            }
-        }
-
-        @keyframes blink {
-            0% { opacity: 1; }
-            50% { opacity: 0; }
-            100% { opacity: 1; }
-        }
-
-        .options {
-            position: fixed;
-            top: 75%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            display: none;
-            z-index: 1001;
-            width: 80%;
-            text-align: center;
-        }
-
-        .option-btn {
+        .wish-button {
             background: rgba(255, 255, 255, 0.2);
             border: 2px solid #fff;
             color: #fff;
             padding: 12px 25px;
-            margin: 8px;
+            margin: 20px;
             border-radius: 25px;
             font-size: 1.2em;
             cursor: pointer;
             transition: all 0.3s;
-            width: 80%;
-            font-family: "Microsoft YaHei", sans-serif;
         }
 
-        .option-btn:active {
-            transform: scale(0.95);
+        .wish-button:hover {
             background: rgba(255, 255, 255, 0.3);
-        }
-
-        .kiss {
-            position: absolute;
-            color: #ff69b4;
-            font-size: 24px;
-            animation: float-kiss 4s ease-in-out infinite;
-            opacity: 0;
-        }
-
-        @keyframes float-kiss {
-            0% {
-                transform: translateY(0) rotate(0deg);
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(-100vh) rotate(360deg);
-                opacity: 0;
-            }
-        }
-
-        .kiss-message {
-            color: #ff69b4;
-            font-size: 1.5em;
-            text-align: center;
-            display: none;
-            font-family: "Microsoft YaHei", sans-serif;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 1001;
-            text-shadow: 0 0 10px #ff69b4;
-            background: rgba(0, 0, 0, 0.5);
-            padding: 20px;
-            border-radius: 15px;
-            width: 80%;
+            transform: scale(1.05);
         }
     </style>
 </head>
 <body>
-    <div class="message">不是姐妹，一天到晚和闺蜜玩，也不知道想我，也不给我看看吃的什么，切，不想和你说话了</div>
-    <div class="options">
-        <button class="option-btn" onclick="chooseOption('A')">A. 我错了，立马亲亲 😘</button>
-        <button class="option-btn" onclick="chooseOption('B')">B. 我就是这么倔 😤</button>
+    <div class="music-control" onclick="toggleMusic()">🎵</div>
+    <div class="container">
+        <div class="message">亲爱的宝贝</div>
+        <div class="message">今天是我们在一起的</div>
+        <div class="days">305</div>
+        <div class="message">天</div>
+        <div class="christmas-tree" onclick="createGifts()">🎄</div>
+        <button class="wish-button" onclick="makeWish()">许个愿吧 ✨</button>
     </div>
-    <div class="explosion"></div>
-    <div class="warning">⚠️ 正在启动手机自爆系统 ⚠️<br>预计 3 秒后自爆</div>
-    <div class="kiss-message">那还不快到微信上亲亲66个 💕</div>
+    <audio id="bgMusic" loop>
+        <source src="https://music.163.com/song/media/outer/url?id=1892513656.mp3" type="audio/mpeg">
+    </audio>
 
     <script>
-        function createHeart() {
-            const heart = document.createElement('div');
-            heart.className = 'heart';
-            heart.innerHTML = '❤';
-            heart.style.left = Math.random() * 100 + 'vw';
-            heart.style.animationDuration = (Math.random() * 2 + 2) + 's';
-            document.body.appendChild(heart);
+        // 创建雪花
+        function createSnow() {
+            const snow = document.createElement('div');
+            snow.className = 'snow';
+            snow.style.left = Math.random() * 100 + 'vw';
+            snow.style.animationDuration = Math.random() * 3 + 2 + 's';
+            snow.innerHTML = '❄';
+            document.body.appendChild(snow);
             
             setTimeout(() => {
-                heart.remove();
-            }, 4000);
+                snow.remove();
+            }, 5000);
         }
 
-        // 创建爱心动画
-        const heartInterval = setInterval(() => {
-            for(let i = 0; i < 5; i++) {
-                createHeart();
-            }
-        }, 200);
+        // 每200ms创建一片雪花
+        setInterval(createSnow, 200);
 
-        function createKiss() {
-            const kiss = document.createElement('div');
-            kiss.className = 'kiss';
-            kiss.innerHTML = '💋';
-            kiss.style.left = Math.random() * 100 + 'vw';
-            kiss.style.animationDuration = (Math.random() * 2 + 2) + 's';
-            document.body.appendChild(kiss);
-            
-            setTimeout(() => {
-                kiss.remove();
-            }, 4000);
-        }
-
-        function chooseOption(option) {
-            document.querySelector('.options').style.display = 'none';
-            document.querySelector('.message').style.display = 'none';
-            
-            if (option === 'A') {
-                // 显示满屏亲亲
-                const kissInterval = setInterval(() => {
-                    for(let i = 0; i < 5; i++) {
-                        createKiss();
-                    }
-                }, 200);
+        // 创建礼物
+        function createGifts() {
+            const gifts = ['🎁', '🎀', '🧸', '💝', '🍬'];
+            for(let i = 0; i < 10; i++) {
+                const gift = document.createElement('div');
+                gift.className = 'gift';
+                gift.innerHTML = gifts[Math.floor(Math.random() * gifts.length)];
+                gift.style.left = Math.random() * 100 + 'vw';
+                document.body.appendChild(gift);
                 
-                // 显示提示文字
-                document.querySelector('.kiss-message').style.display = 'block';
-                
-                // 10秒后停止亲亲动画
                 setTimeout(() => {
-                    clearInterval(kissInterval);
-                    document.querySelector('.kiss-message').style.display = 'none';
-                }, 10000);
+                    gift.remove();
+                }, 3000);
+            }
+        }
+
+        // 音乐控制
+        let isPlaying = false;
+        const music = document.getElementById('bgMusic');
+        
+        function toggleMusic() {
+            if (isPlaying) {
+                music.pause();
+                document.querySelector('.music-control').innerHTML = '🔇';
             } else {
-                // 显示炫彩和自爆警告
-                document.querySelector('.explosion').style.display = 'block';
-                setTimeout(() => {
-                    document.querySelector('.warning').style.display = 'block';
-                    let count = 5;
-                    const countInterval = setInterval(() => {
-                        count--;
-                        if (count > 0) {
-                            document.querySelector('.warning').innerHTML = 
-                                `⚠️ 正在启动手机自爆系统 ⚠️<br>预计 ${count} 秒后自爆`;
-                        } else {
-                            clearInterval(countInterval);
-                            document.querySelector('.warning').innerHTML = 
-                                `⚠️ 自爆程序已启动 ⚠️<br>再见了您嘞～`;
-                        }
-                    }, 1000);
-                }, 2000);
+                music.play();
+                document.querySelector('.music-control').innerHTML = '🎵';
             }
+            isPlaying = !isPlaying;
         }
 
-        // 修改主要定时器
-        setTimeout(() => {
-            clearInterval(heartInterval);
-            document.querySelectorAll('.heart').forEach(heart => heart.remove());
-            document.querySelector('.message').style.display = 'block';
+        // 许愿功能
+        function makeWish() {
+            const wishes = [
+                "愿我们永远在一起 ❤️",
+                "愿你永远开心快乐 😊",
+                "愿我们的爱情天长地久 💑",
+                "愿每一天都充满惊喜 🎉",
+                "愿你梦想成真 ⭐"
+            ];
             
-            // 3秒��显示选项
-            setTimeout(() => {
-                document.querySelector('.options').style.display = 'block';
-            }, 3000);
-        }, 5000);
+            alert(wishes[Math.floor(Math.random() * wishes.length)]);
+        }
     </script>
 </body>
 </html> 
