@@ -3,204 +3,861 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>圣诞快乐，宝贝！</title>
+    <title>Love Story</title>
+    <!-- 引入Google字体 -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
-        body {
+        * {
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
             min-height: 100vh;
-            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            background: rgba(21, 68, 34, 0.93);
             font-family: "Microsoft YaHei", sans-serif;
-            overflow: hidden;
+            overflow-y: auto;
+            overflow-x: hidden;
             position: relative;
         }
 
+        /* 增强磨砂效果 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                45deg,
+                rgba(255, 255, 255, 0.1) 0%,
+                rgba(255, 255, 255, 0.2) 50%,
+                rgba(255, 255, 255, 0.1) 100%
+            );
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            pointer-events: none;
+        }
+
         .container {
+            width: 100%;
+            max-width: 800px;
+            padding: 20px;
             text-align: center;
-            z-index: 10;
         }
 
-        .message {
-            color: #fff;
+        .title-container {
+            position: fixed;
+            top: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+        }
+
+        .title-en {
+            color: white;
             font-size: 1.8em;
-            text-shadow: 0 0 10px rgba(255,255,255,0.5);
-            margin: 20px;
-            opacity: 0;
-            animation: fadeIn 2s forwards;
+            font-weight: 400;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            font-family: 'Playfair Display', serif;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            white-space: nowrap;
+            margin-bottom: 10px;
         }
 
-        .days {
-            font-size: 3em;
-            color: #ff0;
-            text-shadow: 0 0 15px rgba(255,255,0,0.5);
-            margin: 20px;
-            animation: pulse 2s infinite;
+        .title-cn {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.3em;
+            font-weight: 300;
+            letter-spacing: 8px;
+            font-family: "STXingkai", "华文行楷", serif;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+            margin-top: 5px;
         }
 
-        .snow {
-            position: absolute;
-            color: #fff;
-            font-size: 20px;
-            animation: snowfall linear infinite;
+        .timer-container {
+            position: fixed;
+            top: 150px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            color: white;
+            font-family: "Microsoft YaHei", sans-serif;
         }
 
-        .christmas-tree {
-            font-size: 100px;
+        .timer-title {
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            letter-spacing: 3px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .timer {
+            font-size: 1.1em;
+            font-family: 'Playfair Display', serif;
+            letter-spacing: 2px;
+            line-height: 1.5;
+        }
+
+        .timer span {
+            color: #ffd700;
+            font-weight: 500;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+        }
+
+        .photo-container-left, .photo-container-right {
+            position: fixed;
+            top: 20px;
+            width: 150px;
+            height: 150px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            opacity: 0.9;
+            transition: all 0.3s ease;
+        }
+
+        .photo-container-left {
+            left: 20px;
+        }
+
+        .photo-container-right {
+            right: 20px;
+        }
+
+        .photo-container-left img,
+        .photo-container-right img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+            filter: brightness(0.95) contrast(0.95);
+        }
+
+        .photo-container-left:hover,
+        .photo-container-right:hover {
+            opacity: 1;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .photo-container-left img:hover,
+        .photo-container-right img:hover {
+            transform: scale(1.08);
+        }
+
+        .photo-wall {
+            position: relative;
+            margin-top: 250px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            padding: 20px;
+            max-width: 800px;
+            width: 90%;
+            margin-bottom: 50px;
+        }
+
+        .photo-item {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            perspective: 1000px;
             cursor: pointer;
-            transition: transform 0.3s;
-            animation: treePulse 2s infinite;
+            margin: auto;
         }
 
-        .christmas-tree:hover {
-            transform: scale(1.1);
+        .photo-card {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transition: transform 0.8s;
         }
 
-        .gift {
+        .photo-item:hover .photo-card {
+            transform: rotateY(180deg);
+        }
+
+        .photo-front,
+        .photo-back {
             position: absolute;
-            font-size: 30px;
-            opacity: 0;
-            animation: giftFloat 3s ease-in-out infinite;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
         }
 
-        @keyframes snowfall {
-            0% {
-                transform: translateY(-10vh) translateX(0);
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(100vh) translateX(100px);
-                opacity: 0;
-            }
+        .photo-front {
+            background: #fff;
+        }
+
+        .photo-back {
+            background: rgba(255, 255, 255, 0.9);
+            transform: rotateY(180deg);
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-size: 0.9em;
+            color: #333;
+            font-family: "Microsoft YaHei", sans-serif;
+            line-height: 1.5;
+        }
+
+        .photo-front img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .modal, .modal-content, .modal-image, .modal-text, .close-button {
+            display: none;
+        }
+
+        /* 添加音乐播放器样式 */
+        .music-player {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .music-player:hover {
+            transform: scale(1.1);
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .music-player i {
+            font-size: 24px;
+            color: white;
+        }
+
+        .music-player.playing {
+            animation: rotate 5s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* 添加滚动条样式 */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        .next-page-button {
+            position: relative;
+            left: 50%;
+            transform: translateX(-50%);
+            margin: 40px auto;
+            padding: 15px 40px;
+            font-size: 1.2em;
+            color: white;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+            font-family: "Microsoft YaHei", sans-serif;
+        }
+
+        .next-page-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateX(-50%) scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* 第二页样式 */
+        .second-page {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(21, 68, 34, 0.93);
+            z-index: 2000;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .second-page.active {
+            display: block;
+            opacity: 1;
+        }
+
+        .second-page::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                45deg,
+                rgba(255, 255, 255, 0.1) 0%,
+                rgba(255, 255, 255, 0.2) 50%,
+                rgba(255, 255, 255, 0.1) 100%
+            );
+            backdrop-filter: blur(15px);
+            pointer-events: none;
+        }
+
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            padding: 10px 20px;
+            font-size: 1em;
+            color: white;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 2001;
+        }
+
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        .message-board {
+            position: relative;
+            max-width: 800px;
+            width: 90%;
+            margin: 250px auto 0;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .message-input {
+            width: 100%;
+            min-height: 100px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1em;
+            font-family: "Microsoft YaHei", sans-serif;
+            resize: vertical;
+            outline: none;
+        }
+
+        .message-input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .message-submit {
+            padding: 10px 25px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            color: white;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .message-submit:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        .messages-container {
+            margin-top: 30px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .message-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            color: white;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .message-date {
+            font-size: 0.8em;
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 5px;
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
-
-        @keyframes treePulse {
-            0% { text-shadow: 0 0 10px #ff0; }
-            50% { text-shadow: 0 0 20px #f00; }
-            100% { text-shadow: 0 0 10px #ff0; }
-        }
-
-        @keyframes giftFloat {
-            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
-        }
-
-        .music-control {
+        /* 添加切换按钮 */
+        .music-controls {
             position: fixed;
-            top: 20px;
-            right: 20px;
-            font-size: 30px;
-            color: #fff;
-            cursor: pointer;
-            z-index: 100;
+            bottom: 90px;
+            right: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 1000;
         }
 
-        .wish-button {
+        .music-control-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
             background: rgba(255, 255, 255, 0.2);
-            border: 2px solid #fff;
-            color: #fff;
-            padding: 12px 25px;
-            margin: 20px;
-            border-radius: 25px;
-            font-size: 1.2em;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
         }
 
-        .wish-button:hover {
+        .music-control-btn:hover {
             background: rgba(255, 255, 255, 0.3);
-            transform: scale(1.05);
+            transform: scale(1.1);
+        }
+
+        .music-title {
+            position: fixed;
+            bottom: 90px;
+            right: 85px;
+            color: white;
+            font-size: 0.9em;
+            text-align: right;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+            pointer-events: none;
+        }
+
+        .music-title.show {
+            opacity: 1;
         }
     </style>
 </head>
 <body>
-    <div class="music-control" onclick="toggleMusic()">🎵</div>
-    <div class="container">
-        <div class="message">亲爱的宝贝</div>
-        <div class="message">今天是我们在一起的</div>
-        <div class="days">305</div>
-        <div class="message">天</div>
-        <div class="christmas-tree" onclick="createGifts()">🎄</div>
-        <button class="wish-button" onclick="makeWish()">许个愿吧 ✨</button>
+    <div class="photo-container-left">
+        <img src="photo/0.png" alt="Left Photo">
     </div>
-    <audio id="bgMusic" loop>
-        <source src="https://music.163.com/song/media/outer/url?id=1892513656.mp3" type="audio/mpeg">
+    
+    <div class="photo-container-right">
+        <img src="photo/-1.png" alt="Right Photo">
+    </div>
+
+    <div class="title-container">
+        <div class="title-en">The secret place for MU and KAI</div>
+        <div class="title-cn">我们的秘密基地</div>
+    </div>
+    
+    <div class="timer-container">
+        <div class="timer-title">我们的故事持续时间：</div>
+        <div class="timer" id="timer"></div>
+    </div>
+
+    <div class="container">
+        <!-- 这里将放置主要内容 -->
+    </div>
+
+    <div class="photo-wall">
+        <div class="photo-item">
+            <div class="photo-card">
+                <div class="photo-front">
+                    <img src="photo/1.jpg" alt="Photo 1">
+                </div>
+                <div class="photo-back">
+                    每一次见到你，我的心跳都会加速，就像第一次见面时那样悸动。
+                </div>
+            </div>
+        </div>
+        <div class="photo-item">
+            <div class="photo-card">
+                <div class="photo-front">
+                    <img src="photo/2.jpg" alt="Photo 2">
+                </div>
+                <div class="photo-back">
+                    和在一起的每一刻都是那么珍贵，我想永远珍藏这些好回忆。
+                </div>
+            </div>
+        </div>
+        <div class="photo-item">
+            <div class="photo-card">
+                <div class="photo-front">
+                    <img src="photo/3.jpg" alt="Photo 3">
+                </div>
+                <div class="photo-back">
+                    你的笑容是这个世界上最美的风景，每次看到都会让我心动不已。
+                </div>
+            </div>
+        </div>
+        <div class="photo-item">
+            <div class="photo-card">
+                <div class="photo-front">
+                    <img src="photo/4.jpg" alt="Photo 4">
+                </div>
+                <div class="photo-back">
+                    有时候觉得时间过得太快，但只要和你在一起，每一分每一秒都是幸福的。
+                </div>
+            </div>
+        </div>
+        <div class="photo-item">
+            <div class="photo-card">
+                <div class="photo-front">
+                    <img src="photo/5.jpg" alt="Photo 5">
+                </div>
+                <div class="photo-back">
+                    遇见你是我生命中最美好的意外，感谢命运让我们相遇。
+                </div>
+            </div>
+        </div>
+        <div class="photo-item">
+            <div class="photo-card">
+                <div class="photo-front">
+                    <img src="photo/6.jpg" alt="Photo 6">
+                </div>
+                <div class="photo-back">
+                    和你在一起的每一刻都像是一场甜蜜的冒险，充满惊喜和期待。
+                </div>
+            </div>
+        </div>
+        <div class="photo-item">
+            <div class="photo-card">
+                <div class="photo-front">
+                    <img src="photo/7.jpg" alt="Photo 7">
+                </div>
+                <div class="photo-back">
+                    无论晴天还是雨天，只要有你在身边，每一天都是最好的日子。
+                </div>
+            </div>
+        </div>
+        <div class="photo-item">
+            <div class="photo-card">
+                <div class="photo-front">
+                    <img src="photo/8.jpg" alt="Photo 8">
+                </div>
+                <div class="photo-back">
+                    希望未来的每一天，我们都能一起看日出日落，数星星看月亮
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button class="next-page-button" onclick="showSecondPage()">
+        下一页 →
+    </button>
+
+    <div class="second-page" id="secondPage">
+        <button class="back-button" onclick="hideSecondPage()">← 返回</button>
+        <div class="title-container">
+            <div class="title-en">The secret place for MU and KAI</div>
+            <div class="title-cn">我们的秘密基地</div>
+        </div>
+        
+        <div class="timer-container">
+            <div class="timer-title">我们的故事持续时间：</div>
+            <div class="timer" id="timer2"></div>
+        </div>
+
+        <div class="message-board">
+            <textarea class="message-input" placeholder="写下此刻的心情..." id="messageInput"></textarea>
+            <button class="message-submit" onclick="submitMessage()">保存留言</button>
+            <div class="messages-container" id="messagesContainer"></div>
+        </div>
+    </div>
+
+    <div class="music-player" onclick="toggleMusic()">
+        <i class="fas fa-music"></i>
+    </div>
+
+    <!-- 添加音乐控制按钮 -->
+    <div class="music-controls">
+        <div class="music-control-btn" onclick="prevSong()">
+            <i class="fas fa-step-backward"></i>
+        </div>
+        <div class="music-control-btn" onclick="nextSong()">
+            <i class="fas fa-step-forward"></i>
+        </div>
+    </div>
+
+    <div class="music-title" id="musicTitle"></div>
+
+    <!-- 添加音频元素 -->
+    <audio id="bgMusic" preload="auto" controls style="display:none;">
+        <source src="music/1.mp3" type="audio/mpeg">
     </audio>
 
     <script>
-        // 创建雪花
-        function createSnow() {
-            const snow = document.createElement('div');
-            snow.className = 'snow';
-            snow.style.left = Math.random() * 100 + 'vw';
-            snow.style.animationDuration = Math.random() * 3 + 2 + 's';
-            snow.innerHTML = '❄';
-            document.body.appendChild(snow);
-            
-            setTimeout(() => {
-                snow.remove();
-            }, 5000);
+        function updateTimer() {
+            const startDate = new Date('2024-02-14T00:00:00');
+            const now = new Date();
+            const diff = now - startDate;
+
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+            const timerHTML = 
+                `<span>${days}</span> 天 ` +
+                `<span>${hours.toString().padStart(2, '0')}</span> 小时 ` +
+                `<span>${minutes.toString().padStart(2, '0')}</span> 分钟 ` +
+                `<span>${seconds.toString().padStart(2, '0')}</span> 秒`;
+
+            document.getElementById('timer').innerHTML = timerHTML;
+            document.getElementById('timer2').innerHTML = timerHTML;
         }
 
-        // 每200ms创建一片雪花
-        setInterval(createSnow, 200);
+        // 立即更新一次
+        updateTimer();
+        // 每秒更新一次
+        setInterval(updateTimer, 1000);
 
-        // 创建礼物
-        function createGifts() {
-            const gifts = ['🎁', '🎀', '🧸', '💝', '🍬'];
-            for(let i = 0; i < 10; i++) {
-                const gift = document.createElement('div');
-                gift.className = 'gift';
-                gift.innerHTML = gifts[Math.floor(Math.random() * gifts.length)];
-                gift.style.left = Math.random() * 100 + 'vw';
-                document.body.appendChild(gift);
-                
-                setTimeout(() => {
-                    gift.remove();
-                }, 3000);
-            }
-        }
+        // 音乐播放器相关代码
+        const songs = [
+            { path: 'music/1.mp3', title: 'Never Say Good Bye' },
+            { path: 'music/2.mp3', title: 'no idea' },
+            { path: 'music/3.mp3', title: '分身情人' }
+        ];
 
-        // 音乐控制
+        let currentSongIndex = 0;
         let isPlaying = false;
         const music = document.getElementById('bgMusic');
-        
+        const musicPlayer = document.querySelector('.music-player');
+        const musicTitle = document.getElementById('musicTitle');
+
+        // 确保音频元素已加载
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM加载完成');
+            music.load();  // 强制加载音频
+        });
+
+        // 修改播放切换函数
         function toggleMusic() {
-            if (isPlaying) {
-                music.pause();
-                document.querySelector('.music-control').innerHTML = '🔇';
-            } else {
-                music.play();
-                document.querySelector('.music-control').innerHTML = '🎵';
+            console.log('点击播放按钮');
+            console.log('当前播放状态:', isPlaying);
+            console.log('当前音频源:', music.src);
+            console.log('音频元素状态:', music.readyState);
+            console.log('音频是否已加载:', music.networkState);
+            
+            try {
+                if (isPlaying) {
+                    console.log('尝试暂停');
+                    music.pause();
+                    musicPlayer.classList.remove('playing');
+                } else {
+                    console.log('尝试播放');
+                    // 确保音频已加载
+                    if (music.readyState < 2) {  // HAVE_CURRENT_DATA
+                        console.log('音频尚未加载完成，重新加载');
+                        music.load();
+                    }
+                    
+                    const playPromise = music.play();
+                    if (playPromise !== undefined) {
+                        playPromise
+                            .then(() => {
+                                console.log('播放成功');
+                                musicPlayer.classList.add('playing');
+                            })
+                            .catch(error => {
+                                console.error('播放失败:', error);
+                                // 显示错误信息
+                                alert('音乐播放失败，请检查音频文件是否正确');
+                            });
+                    }
+                }
+                isPlaying = !isPlaying;
+            } catch (error) {
+                console.error('播放器操作错误:', error);
             }
-            isPlaying = !isPlaying;
         }
 
-        // 许愿功能
-        function makeWish() {
-            const wishes = [
-                "愿我们永远在一起 ❤️",
-                "愿你永远开心快乐 😊",
-                "愿我们的爱情天长地久 💑",
-                "愿每一天都充满惊喜 🎉",
-                "愿你梦想成真 ⭐"
-            ];
-            
-            alert(wishes[Math.floor(Math.random() * wishes.length)]);
+        // 添加音频事件监听
+        music.addEventListener('play', () => {
+            console.log('音频开始播放');
+            musicPlayer.classList.add('playing');
+        });
+
+        music.addEventListener('pause', () => {
+            console.log('音频暂停');
+            musicPlayer.classList.remove('playing');
+        });
+
+        music.addEventListener('error', (e) => {
+            console.error('音频错误:', e);
+            console.log('错误详情:', music.error);
+        });
+
+        // 初始化音频
+        function initAudio() {
+            music.volume = 1.0;  // 设置音量
+            loadSong(currentSongIndex);  // 加载第一首歌
         }
+
+        // 页面加载完成后初始化
+        window.addEventListener('load', initAudio);
+
+        function loadSong(index) {
+            const song = songs[index];
+            console.log('加载歌曲:', song.path);
+            music.src = song.path;
+            music.load(); // 强制重新加载
+            musicTitle.textContent = song.title;
+            musicTitle.classList.add('show');
+            
+            if (isPlaying) {
+                music.play().then(() => {
+                    musicPlayer.classList.add('playing');
+                }).catch(error => {
+                    console.error('播放失败:', error);
+                });
+            }
+
+            setTimeout(() => {
+                musicTitle.classList.remove('show');
+            }, 3000);
+        }
+
+        function nextSong() {
+            currentSongIndex = (currentSongIndex + 1) % songs.length;
+            loadSong(currentSongIndex);
+        }
+
+        function prevSong() {
+            currentSongIndex = (currentSongIndex - 1 + songs.length) % songs.length;
+            loadSong(currentSongIndex);
+        }
+
+        // 自动播放下一首
+        music.addEventListener('ended', nextSong);
+
+        // 添加加载状态监听
+        music.addEventListener('loadstart', () => {
+            console.log('开始加载音频');
+        });
+
+        music.addEventListener('canplay', () => {
+            console.log('音频可以播放');
+        });
+
+        function showSecondPage() {
+            document.getElementById('secondPage').classList.add('active');
+            loadMessages();
+        }
+
+        function hideSecondPage() {
+            document.getElementById('secondPage').classList.remove('active');
+        }
+
+        // 加载保存的留言
+        function loadMessages() {
+            const messagesContainer = document.getElementById('messagesContainer');
+            const messages = JSON.parse(localStorage.getItem('loveMessages')) || [];
+            
+            messagesContainer.innerHTML = messages.map(msg => `
+                <div class="message-item">
+                    <div class="message-content">${msg.content}</div>
+                    <div class="message-date">${msg.date}</div>
+                </div>
+            `).join('');
+        }
+
+        // 提交新留言
+        function submitMessage() {
+            const input = document.getElementById('messageInput');
+            const content = input.value.trim();
+            
+            if (!content) return;
+
+            const messages = JSON.parse(localStorage.getItem('loveMessages')) || [];
+            const newMessage = {
+                content: content,
+                date: new Date().toLocaleString()
+            };
+
+            messages.unshift(newMessage);  // 新消息放在前面
+            localStorage.setItem('loveMessages', JSON.stringify(messages));
+            
+            input.value = '';  // 清空输入框
+            loadMessages();  // 重新加载留言
+        }
+
+        // 支持按回车发送
+        document.getElementById('messageInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                submitMessage();
+            }
+        });
+
+        // 添加错误处理
+        music.addEventListener('error', (e) => {
+            console.error('音频加载错误:', e);
+            console.log('当前尝试加载的文���:', music.src);
+        });
+
+        // 添加更多事件监听
+        music.addEventListener('loadeddata', () => {
+            console.log('音频数据已加载');
+        });
+
+        music.addEventListener('canplaythrough', () => {
+            console.log('音频可以流畅播放');
+        });
+
+        music.addEventListener('stalled', () => {
+            console.log('音频加载已停止');
+        });
+
+        music.addEventListener('suspend', () => {
+            console.log('音频加载已暂停');
+        });
     </script>
 </body>
-</html> 
+</html>
