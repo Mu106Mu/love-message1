@@ -731,14 +731,14 @@
             const leftPhoto = document.querySelector('.photo-container-left img');
             const rightPhoto = document.querySelector('.photo-container-right img');
             
-            // 使用相对路径
-            leftPhoto.src = './photo/0.png';
-            rightPhoto.src = './photo/-1.png';
+            // 使用正确的路径
+            leftPhoto.src = `${basePath}/photo/0.png`;
+            rightPhoto.src = `${basePath}/photo/-1.png`;
             
             // 修改照片墙的照片路径
             const photos = document.querySelectorAll('.photo-front img');
             photos.forEach((photo, index) => {
-                photo.src = `./photo/${index + 1}.jpg`;
+                photo.src = `${basePath}/photo/${index + 1}.jpg`;
             });
         });
 
