@@ -483,7 +483,7 @@
             opacity: 1;
         }
 
-        /* 添加触摸设备支持 */
+        /* 添加触摸设备持 */
         @media (hover: none) {
             .photo-item:active .photo-card {
                 transform: rotateY(180deg);
@@ -566,6 +566,24 @@
                     outline: none;
                     font-size: 14px;
                 ">
+                <div style="
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 8px;
+                    margin-bottom: 10px;
+                    color: white;
+                ">
+                    <input type="checkbox" id="rememberMe" style="
+                        width: 16px;
+                        height: 16px;
+                        cursor: pointer;
+                    ">
+                    <label for="rememberMe" style="
+                        font-size: 14px;
+                        cursor: pointer;
+                    ">记住我</label>
+                </div>
                 <button onclick="login()" style="
                     width: 250px;
                     padding: 12px;
@@ -620,7 +638,7 @@
                     <img src="./photo/2.jpg" alt="Photo 2">
                 </div>
                 <div class="photo-back">
-                    坐在摩天轮，世界仿佛是我们的，然后我们拥有了彼此，就已经拥有了世界。
+                    坐在摩天轮，世界仿佛是我们的，然后我们拥有了彼此，就已经拥有��世界。
                 </div>
             </div>
         </div>
@@ -650,7 +668,7 @@
                     <img src="./photo/5.jpg" alt="Photo 5">
                 </div>
                 <div class="photo-back">
-                    遇见你是我生��中最美好的意外，感谢命运让我们相遇，谁想分开我们，那就给ta竖你手上的友好手势。
+                    遇见你是我生命中最美好的意外，感谢命运让我们相遇，谁想分开我们，那就给ta竖你手上的友好手势。
                 </div>
             </div>
         </div>
@@ -670,7 +688,7 @@
                     <img src="./photo/7.jpg" alt="Photo 7">
                 </div>
                 <div class="photo-back">
-                    无论晴天还是雨天，只要有你在身边，每一天都是最甜美的日子。
+                    无论晴天还是雨天，只要有你在身边，每一都是最甜美的日子。
                 </div>
             </div>
         </div>
@@ -785,10 +803,78 @@
     </script>
 
     <script>
-        // 根据域名判断是否需要添加基础路径
-        const basePath = location.hostname === 'muandkai.top' ? '' : '/love-message1';
+        // 在页面加载前就检查登录状态
+        (function() {
+            const isLoggedInSession = sessionStorage.getItem('isLoggedIn');
+            const isLoggedInLocal = localStorage.getItem('isLoggedIn');
+            
+            if (isLoggedInSession !== 'true' && isLoggedInLocal !== 'true') {
+                // 如果未登录，阻止页面内容显示
+                document.documentElement.style.visibility = 'hidden';
+            }
+        })();
 
         document.addEventListener('DOMContentLoaded', function() {
+            const isLoggedInSession = sessionStorage.getItem('isLoggedIn');
+            const isLoggedInLocal = localStorage.getItem('isLoggedIn');
+            
+            // 重置登录状态，确保每次都需要登录
+            sessionStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('isLoggedIn');
+            
+            // 显示登录页面
+            document.getElementById('loginPage').style.display = 'flex';
+            
+            // 恢复页面可见性
+            document.documentElement.style.visibility = 'visible';
+
+            // 隐藏主页内容，直到登录成功
+            document.querySelector('.photo-container-left').style.display = 'none';
+            document.querySelector('.photo-container-right').style.display = 'none';
+            document.querySelector('.title-container').style.display = 'none';
+            document.querySelector('.timer-container').style.display = 'none';
+            document.querySelector('.photo-wall').style.display = 'none';
+            document.querySelector('.next-page-button').style.display = 'none';
+            document.querySelector('.music-player').style.display = 'none';
+            document.querySelector('.music-controls').style.display = 'none';
+
+            // 其他初始化代码...
+
+            // 初始化音频
+            initAudio();
+            
+            // 阻止右键点击
+            document.addEventListener('contextmenu', function(e) {
+                e.preventDefault();
+            });
+            
+            // 阻止F12和开发者工具快捷键
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I')) {
+                    e.preventDefault();
+                }
+            });
+
+            // 为所有照片添加点击事件
+            const photoItems = document.querySelectorAll('.photo-item');
+            photoItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const card = this.querySelector('.photo-card');
+                    // 切换翻转状态
+                    card.classList.toggle('flipped');
+                });
+                
+                // 添加触摸事件支持
+                item.addEventListener('touchstart', function(e) {
+                    e.preventDefault();  // 防止触摸事件的默认行为
+                    const card = this.querySelector('.photo-card');
+                    card.classList.toggle('flipped');
+                });
+            });
+
+            // 根据域名判断是否需要添加基础路径
+            const basePath = location.hostname === 'muandkai.top' ? '' : '/love-message1';
+            
             // 修改左右两侧的照片路径
             const leftPhoto = document.querySelector('.photo-container-left img');
             const rightPhoto = document.querySelector('.photo-container-right img');
@@ -797,7 +883,7 @@
             leftPhoto.src = `${basePath}/photo/0.png`;
             rightPhoto.src = `${basePath}/photo/-1.png`;
             
-            // 修改照片墙的照片路径，使用大写的 JPG
+            // 修改照片墙的照片路径
             const photos = document.querySelectorAll('.photo-front img');
             photos.forEach((photo, index) => {
                 photo.src = `${basePath}/photo/${index + 1}.JPG`;
@@ -997,32 +1083,34 @@
             console.log('音频加载已暂停');
         });
 
-        document.addEventListener('DOMContentLoaded', function() {
-            // 为所有照片添加点击事件
-            const photoItems = document.querySelectorAll('.photo-item');
-            photoItems.forEach(item => {
-                item.addEventListener('click', function() {
-                    const card = this.querySelector('.photo-card');
-                    // 切换翻转状态
-                    card.classList.toggle('flipped');
-                });
-                
-                // 添加触摸事件支持
-                item.addEventListener('touchstart', function(e) {
-                    e.preventDefault();  // 防止触摸事件的默认行为
-                    const card = this.querySelector('.photo-card');
-                    card.classList.toggle('flipped');
-                });
-            });
-        });
-
-        // 添加登录验证的JavaScript代码
+        // 修改登录函数
         function login() {
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
+            const rememberMe = document.getElementById('rememberMe').checked;
             
             if (username === '0621' && password === '1006') {
+                // 根据是否勾选"记住我"来存储登录状态
+                if (rememberMe) {
+                    localStorage.setItem('isLoggedIn', 'true');
+                } else {
+                    sessionStorage.setItem('isLoggedIn', 'true');
+                    localStorage.removeItem('isLoggedIn');
+                }
+                
+                // 显示主页内容
+                document.querySelector('.photo-container-left').style.display = 'block';
+                document.querySelector('.photo-container-right').style.display = 'block';
+                document.querySelector('.title-container').style.display = 'block';
+                document.querySelector('.timer-container').style.display = 'block';
+                document.querySelector('.photo-wall').style.display = 'grid';
+                document.querySelector('.next-page-button').style.display = 'block';
+                document.querySelector('.music-player').style.display = 'flex';
+                document.querySelector('.music-controls').style.display = 'flex';
+                
+                // 隐藏登录页面
                 document.getElementById('loginPage').style.display = 'none';
+                
                 // 登录成功后自动播放音乐
                 const music = document.getElementById('bgMusic');
                 music.play().catch(error => {
@@ -1039,24 +1127,6 @@
                 login();
             }
         });
-
-        // 检查登录状态
-        window.onload = function() {
-            // 其他已有的onload代码...
-            initAudio();
-            
-            // 阻止右键点击
-            document.addEventListener('contextmenu', function(e) {
-                e.preventDefault();
-            });
-            
-            // 阻止F12和开发者工具快捷键
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I')) {
-                    e.preventDefault();
-                }
-            });
-        };
     </script>
 </body>
 </html>
