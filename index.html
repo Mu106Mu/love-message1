@@ -21,6 +21,19 @@
             overflow-y: auto;
             overflow-x: hidden;
             position: relative;
+            transition: background 0.5s ease;
+        }
+
+        body.mood-happy {
+            background: linear-gradient(135deg, rgba(255, 223, 0, 0.93), rgba(255, 200, 0, 0.93));
+        }
+
+        body.mood-angry {
+            background: linear-gradient(135deg, rgba(180, 0, 0, 0.93), rgba(130, 0, 0, 0.93));
+        }
+
+        body.mood-sad {
+            background: linear-gradient(135deg, rgba(70, 70, 70, 0.93), rgba(40, 40, 40, 0.93));
         }
 
         /* 增强磨砂效果 */
@@ -55,58 +68,162 @@
             left: 50%;
             transform: translateX(-50%);
             text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 25px 40px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+            animation: titleFloat 4s ease-in-out infinite;
+        }
+
+        @keyframes titleFloat {
+            0%, 100% {
+                transform: translateX(-50%) translateY(0);
+            }
+            50% {
+                transform: translateX(-50%) translateY(-10px);
+            }
+        }
+
+        .title-container:hover {
+            border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            background: rgba(255, 255, 255, 0.15);
         }
 
         .title-en {
             color: white;
-            font-size: 1.8em;
+            font-size: 2em;
             font-weight: 400;
-            letter-spacing: 4px;
+            letter-spacing: 6px;
             text-transform: uppercase;
             font-family: 'Playfair Display', serif;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-            white-space: nowrap;
-            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            margin-bottom: 15px;
+            background: linear-gradient(45deg, #fff, #ffd700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: -100% 0;
+            }
+            100% {
+                background-position: 200% 0;
+            }
         }
 
         .title-cn {
-            color: rgba(255, 255, 255, 0.9);
-            font-size: 1.3em;
+            color: rgba(255, 255, 255, 0.95);
+            font-size: 1.5em;
             font-weight: 300;
-            letter-spacing: 8px;
+            letter-spacing: 12px;
             font-family: "STXingkai", "华文行楷", serif;
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
-            margin-top: 5px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+            position: relative;
+            display: inline-block;
+        }
+
+        .title-cn::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(255, 255, 255, 0.5) 50%, 
+                transparent 100%
+            );
         }
 
         .timer-container {
             position: fixed;
-            top: 150px;
+            top: 180px;
             left: 50%;
             transform: translateX(-50%);
             text-align: center;
-            color: white;
-            font-family: "Microsoft YaHei", sans-serif;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px 35px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            animation: timerFloat 4s ease-in-out infinite;
+            animation-delay: 0.5s;
+        }
+
+        @keyframes timerFloat {
+            0%, 100% {
+                transform: translateX(-50%) translateY(0);
+            }
+            50% {
+                transform: translateX(-50%) translateY(-8px);
+            }
+        }
+
+        .timer-container:hover {
+            border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+            background: rgba(255, 255, 255, 0.15);
         }
 
         .timer-title {
-            font-size: 1.2em;
+            font-size: 1.3em;
             margin-bottom: 15px;
             letter-spacing: 3px;
-            color: rgba(255, 255, 255, 0.9);
+            color: rgba(255, 255, 255, 0.95);
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+            position: relative;
+            display: inline-block;
+        }
+
+        .timer-title::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50%;
+            height: 1px;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(255, 255, 255, 0.5) 50%, 
+                transparent 100%
+            );
         }
 
         .timer {
-            font-size: 1.1em;
+            font-size: 1.2em;
             font-family: 'Playfair Display', serif;
             letter-spacing: 2px;
-            line-height: 1.5;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.9);
         }
 
         .timer span {
             color: #ffd700;
             font-weight: 500;
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
+            padding: 0 5px;
+            display: inline-block;
+            min-width: 30px;
+            animation: pulse 1s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
         }
 
         .photo-container-left, .photo-container-right {
@@ -121,14 +238,17 @@
             border: 1px solid rgba(255, 255, 255, 0.18);
             opacity: 0.9;
             transition: all 0.3s ease;
+            animation: floatSide 4s ease-in-out infinite;
         }
 
         .photo-container-left {
             left: 20px;
+            animation-delay: 0.5s;
         }
 
         .photo-container-right {
             right: 20px;
+            animation-delay: 1s;
         }
 
         .photo-container-left img,
@@ -142,9 +262,7 @@
 
         .photo-container-left:hover,
         .photo-container-right:hover {
-            opacity: 1;
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
-            transform: translateY(-2px);
+            animation-play-state: paused;
         }
 
         .photo-container-left img:hover,
@@ -164,6 +282,7 @@
             max-width: 800px;
             width: 90%;
             margin-bottom: 50px;
+            z-index: 2;
         }
 
         .photo-item {
@@ -174,7 +293,18 @@
             cursor: pointer;
             margin: auto;
             -webkit-tap-highlight-color: transparent;
+            animation: float 3s ease-in-out infinite;
+            z-index: 2;
         }
+
+        .photo-item:nth-child(1) { animation-delay: 0s; }
+        .photo-item:nth-child(2) { animation-delay: 0.2s; }
+        .photo-item:nth-child(3) { animation-delay: 0.4s; }
+        .photo-item:nth-child(4) { animation-delay: 0.6s; }
+        .photo-item:nth-child(5) { animation-delay: 0.8s; }
+        .photo-item:nth-child(6) { animation-delay: 1.0s; }
+        .photo-item:nth-child(7) { animation-delay: 1.2s; }
+        .photo-item:nth-child(8) { animation-delay: 1.4s; }
 
         .photo-card {
             position: relative;
@@ -285,10 +415,11 @@
         }
 
         .next-page-button {
-            position: relative;
-            left: 50%;
-            transform: translateX(-50%);
-            margin: 40px auto;
+            position: fixed;
+            left: 20px;
+            bottom: 30px;
+            transform: none;
+            margin: 0;
             padding: 15px 40px;
             font-size: 1.2em;
             color: white;
@@ -299,12 +430,70 @@
             transition: all 0.3s ease;
             backdrop-filter: blur(5px);
             font-family: "Microsoft YaHei", sans-serif;
+            z-index: 1000;
         }
 
         .next-page-button:hover {
             background: rgba(255, 255, 255, 0.3);
-            transform: translateX(-50%) scale(1.05);
+            transform: scale(1.05);
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* 添加折叠按钮样式 */
+        .fold-button {
+            position: fixed;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            padding: 15px 40px;
+            font-size: 1.2em;
+            color: white;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+            font-family: "Microsoft YaHei", sans-serif;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .fold-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-50%) scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .fold-button i {
+            transition: transform 0.3s ease;
+        }
+
+        .fold-button.folded i {
+            transform: rotate(180deg);
+        }
+
+        /* 照片墙折叠动画 */
+        .photo-wall {
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-origin: center top;
+        }
+
+        .photo-wall.folded {
+            opacity: 0;
+            transform: translateX(-50%) scale(0.95);
+            pointer-events: none;
+        }
+
+        .photo-wall.folding .photo-item {
+            transform: scale(0.8);
+            opacity: 0;
+        }
+
+        .photo-item {
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         /* 第二页样式 */
@@ -368,26 +557,33 @@
             max-width: 800px;
             width: 90%;
             margin: 250px auto 0;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
+            padding: 35px;
+            background: rgba(255, 255, 255, 0.12);
+            border-radius: 20px;
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
         }
 
         .message-input {
             width: 100%;
-            min-height: 100px;
-            padding: 15px;
-            margin-bottom: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 10px;
+            min-height: 120px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 15px;
             background: rgba(255, 255, 255, 0.1);
             color: white;
-            font-size: 1em;
+            font-size: 1.1em;
             font-family: "Microsoft YaHei", sans-serif;
             resize: vertical;
             outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .message-input:focus {
+            border-color: rgba(255, 255, 255, 0.5);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
         }
 
         .message-input::placeholder {
@@ -395,45 +591,95 @@
         }
 
         .message-submit {
-            padding: 10px 25px;
+            padding: 12px 30px;
             background: rgba(255, 255, 255, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 25px;
             color: white;
-            font-size: 1em;
+            font-size: 1.1em;
             cursor: pointer;
             transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .message-submit:hover {
             background: rgba(255, 255, 255, 0.3);
-            transform: scale(1.05);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .message-submit:active {
+            transform: translateY(0);
         }
 
         .messages-container {
             margin-top: 30px;
-            max-height: 400px;
+            max-height: 500px;
             overflow-y: auto;
+            padding-right: 10px;
         }
 
         .message-item {
             background: rgba(255, 255, 255, 0.1);
-            padding: 15px;
-            margin-bottom: 15px;
-            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 15px;
             color: white;
             animation: fadeIn 0.5s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .message-item:hover {
+            transform: translateX(5px);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .message-content {
+            font-size: 1.1em;
+            line-height: 1.6;
+            margin-bottom: 10px;
+            word-wrap: break-word;
         }
 
         .message-date {
-            font-size: 0.8em;
+            font-size: 0.9em;
             color: rgba(255, 255, 255, 0.7);
-            margin-top: 5px;
+            font-style: italic;
+        }
+
+        /* 自定义滚动条样式 */
+        .messages-container::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .messages-container::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+        }
+
+        .messages-container::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .messages-container::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.5);
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from { 
+                opacity: 0; 
+                transform: translateY(20px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
         }
 
         /* 添加切换按钮 */
@@ -517,25 +763,466 @@
                 transform: rotateY(180deg);
             }
         }
-    </style>
-</head>
-<body>
-    <div id="loginPage" style="
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgb(21, 68, 34);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 9999;
-    ">
-        <div style="
+
+        /* 添加删除按钮样式 */
+        .message-delete {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: rgba(255, 255, 255, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            opacity: 0;
+        }
+
+        .message-item:hover .message-delete {
+            opacity: 1;
+        }
+
+        .message-delete:hover {
+            background: rgba(255, 0, 0, 0.2);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        /* 确认对话框样式 */
+        .confirm-dialog {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.95);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            z-index: 3000;
+            display: none;
+            text-align: center;
+            min-width: 300px;
+        }
+
+        .confirm-dialog.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .dialog-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2999;
+            display: none;
+        }
+
+        .dialog-overlay.show {
+            display: block;
+        }
+
+        .dialog-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .dialog-button {
+            padding: 8px 20px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1em;
+        }
+
+        .confirm-button {
+            background: #ff4444;
+            color: white;
+        }
+
+        .confirm-button:hover {
+            background: #ff0000;
+            transform: translateY(-2px);
+        }
+
+        .cancel-button {
+            background: #e0e0e0;
+            color: #333;
+        }
+
+        .cancel-button:hover {
+            background: #d0d0d0;
+            transform: translateY(-2px);
+        }
+
+        /* 添加图片抖动动画 */
+        @keyframes float {
+            0% {
+                transform: translateY(0) rotate(0deg);
+            }
+            25% {
+                transform: translateY(-5px) rotate(1deg);
+            }
+            50% {
+                transform: translateY(0) rotate(0deg);
+            }
+            75% {
+                transform: translateY(5px) rotate(-1deg);
+            }
+            100% {
+                transform: translateY(0) rotate(0deg);
+            }
+        }
+
+        /* 左右两侧的照片抖动效果 */
+        @keyframes floatSide {
+            0% {
+                transform: translateY(0) rotate(0deg);
+            }
+            25% {
+                transform: translateY(-8px) rotate(1deg);
+            }
+            50% {
+                transform: translateY(0) rotate(0deg);
+            }
+            75% {
+                transform: translateY(8px) rotate(-1deg);
+            }
+            100% {
+                transform: translateY(0) rotate(0deg);
+            }
+        }
+
+        /* 当鼠标悬停时暂停动画 */
+        .photo-item:hover {
+            animation-play-state: paused;
+        }
+
+        .photo-container-left:hover,
+        .photo-container-right:hover {
+            animation-play-state: paused;
+        }
+
+        /* 添加心情天气按钮样式 */
+        .mood-weather-button {
+            position: fixed;
+            top: 300px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 15px 40px;
+            font-size: 1.2em;
+            color: white;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+            font-family: "Microsoft YaHei", sans-serif;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .mood-weather-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateX(-50%) scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* 心情图标容器 */
+        .mood-icons-container {
+            position: fixed;
+            top: 370px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1;
+        }
+
+        .mood-icons-container.show {
+            opacity: 1;
+            visibility: visible;
+            top: 380px;
+        }
+
+        .mood-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(5px);
+        }
+
+        .mood-icon i {
+            font-size: 24px;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .mood-icon:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .mood-icon.happy {
+            background: linear-gradient(135deg, rgba(255, 223, 0, 0.3), rgba(255, 200, 0, 0.3));
+        }
+
+        .mood-icon.angry {
+            background: linear-gradient(135deg, rgba(255, 0, 0, 0.3), rgba(200, 0, 0, 0.3));
+        }
+
+        .mood-icon.sad {
+            background: linear-gradient(135deg, rgba(0, 0, 255, 0.3), rgba(0, 0, 200, 0.3));
+        }
+
+        .mood-icon.okay {
+            background: linear-gradient(135deg, rgba(0, 255, 0, 0.3), rgba(0, 200, 0, 0.3));
+        }
+
+        @keyframes popIn {
+            0% {
+                transform: scale(0) rotate(-180deg);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+            }
+        }
+
+        .mood-icon.show {
+            animation: popIn 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        /* 添加心情弹窗样式 */
+        .mood-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.8);
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            z-index: 3000;
+            text-align: center;
+            min-width: 300px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .mood-modal.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .mood-modal-text {
+            font-size: 1.2em;
+            color: #333;
+            line-height: 1.6;
+            margin: 20px 0;
+            font-family: "Microsoft YaHei", sans-serif;
+        }
+
+        .mood-modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.1);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .mood-modal-close:hover {
+            background: rgba(0, 0, 0, 0.2);
+            transform: scale(1.1);
+        }
+
+        .mood-modal-close i {
+            font-size: 16px;
+            color: #666;
+        }
+
+        /* 添加心情记录面板样式 */
+        .mood-history-panel {
+            position: fixed;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 20px;
+            width: 200px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .mood-history-title {
+            color: white;
+            font-size: 1.1em;
+            text-align: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .mood-history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .mood-record {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .mood-record:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(-5px);
+        }
+
+        .mood-record-icon {
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .mood-record-time {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9em;
+        }
+
+        .mood-record.happy .mood-record-icon {
+            background: linear-gradient(135deg, rgba(255, 223, 0, 0.3), rgba(255, 200, 0, 0.3));
+        }
+
+        .mood-record.angry .mood-record-icon {
+            background: linear-gradient(135deg, rgba(255, 0, 0, 0.3), rgba(200, 0, 0, 0.3));
+        }
+
+        .mood-record.sad .mood-record-icon {
+            background: linear-gradient(135deg, rgba(0, 0, 255, 0.3), rgba(0, 0, 200, 0.3));
+        }
+
+        .mood-record.okay .mood-record-icon {
+            background: linear-gradient(135deg, rgba(0, 255, 0, 0.3), rgba(0, 200, 0, 0.3));
+        }
+
+        .mood-history-list::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .mood-history-list::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+        }
+
+        .mood-history-list::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 2px;
+        }
+
+        /* 登录页面样式美化 */
+        #loginPage {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, 
+                rgba(21, 68, 34, 0.95),
+                rgba(33, 92, 50, 0.95)
+            );
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            overflow: hidden;
+        }
+
+        /* 添加背景动画效果 */
+        #loginPage::before {
+            content: '❤️';
+            position: absolute;
+            font-size: 24px;
+            animation: floatingHeart 6s linear infinite;
+            opacity: 0.3;
+        }
+
+        #loginPage::after {
+            content: '💕';
+            position: absolute;
+            font-size: 24px;
+            animation: floatingHeart 8s linear infinite;
+            animation-delay: 2s;
+            opacity: 0.3;
+        }
+
+        @keyframes floatingHeart {
+            0% {
+                transform: translate(0, 0) rotate(0deg);
+                opacity: 0;
+            }
+            50% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translate(100vw, 100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .login-container {
             background: rgba(255, 255, 255, 0.1);
             padding: 40px;
-            border-radius: 15px;
+            border-radius: 20px;
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.2);
             text-align: center;
@@ -543,59 +1230,480 @@
             flex-direction: column;
             align-items: center;
             gap: 15px;
-        ">
-            <h2 style="color: white; margin-bottom: 20px;">欢迎来到我们的秘密基地</h2>
-            <div style="display: flex; flex-direction: column; gap: 15px;">
-                <input type="text" id="username" placeholder="请输入账号" style="
-                    width: 250px;
-                    padding: 12px;
-                    border: 1px solid rgba(255, 255, 255, 0.3);
-                    border-radius: 5px;
-                    background: rgba(255, 255, 255, 0.1);
-                    color: white;
-                    outline: none;
-                    font-size: 14px;
-                ">
-                <input type="password" id="password" placeholder="请输入密码" style="
-                    width: 250px;
-                    padding: 12px;
-                    border: 1px solid rgba(255, 255, 255, 0.3);
-                    border-radius: 5px;
-                    background: rgba(255, 255, 255, 0.1);
-                    color: white;
-                    outline: none;
-                    font-size: 14px;
-                ">
-                <div style="
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    gap: 8px;
-                    margin-bottom: 10px;
-                    color: white;
-                ">
-                    <input type="checkbox" id="rememberMe" style="
-                        width: 16px;
-                        height: 16px;
-                        cursor: pointer;
-                    ">
-                    <label for="rememberMe" style="
-                        font-size: 14px;
-                        cursor: pointer;
-                    ">记住我</label>
-                </div>
-                <button onclick="login()" style="
-                    width: 250px;
-                    padding: 12px;
-                    border: none;
-                    border-radius: 5px;
-                    background: rgba(255, 255, 255, 0.2);
-                    color: white;
-                    cursor: pointer;
-                    transition: all 0.3s ease;
-                    font-size: 14px;
-                ">登录</button>
+            animation: loginAppear 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            max-width: 400px;
+            width: 90%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.2),
+                transparent
+            );
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% { left: -100%; }
+            50% { left: 100%; }
+            100% { left: 100%; }
+        }
+
+        .login-title {
+            color: white;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            font-family: "STXingkai", "华文行楷", serif;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            letter-spacing: 3px;
+            position: relative;
+            animation: titleWave 2s ease-in-out infinite;
+        }
+
+        @keyframes titleWave {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-5px);
+            }
+        }
+
+        .login-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            outline: none;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            margin-bottom: 15px;
+            padding-left: 40px;
+            position: relative;
+        }
+
+        .login-input-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        .login-input-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.6);
+            transition: all 0.3s ease;
+        }
+
+        .login-input:focus + .login-input-icon {
+            color: white;
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .login-input:focus {
+            border-color: rgba(255, 255, 255, 0.5);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .login-input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+            transition: all 0.3s ease;
+        }
+
+        .login-input:focus::placeholder {
+            opacity: 0.7;
+            transform: translateX(10px);
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin: 10px 0;
+            color: rgba(255, 255, 255, 0.8);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .remember-me:hover {
+            transform: scale(1.05);
+        }
+
+        .remember-checkbox {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            position: relative;
+            appearance: none;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .remember-checkbox:checked {
+            background: rgba(255, 255, 255, 0.3);
+            animation: checkmark 0.3s ease-in-out;
+        }
+
+        @keyframes checkmark {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .remember-checkbox:checked::before {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 12px;
+        }
+
+        .login-button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.1em;
+            margin-top: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .login-button:active {
+            transform: scale(0.95);
+        }
+
+        .login-button::after {
+            content: '🚀';
+            position: absolute;
+            right: -20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.2em;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .login-button:hover::after {
+            right: 20px;
+            opacity: 1;
+        }
+
+        .login-error {
+            color: #ff6b6b;
+            font-size: 0.9em;
+            margin-top: 10px;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+        }
+
+        .login-error.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-5px); }
+            40%, 80% { transform: translateX(5px); }
+        }
+
+        /* 火柴人动画容器 */
+        .stickman-animation {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            height: 200px;
+            z-index: 1;
+            opacity: 0.9;
+        }
+
+        /* 火柴人样式 */
+        .stickman {
+            position: absolute;
+            left: 30px;
+            bottom: 40px;
+            width: 50px;
+            height: 80px;
+            animation: walkToLove 4s linear infinite;
+        }
+
+        /* 火柴人身体部分 */
+        .stickman-body {
+            position: absolute;
+            width: 2px;
+            height: 30px;
+            background: white;
+            left: 50%;
+            top: 20px;
+            transform: translateX(-50%);
+        }
+
+        .stickman-head {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            border: 2px solid white;
+            border-radius: 50%;
+            left: 50%;
+            top: 5px;
+            transform: translateX(-50%);
+        }
+
+        .stickman-arm-left,
+        .stickman-arm-right {
+            position: absolute;
+            width: 20px;
+            height: 2px;
+            background: white;
+            top: 25px;
+            animation: armSwing 1s linear infinite;
+        }
+
+        .stickman-arm-left {
+            left: 50%;
+            transform-origin: left center;
+            animation-delay: 0.5s;
+        }
+
+        .stickman-arm-right {
+            right: 50%;
+            transform-origin: right center;
+        }
+
+        .stickman-leg-left,
+        .stickman-leg-right {
+            position: absolute;
+            width: 20px;
+            height: 2px;
+            background: white;
+            top: 48px;
+            animation: legWalk 1s linear infinite;
+        }
+
+        .stickman-leg-left {
+            left: 50%;
+            transform-origin: left center;
+            animation-delay: 0.5s;
+        }
+
+        .stickman-leg-right {
+            right: 50%;
+            transform-origin: right center;
+        }
+
+        /* 爱心样式 */
+        .heart {
+            position: absolute;
+            right: 30px;
+            bottom: 60px;
+            width: 30px;
+            height: 30px;
+            animation: heartBeat 1s ease infinite;
+        }
+
+        .heart::before,
+        .heart::after {
+            content: '';
+            position: absolute;
+            width: 15px;
+            height: 25px;
+            background: #ff4b4b;
+            border-radius: 15px 15px 0 0;
+        }
+
+        .heart::before {
+            left: 15px;
+            transform: rotate(-45deg);
+            transform-origin: 0 100%;
+        }
+
+        .heart::after {
+            left: 0;
+            transform: rotate(45deg);
+            transform-origin: 100% 100%;
+        }
+
+        /* 表白文字 */
+        .love-text {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            bottom: 10px;
+            color: white;
+            font-size: 1.2em;
+            font-family: "STXingkai", "华文行楷", serif;
+            opacity: 0;
+            animation: textFade 4s linear infinite;
+        }
+
+        /* 动画关键帧 */
+        @keyframes walkToLove {
+            0% {
+                transform: translateX(0) scaleX(1);
+            }
+            45% {
+                transform: translateX(180px) scaleX(1);
+            }
+            50% {
+                transform: translateX(180px) scaleX(-1);
+            }
+            95% {
+                transform: translateX(0) scaleX(-1);
+            }
+            100% {
+                transform: translateX(0) scaleX(1);
+            }
+        }
+
+        @keyframes armSwing {
+            0%, 100% { transform: rotate(-30deg); }
+            50% { transform: rotate(30deg); }
+        }
+
+        @keyframes legWalk {
+            0%, 100% { transform: rotate(-20deg); }
+            50% { transform: rotate(20deg); }
+        }
+
+        @keyframes heartBeat {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes textFade {
+            0%, 100% { opacity: 0; }
+            25%, 75% { opacity: 1; }
+        }
+
+        /* 添加彩蛋爱心样式 */
+        .easter-heart {
+            position: fixed;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            z-index: 9998;
+            animation: floatAround 15s linear infinite;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .easter-heart.show {
+            opacity: 1;
+        }
+
+        .easter-heart::before,
+        .easter-heart::after {
+            content: '';
+            position: absolute;
+            width: 15px;
+            height: 25px;
+            background: #ff4b4b;
+            border-radius: 15px 15px 0 0;
+            transform-origin: 100% 100%;
+            filter: drop-shadow(0 0 5px rgba(255, 75, 75, 0.5));
+        }
+
+        .easter-heart::before {
+            left: 15px;
+            transform: rotate(-45deg);
+        }
+
+        .easter-heart::after {
+            left: 0;
+            transform: rotate(45deg);
+        }
+
+        .burst-heart {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9997;
+        }
+
+        @keyframes floatAround {
+            0% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+            25% {
+                transform: translate(50vw, 25vh) rotate(90deg);
+            }
+            50% {
+                transform: translate(25vw, 50vh) rotate(180deg);
+            }
+            75% {
+                transform: translate(75vw, 75vh) rotate(270deg);
+            }
+            100% {
+                transform: translate(0, 0) rotate(360deg);
+            }
+        }
+
+        @keyframes burstFloat {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--tx), var(--ty)) scale(0);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="loginPage">
+        <div class="login-container">
+            <h2 class="login-title">欢迎来到我们的秘密基地</h2>
+            <div class="login-input-wrapper">
+                <input type="text" id="username" placeholder="悄悄告诉我暗号~" class="login-input">
+                <i class="fas fa-user login-input-icon"></i>
             </div>
+            <div class="login-input-wrapper">
+                <input type="password" id="password" placeholder="再告诉我通关密语~" class="login-input">
+                <i class="fas fa-lock login-input-icon"></i>
+            </div>
+            <div class="remember-me">
+                <input type="checkbox" id="rememberMe" class="remember-checkbox">
+                <label for="rememberMe" class="remember-label">记住我的小秘密</label>
+            </div>
+            <button onclick="login()" class="login-button">
+                <span>开启我们的小世界</span>
+            </button>
+            <div class="login-error" id="loginError">暗号或密语不对哦，再想想~</div>
         </div>
     </div>
 
@@ -616,6 +1724,44 @@
         <div class="timer-title">我们的故事持续时间：</div>
         <div class="timer" id="timer"></div>
     </div>
+
+    <div class="stickman-animation">
+        <div class="stickman">
+            <div class="stickman-head"></div>
+            <div class="stickman-body"></div>
+            <div class="stickman-arm-left"></div>
+            <div class="stickman-arm-right"></div>
+            <div class="stickman-leg-left"></div>
+            <div class="stickman-leg-right"></div>
+        </div>
+        <div class="heart"></div>
+        <div class="love-text">永远爱你，宝贝</div>
+    </div>
+
+    <button class="mood-weather-button" onclick="toggleMoodIcons()">
+        <i class="fas fa-cloud-sun"></i>
+        <span>今日心情</span>
+    </button>
+
+    <div class="mood-icons-container">
+        <div class="mood-icon happy" onclick="selectMood('happy')" title="开心快乐">
+            <i class="fas fa-sun"></i>
+        </div>
+        <div class="mood-icon angry" onclick="selectMood('angry')" title="生气愤怒">
+            <i class="fas fa-bolt"></i>
+        </div>
+        <div class="mood-icon sad" onclick="selectMood('sad')" title="悲伤失落">
+            <i class="fas fa-cloud-rain"></i>
+        </div>
+        <div class="mood-icon okay" onclick="selectMood('okay')" title="还好还好">
+            <i class="fas fa-cloud"></i>
+        </div>
+    </div>
+
+    <button class="fold-button" onclick="togglePhotoWall()">
+        <i class="fas fa-chevron-left"></i>
+        <span class="button-text">收起照片墙</span>
+    </button>
 
     <div class="container">
         <!-- 这里将放置主要内容 -->
@@ -638,7 +1784,7 @@
                     <img src="./photo/2.jpg" alt="Photo 2">
                 </div>
                 <div class="photo-back">
-                    坐在摩天轮，世界仿佛是我们的，然后我们拥有了彼此，就已经拥有��世界。
+                    坐在摩天轮，世界仿佛是我们的，然后我们拥有了彼此，就已经拥有世界。
                 </div>
             </div>
         </div>
@@ -722,7 +1868,10 @@
 
         <div class="message-board">
             <textarea class="message-input" placeholder="写下此刻的心情..." id="messageInput"></textarea>
-            <button class="message-submit" onclick="submitMessage()">保存留言</button>
+            <button class="message-submit" onclick="submitMessage()">
+                <i class="fas fa-paper-plane"></i>
+                保存留言
+            </button>
             <div class="messages-container" id="messagesContainer"></div>
         </div>
     </div>
@@ -748,10 +1897,33 @@
         <source src="./music/1.mp3" type="audio/mpeg">
     </audio>
 
+    <!-- 添加确认对话框 -->
+    <div class="dialog-overlay" id="dialogOverlay"></div>
+    <div class="confirm-dialog" id="confirmDialog">
+        <h3>确认删除</h3>
+        <p>确定要删除这条留言吗？</p>
+        <div class="dialog-buttons">
+            <button class="dialog-button confirm-button" onclick="confirmDelete()">删除</button>
+            <button class="dialog-button cancel-button" onclick="cancelDelete()">取消</button>
+        </div>
+    </div>
+
+    <div class="mood-modal" id="moodModal">
+        <button class="mood-modal-close" onclick="closeMoodModal()">
+            <i class="fas fa-times"></i>
+        </button>
+        <div class="mood-modal-text" id="moodModalText"></div>
+    </div>
+
+    <div class="mood-history-panel">
+        <div class="mood-history-title">今日心情记录</div>
+        <div class="mood-history-list" id="moodHistoryList"></div>
+    </div>
+
     <script type="module">
         // Import the functions you need from the SDKs you need
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+        import { getDatabase, ref, push, onValue, remove, set, get } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
         // Your web app's Firebase configuration
         const firebaseConfig = {
@@ -768,22 +1940,71 @@
         const database = getDatabase(app);
         const messagesRef = ref(database, 'messages');
 
+        let currentDeleteId = null;
+
         // 修改加载消息函数
         window.loadMessages = function() {
             onValue(messagesRef, (snapshot) => {
                 const messages = [];
                 snapshot.forEach((childSnapshot) => {
-                    messages.push(childSnapshot.val());
+                    messages.push({
+                        id: childSnapshot.key,
+                        ...childSnapshot.val()
+                    });
                 });
+                
+                // 按时间倒序排序
+                messages.sort((a, b) => new Date(b.date) - new Date(a.date));
                 
                 const messagesContainer = document.getElementById('messagesContainer');
                 messagesContainer.innerHTML = messages.map(msg => `
-                    <div class="message-item">
+                    <div class="message-item" data-id="${msg.id}">
                         <div class="message-content">${msg.content}</div>
-                        <div class="message-date">${msg.date}</div>
+                        <div class="message-date">
+                            <i class="far fa-clock"></i> ${msg.date}
+                        </div>
+                        <div class="message-delete" onclick="showDeleteConfirm('${msg.id}')">
+                            <i class="fas fa-trash-alt"></i>
+                        </div>
                     </div>
                 `).join('');
+
+                // 添加新消息提示动画
+                const newMessage = messagesContainer.firstElementChild;
+                if (newMessage) {
+                    newMessage.style.animation = 'none';
+                    newMessage.offsetHeight; // 触发重绘
+                    newMessage.style.animation = 'fadeIn 0.5s ease';
+                }
             });
+        }
+
+        // 显示删除确认对话框
+        window.showDeleteConfirm = function(messageId) {
+            currentDeleteId = messageId;
+            document.getElementById('dialogOverlay').classList.add('show');
+            document.getElementById('confirmDialog').classList.add('show');
+        }
+
+        // 确认删除
+        window.confirmDelete = function() {
+            if (currentDeleteId) {
+                const messageRef = ref(database, `messages/${currentDeleteId}`);
+                remove(messageRef).then(() => {
+                    // 删除成功后关闭对话框
+                    cancelDelete();
+                }).catch(error => {
+                    console.error('删除失败:', error);
+                    alert('删除失败，请重试');
+                });
+            }
+        }
+
+        // 取消删除
+        window.cancelDelete = function() {
+            currentDeleteId = null;
+            document.getElementById('dialogOverlay').classList.remove('show');
+            document.getElementById('confirmDialog').classList.remove('show');
         }
 
         // 修改提交消息函数
@@ -791,15 +2012,157 @@
             const input = document.getElementById('messageInput');
             const content = input.value.trim();
             
-            if (!content) return;
+            if (!content) {
+                alert('请输入留言内容');
+                return;
+            }
+
+            // 添加提交动画效果
+            const submitButton = document.querySelector('.message-submit');
+            submitButton.style.pointerEvents = 'none';
+            submitButton.style.opacity = '0.7';
 
             push(messagesRef, {
                 content: content,
                 date: new Date().toLocaleString()
+            }).then(() => {
+                input.value = ''; // 清空输入框
+                // 恢复按钮状态
+                submitButton.style.pointerEvents = 'auto';
+                submitButton.style.opacity = '1';
+            }).catch(error => {
+                console.error('提交留言失败:', error);
+                alert('提交留言失败，请重试');
+                submitButton.style.pointerEvents = 'auto';
+                submitButton.style.opacity = '1';
             });
-            
-            input.value = ''; // 清空输入框
         }
+
+        // 添加心情记录相关功能
+        const moodHistoryRef = ref(database, 'moodHistory');
+        
+        // 获取今天的日期（格式：YYYY-MM-DD）
+        function getTodayDate() {
+            const now = new Date();
+            return now.toISOString().split('T')[0];
+        }
+
+        // 加载今天的心情记录
+        function loadMoodHistory() {
+            const today = getTodayDate();
+            const todayMoodRef = ref(database, `moodHistory/${today}`);
+            
+            onValue(todayMoodRef, (snapshot) => {
+                const moodHistoryList = document.getElementById('moodHistoryList');
+                moodHistoryList.innerHTML = '';
+                
+                const moods = [];
+                snapshot.forEach((childSnapshot) => {
+                    moods.push({
+                        mood: childSnapshot.val().mood,
+                        time: childSnapshot.val().time
+                    });
+                });
+                
+                // 按时间倒序排序
+                moods.sort((a, b) => new Date(b.time) - new Date(a.time));
+                
+                moods.forEach(record => {
+                    const moodIcons = {
+                        happy: 'fa-sun',
+                        angry: 'fa-bolt',
+                        sad: 'fa-cloud-rain',
+                        okay: 'fa-cloud'
+                    };
+                    
+                    const time = new Date(record.time).toLocaleTimeString('zh-CN', {
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
+                    
+                    const recordElement = document.createElement('div');
+                    recordElement.className = `mood-record ${record.mood}`;
+                    recordElement.innerHTML = `
+                        <div class="mood-record-icon">
+                            <i class="fas ${moodIcons[record.mood]}"></i>
+                        </div>
+                        <div class="mood-record-time">${time}</div>
+                    `;
+                    
+                    moodHistoryList.appendChild(recordElement);
+                });
+            });
+        }
+
+        // 修改选择心情的函数
+        window.selectMood = function(mood) {
+            const moodMessages = {
+                happy: '耶耶耶，宝贝开心，我开心',
+                angry: '妖魔鬼怪快离开，妖魔鬼怪快离开',
+                sad: '我是你的港湾，在你累了烦了的时候，我会张开双臂拥抱着你!',
+                okay: '还好还好，就刚刚好，让它更好'
+            };
+
+            const moodClasses = {
+                happy: 'mood-happy',
+                angry: 'mood-angry',
+                sad: 'mood-sad'
+            };
+
+            // 移除所有心情类
+            document.body.classList.remove('mood-happy', 'mood-angry', 'mood-sad');
+
+            // 如果不是"还好还好"，添加对应的类
+            if (mood !== 'okay') {
+                document.body.classList.add(moodClasses[mood]);
+            }
+
+            // 显示弹窗
+            const modal = document.getElementById('moodModal');
+            const modalText = document.getElementById('moodModalText');
+            modalText.textContent = moodMessages[mood];
+            modal.classList.add('show');
+
+            // 记录心情
+            const today = getTodayDate();
+            const todayMoodRef = ref(database, `moodHistory/${today}`);
+            push(todayMoodRef, {
+                mood: mood,
+                time: new Date().toISOString()
+            });
+
+            // 收起心情图标
+            toggleMoodIcons();
+        }
+
+        // 在页面加载时加载心情记录
+        window.addEventListener('load', loadMoodHistory);
+
+        // 每天凌晨自动清除昨天的记录
+        function scheduleMoodHistoryCleanup() {
+            const now = new Date();
+            const tomorrow = new Date(now);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            tomorrow.setHours(0, 0, 0, 0);
+            
+            const timeUntilMidnight = tomorrow - now;
+            
+            setTimeout(() => {
+                const yesterday = new Date(now);
+                yesterday.setDate(yesterday.getDate() - 1);
+                const yesterdayStr = yesterday.toISOString().split('T')[0];
+                
+                // 删除昨天的记录
+                const yesterdayMoodRef = ref(database, `moodHistory/${yesterdayStr}`);
+                remove(yesterdayMoodRef);
+                
+                // 重新设置定时器
+                scheduleMoodHistoryCleanup();
+            }, timeUntilMidnight);
+        }
+
+        // 启动自动清理定时器
+        scheduleMoodHistoryCleanup();
     </script>
 
     <script>
@@ -1088,38 +2451,88 @@
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
             const rememberMe = document.getElementById('rememberMe').checked;
+            const loginError = document.getElementById('loginError');
             
             if (username === '0621' && password === '1006') {
-                // 根据是否勾选"记住我"来存储登录状态
-                if (rememberMe) {
-                    localStorage.setItem('isLoggedIn', 'true');
-                } else {
-                    sessionStorage.setItem('isLoggedIn', 'true');
-                    localStorage.removeItem('isLoggedIn');
-                }
+                // 登录成功动画
+                const loginContainer = document.querySelector('.login-container');
+                loginContainer.style.transform = 'scale(0.8)';
+                loginContainer.style.opacity = '0';
                 
-                // 显示主页内容
-                document.querySelector('.photo-container-left').style.display = 'block';
-                document.querySelector('.photo-container-right').style.display = 'block';
-                document.querySelector('.title-container').style.display = 'block';
-                document.querySelector('.timer-container').style.display = 'block';
-                document.querySelector('.photo-wall').style.display = 'grid';
-                document.querySelector('.next-page-button').style.display = 'block';
-                document.querySelector('.music-player').style.display = 'flex';
-                document.querySelector('.music-controls').style.display = 'flex';
-                
-                // 隐藏登录页面
-                document.getElementById('loginPage').style.display = 'none';
-                
-                // 登录成功后自动播放音乐
-                const music = document.getElementById('bgMusic');
-                music.play().catch(error => {
-                    console.error('自动播放失败:', error);
-                });
+                setTimeout(() => {
+                    // 根据是否勾选"记住我"来存储登录状态
+                    if (rememberMe) {
+                        localStorage.setItem('isLoggedIn', 'true');
+                    } else {
+                        sessionStorage.setItem('isLoggedIn', 'true');
+                        localStorage.removeItem('isLoggedIn');
+                    }
+                    
+                    // 显示主页内容
+                    document.querySelector('.photo-container-left').style.display = 'block';
+                    document.querySelector('.photo-container-right').style.display = 'block';
+                    document.querySelector('.title-container').style.display = 'block';
+                    document.querySelector('.timer-container').style.display = 'block';
+                    document.querySelector('.photo-wall').style.display = 'grid';
+                    document.querySelector('.next-page-button').style.display = 'block';
+                    document.querySelector('.music-player').style.display = 'flex';
+                    document.querySelector('.music-controls').style.display = 'flex';
+                    
+                    // 隐藏登录页面
+                    document.getElementById('loginPage').style.display = 'none';
+                    
+                    // 登录成功后自动播放音乐
+                    const music = document.getElementById('bgMusic');
+                    music.play().catch(error => {
+                        console.error('自动播放失败:', error);
+                    });
+                }, 500);
             } else {
-                alert('账号或密码错误，请重试！');
+                // 登录失败动画
+                loginError.textContent = getRandomErrorMessage();
+                loginError.classList.add('show');
+                
+                // 晃动输入框
+                const inputs = document.querySelectorAll('.login-input');
+                inputs.forEach(input => {
+                    input.style.animation = 'shake 0.5s ease';
+                    setTimeout(() => {
+                        input.style.animation = '';
+                    }, 500);
+                });
+                
+                // 3秒后隐藏错误信息
+                setTimeout(() => {
+                    loginError.classList.remove('show');
+                }, 3000);
             }
         }
+
+        // 添加随机错误消息
+        function getRandomErrorMessage() {
+            const messages = [
+                "暗号或密语不对哦，再想想~",
+                "咦？这不是我们的秘密哦！",
+                "你确定这是对的吗？再试试吧~",
+                "噢噢，好像记错了呢！",
+                "这不是我们约定好的暗号呢~",
+                "你是不是忘记了什么重要的日子？",
+                "要不要再仔细想想我们的小秘密？",
+                "差一点点就对啦，再试试！"
+            ];
+            return messages[Math.floor(Math.random() * messages.length)];
+        }
+
+        // 添加抖动动画
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes shake {
+                0%, 100% { transform: translateX(0); }
+                20%, 60% { transform: translateX(-5px); }
+                40%, 80% { transform: translateX(5px); }
+            }
+        `;
+        document.head.appendChild(style);
 
         // 添加回车键登录支持
         document.getElementById('password').addEventListener('keypress', function(e) {
@@ -1127,6 +2540,256 @@
                 login();
             }
         });
+
+        // 添加照片墙折叠功能
+        let isPhotoWallFolded = false;
+        window.togglePhotoWall = function() {
+            const photoWall = document.querySelector('.photo-wall');
+            const foldButton = document.querySelector('.fold-button');
+            const buttonText = foldButton.querySelector('.button-text');
+            const icon = foldButton.querySelector('i');
+            const photoItems = document.querySelectorAll('.photo-item');
+            
+            if (!isPhotoWallFolded) {
+                // 折叠动画
+                photoWall.classList.add('folding');
+                
+                // 为每个照片项添加延迟动画
+                photoItems.forEach((item, index) => {
+                    setTimeout(() => {
+                        item.style.opacity = '0';
+                        item.style.transform = 'scale(0.8)';
+                    }, index * 100);
+                });
+
+                // 等待所有照片动画完成后，添加folded类
+                setTimeout(() => {
+                    photoWall.classList.add('folded');
+                    photoWall.classList.remove('folding');
+                    icon.classList.add('fa-chevron-right');
+                    icon.classList.remove('fa-chevron-left');
+                    buttonText.textContent = '展开照片墙';
+                }, photoItems.length * 100 + 300);
+
+            } else {
+                // 展开动画
+                photoWall.classList.remove('folded');
+                
+                // 为每个照片项添加延迟动画
+                photoItems.forEach((item, index) => {
+                    setTimeout(() => {
+                        item.style.opacity = '1';
+                        item.style.transform = 'scale(1)';
+                    }, index * 100);
+                });
+
+                icon.classList.add('fa-chevron-left');
+                icon.classList.remove('fa-chevron-right');
+                buttonText.textContent = '收起照片墙';
+            }
+            
+            isPhotoWallFolded = !isPhotoWallFolded;
+        }
+
+        // 添加心情图标切换功能
+        let isMoodIconsVisible = false;
+        window.toggleMoodIcons = function() {
+            const iconContainer = document.querySelector('.mood-icons-container');
+            const icons = document.querySelectorAll('.mood-icon');
+            
+            if (!isMoodIconsVisible) {
+                iconContainer.classList.add('show');
+                icons.forEach((icon, index) => {
+                    setTimeout(() => {
+                        icon.classList.add('show');
+                    }, index * 100);
+                });
+            } else {
+                icons.forEach((icon) => {
+                    icon.classList.remove('show');
+                });
+                setTimeout(() => {
+                    iconContainer.classList.remove('show');
+                }, 500);
+            }
+            
+            isMoodIconsVisible = !isMoodIconsVisible;
+        }
+
+        window.selectMood = function(mood) {
+            const moodMessages = {
+                happy: '耶耶耶，宝贝开心，我开心',
+                angry: '妖魔鬼怪快离开，妖魔鬼怪快离开',
+                sad: '我是你的港湾，在你累了烦了的时候，我会张开双臂拥抱着你!',
+                okay: '还好还好，就刚刚好，让它更好'
+            };
+
+            const moodClasses = {
+                happy: 'mood-happy',
+                angry: 'mood-angry',
+                sad: 'mood-sad'
+            };
+
+            // 移除所有心情类
+            document.body.classList.remove('mood-happy', 'mood-angry', 'mood-sad');
+
+            // 如果不是"还好还好"，添加对应的类
+            if (mood !== 'okay') {
+                document.body.classList.add(moodClasses[mood]);
+            }
+
+            // 显示弹窗
+            const modal = document.getElementById('moodModal');
+            const modalText = document.getElementById('moodModalText');
+            modalText.textContent = moodMessages[mood];
+            modal.classList.add('show');
+
+            // 记录心情
+            const today = getTodayDate();
+            const todayMoodRef = ref(database, `moodHistory/${today}`);
+            push(todayMoodRef, {
+                mood: mood,
+                time: new Date().toISOString()
+            });
+
+            // 收起心情图标
+            toggleMoodIcons();
+        }
+
+        window.closeMoodModal = function() {
+            const modal = document.getElementById('moodModal');
+            modal.classList.remove('show');
+
+            // 如果不是"还好还好"，延迟一段时间后恢复原始背景
+            setTimeout(() => {
+                document.body.classList.remove('mood-happy', 'mood-angry', 'mood-sad');
+            }, 500);
+        }
+
+        // 添加彩蛋爱心功能
+        class EasterEgg {
+            constructor() {
+                this.maxDaily = 10; // 每天最大出现次数
+                this.appearances = 0;
+                this.isActive = false;
+                this.heart = null;
+                this.burstHearts = [];
+                
+                // 初始化
+                this.init();
+            }
+
+            init() {
+                // 检查今天是否已经重置计数
+                const today = new Date().toDateString();
+                const lastReset = localStorage.getItem('easterEggLastReset');
+                
+                if (lastReset !== today) {
+                    this.appearances = 0;
+                    localStorage.setItem('easterEggLastReset', today);
+                } else {
+                    this.appearances = parseInt(localStorage.getItem('easterEggAppearances') || '0');
+                }
+
+                // 开始随机出现
+                this.scheduleNextAppearance();
+            }
+
+            scheduleNextAppearance() {
+                if (this.appearances >= this.maxDaily) return;
+
+                // 随机 1-30 分钟后出现
+                const delay = Math.random() * 29 * 60 * 1000 + 60 * 1000;
+                setTimeout(() => this.showHeart(), delay);
+            }
+
+            showHeart() {
+                if (this.isActive || this.appearances >= this.maxDaily) return;
+
+                this.isActive = true;
+                this.appearances++;
+                localStorage.setItem('easterEggAppearances', this.appearances);
+
+                // 创建爱心元素
+                this.heart = document.createElement('div');
+                this.heart.className = 'easter-heart';
+                document.body.appendChild(this.heart);
+
+                // 添加点击事件
+                this.heart.addEventListener('click', () => this.createHeartBurst());
+
+                // 延迟显示，让过渡效果生效
+                setTimeout(() => this.heart.classList.add('show'), 100);
+
+                // 15秒后消失
+                setTimeout(() => this.hideHeart(), 15000);
+            }
+
+            hideHeart() {
+                if (!this.heart) return;
+
+                this.heart.classList.remove('show');
+                setTimeout(() => {
+                    this.heart.remove();
+                    this.heart = null;
+                    this.isActive = false;
+                    
+                    // 安排下一次出现
+                    this.scheduleNextAppearance();
+                }, 500);
+            }
+
+            createHeartBurst() {
+                // 移除触发的爱心
+                this.hideHeart();
+
+                // 创建爆发效果
+                for (let i = 0; i < 50; i++) {
+                    const heart = document.createElement('div');
+                    heart.className = 'burst-heart';
+                    
+                    // 随机起始位置
+                    const startX = window.innerWidth / 2;
+                    const startY = window.innerHeight / 2;
+                    
+                    // 随机结束位置
+                    const angle = (Math.random() * 360) * (Math.PI / 180);
+                    const distance = Math.random() * Math.min(window.innerWidth, window.innerHeight) * 0.8;
+                    const tx = Math.cos(angle) * distance;
+                    const ty = Math.sin(angle) * distance;
+
+                    // 设置样式
+                    heart.style.cssText = `
+                        left: ${startX}px;
+                        top: ${startY}px;
+                        width: ${20 + Math.random() * 20}px;
+                        height: ${20 + Math.random() * 20}px;
+                        --tx: ${tx}px;
+                        --ty: ${ty}px;
+                        animation: burstFloat ${1 + Math.random() * 2}s ease-out forwards;
+                    `;
+
+                    // 添加爱心形状
+                    heart.innerHTML = `
+                        <div style="
+                            position: absolute;
+                            width: 100%;
+                            height: 100%;
+                            background: ${`hsl(${Math.random() * 40 + 340}, 100%, 65%)`};
+                            clip-path: path('M12 21.593c-5.63-5.539-11-10.297-11-14.402 0-3.791 3.068-5.191 5.281-5.191 1.312 0 4.151.501 5.719 4.457 1.59-3.968 4.464-4.447 5.726-4.447 2.54 0 5.274 1.621 5.274 5.181 0 4.069-5.136 8.625-11 14.402m5.726-20.583c-2.203 0-4.446 1.042-5.726 3.238-1.285-2.206-3.522-3.248-5.719-3.248-3.183 0-6.281 2.187-6.281 6.191 0 4.661 5.571 9.429 12 15.809 6.43-6.38 12-11.148 12-15.809 0-4.011-3.095-6.181-6.274-6.181');
+                        "></div>
+                    `;
+
+                    document.body.appendChild(heart);
+                    
+                    // 10秒后移除
+                    setTimeout(() => heart.remove(), 10000);
+                }
+            }
+        }
+
+        // 创建彩蛋实例
+        const easterEgg = new EasterEgg();
     </script>
 </body>
 </html>
