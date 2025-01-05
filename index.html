@@ -2606,7 +2606,12 @@
                 const loginError = document.getElementById('loginError');
                 loginError.textContent = "请先选择浏览设备~";
                 loginError.classList.add('show');
+                
+                // 添加输入框晃动效果
+                const deviceSelection = document.querySelector('.device-selection');
+                deviceSelection.style.animation = 'shake 0.5s ease';
                 setTimeout(() => {
+                    deviceSelection.style.animation = '';
                     loginError.classList.remove('show');
                 }, 3000);
                 return;
@@ -2622,6 +2627,7 @@
                 localStorage.setItem('selectedDevice', selectedDevice);
                 
                 // 应用设备特定样式
+                document.body.classList.remove('mobile-view', 'desktop-view');
                 document.body.classList.add(selectedDevice === 'mobile' ? 'mobile-view' : 'desktop-view');
                 
                 // 登录成功动画
@@ -2637,9 +2643,12 @@
                         localStorage.removeItem('isLoggedIn');
                     }
                     
-                    // 显示主页内容
-                    document.querySelector('.photo-container-left').style.display = selectedDevice === 'mobile' ? 'none' : 'block';
-                    document.querySelector('.photo-container-right').style.display = selectedDevice === 'mobile' ? 'none' : 'block';
+                    // 显示主页内容，根据设备类型显示不同内容
+                    const photoContainerLeft = document.querySelector('.photo-container-left');
+                    const photoContainerRight = document.querySelector('.photo-container-right');
+                    if (photoContainerLeft) photoContainerLeft.style.display = selectedDevice === 'mobile' ? 'none' : 'block';
+                    if (photoContainerRight) photoContainerRight.style.display = selectedDevice === 'mobile' ? 'none' : 'block';
+                    
                     document.querySelector('.title-container').style.display = 'block';
                     document.querySelector('.timer-container').style.display = 'block';
                     document.querySelector('.photo-wall').style.display = 'grid';
@@ -2652,9 +2661,11 @@
                     
                     // 登录成功后自动播放音乐
                     const music = document.getElementById('bgMusic');
-                    music.play().catch(error => {
-                        console.error('自动播放失败:', error);
-                    });
+                    if (music) {
+                        music.play().catch(error => {
+                            console.error('自动播放失败:', error);
+                        });
+                    }
                 }, 500);
             } else {
                 loginError.textContent = getRandomErrorMessage();
@@ -3663,19 +3674,40 @@
 
         // 修改登录函数
         function login() {
+            if (!selectedDevice) {
+                const loginError = document.getElementById('loginError');
+                loginError.textContent = "请先选择浏览设备~";
+                loginError.classList.add('show');
+                
+                // 添加输入框晃动效果
+                const deviceSelection = document.querySelector('.device-selection');
+                deviceSelection.style.animation = 'shake 0.5s ease';
+                setTimeout(() => {
+                    deviceSelection.style.animation = '';
+                    loginError.classList.remove('show');
+                }, 3000);
+                return;
+            }
+
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
             const rememberMe = document.getElementById('rememberMe').checked;
             const loginError = document.getElementById('loginError');
             
             if (username === '0621' && password === '1006') {
+                // 保存设备选择
+                localStorage.setItem('selectedDevice', selectedDevice);
+                
+                // 应用设备特定样式
+                document.body.classList.remove('mobile-view', 'desktop-view');
+                document.body.classList.add(selectedDevice === 'mobile' ? 'mobile-view' : 'desktop-view');
+                
                 // 登录成功动画
                 const loginContainer = document.querySelector('.login-container');
                 loginContainer.style.transform = 'scale(0.8)';
                 loginContainer.style.opacity = '0';
                 
                 setTimeout(() => {
-                    // 根据是否勾选"记住我"来存储登录状态
                     if (rememberMe) {
                         localStorage.setItem('isLoggedIn', 'true');
                     } else {
@@ -3683,9 +3715,12 @@
                         localStorage.removeItem('isLoggedIn');
                     }
                     
-                    // 显示主页内容
-                    document.querySelector('.photo-container-left').style.display = 'block';
-                    document.querySelector('.photo-container-right').style.display = 'block';
+                    // 显示主页内容，根据设备类型显示不同内容
+                    const photoContainerLeft = document.querySelector('.photo-container-left');
+                    const photoContainerRight = document.querySelector('.photo-container-right');
+                    if (photoContainerLeft) photoContainerLeft.style.display = selectedDevice === 'mobile' ? 'none' : 'block';
+                    if (photoContainerRight) photoContainerRight.style.display = selectedDevice === 'mobile' ? 'none' : 'block';
+                    
                     document.querySelector('.title-container').style.display = 'block';
                     document.querySelector('.timer-container').style.display = 'block';
                     document.querySelector('.photo-wall').style.display = 'grid';
@@ -3698,16 +3733,16 @@
                     
                     // 登录成功后自动播放音乐
                     const music = document.getElementById('bgMusic');
-                    music.play().catch(error => {
-                        console.error('自动播放失败:', error);
-                    });
+                    if (music) {
+                        music.play().catch(error => {
+                            console.error('自动播放失败:', error);
+                        });
+                    }
                 }, 500);
             } else {
-                // 登录失败动画
                 loginError.textContent = getRandomErrorMessage();
                 loginError.classList.add('show');
                 
-                // 晃动输入框
                 const inputs = document.querySelectorAll('.login-input');
                 inputs.forEach(input => {
                     input.style.animation = 'shake 0.5s ease';
@@ -3716,7 +3751,6 @@
                     }, 500);
                 });
                 
-                // 3秒后隐藏错误信息
                 setTimeout(() => {
                     loginError.classList.remove('show');
                 }, 3000);
