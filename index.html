@@ -1,3 +1,200 @@
+
+            .title-cn {
+                font-size: 1.1em;
+                letter-spacing: 6px;
+            }
+
+            /* 计时器容器适配 */
+            .timer-container {
+                top: 100px;
+                width: 90%;
+                padding: 12px 15px;
+            }
+
+            .timer-title {
+                font-size: 1em;
+                margin-bottom: 8px;
+            }
+
+            .timer {
+                font-size: 0.9em;
+            }
+
+            /* 左右照片容器适配 */
+            .photo-container-left,
+            .photo-container-right {
+                display: none;
+            }
+
+            /* 照片墙适配 */
+            .photo-wall {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+                margin-top: 200px;
+            }
+
+            .photo-item {
+                width: 130px;
+                height: 130px;
+            }
+
+            /* 心情按钮适配 */
+            .mood-weather-button {
+                top: 250px;
+                padding: 10px 25px;
+                font-size: 1em;
+            }
+
+            .mood-icons-container {
+                top: 310px;
+                gap: 15px;
+            }
+
+            .mood-icon {
+                width: 45px;
+                height: 45px;
+            }
+
+            /* 折叠按钮适配 */
+            .fold-button {
+                left: 10px;
+                padding: 10px 20px;
+                font-size: 1em;
+            }
+
+            /* 下一页按钮适配 */
+            .next-page-button {
+                left: 10px;
+                bottom: 20px;
+                padding: 10px 25px;
+                font-size: 1em;
+            }
+
+            /* 音乐播放器适配 */
+            .music-player {
+                bottom: 20px;
+                right: 20px;
+                width: 40px;
+                height: 40px;
+            }
+
+            .music-controls {
+                bottom: 70px;
+                right: 20px;
+            }
+
+            .music-control-btn {
+                width: 25px;
+                height: 25px;
+            }
+
+            /* 第二页适配 */
+            .message-board {
+                margin-top: 60px;
+                width: 92%;
+                padding: 15px;
+            }
+
+            .message-input {
+                min-height: 100px;
+                padding: 15px;
+                font-size: 1em;
+            }
+
+            .message-submit {
+                padding: 10px 20px;
+                font-size: 1em;
+            }
+
+            .message-item {
+                padding: 15px;
+            }
+
+            .message-content {
+                font-size: 1em;
+            }
+
+            .pagination {
+                gap: 10px;
+            }
+
+            .pagination-button {
+                padding: 6px 15px;
+                font-size: 0.85em;
+            }
+
+            /* 心情历史面板适配 */
+            .mood-history-panel {
+                position: fixed;
+                right: 10px;
+                top: auto;
+                bottom: 100px;
+                transform: none;
+                width: 150px;
+                max-height: 200px;
+            }
+
+            /* 登录页面适配 */
+            .login-container {
+                width: 85%;
+                padding: 30px 20px;
+            }
+
+            .login-title {
+                font-size: 1.5em;
+            }
+
+            .login-input {
+                padding: 10px 15px 10px 35px;
+            }
+
+            /* 确认对话框适配 */
+            .confirm-dialog {
+                width: 85%;
+                padding: 20px;
+            }
+
+            /* 心情模态框适配 */
+            .mood-modal {
+                width: 85%;
+                padding: 20px;
+            }
+
+            /* 火柴人动画适配 */
+            .stickman-animation {
+                transform: scale(0.8);
+            }
+        }
+
+        /* 超小屏幕适配 */
+        @media screen and (max-width: 380px) {
+            .photo-wall {
+                grid-template-columns: 1fr;
+            }
+
+            .photo-item {
+                width: 150px;
+                height: 150px;
+            }
+
+            .mood-icons-container {
+                flex-wrap: wrap;
+                justify-content: center;
+                width: 90%;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
+            .timer {
+                font-size: 0.9em;
+            }
+
+            .title-en {
+                font-size: 1.3em;
+            }
+
+            .title-cn {
+                font-size: 1.1em;
 <!DOCTYPE html>
 <html lang="zh">
 <head>
@@ -1682,6 +1879,123 @@
                 opacity: 0;
             }
         }
+
+        /* 添加分页按钮样式 */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-top: 20px;
+            padding: 10px;
+        }
+
+        .pagination-button {
+            padding: 8px 20px;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9em;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .pagination-button:hover:not(:disabled) {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-2px);
+        }
+
+        .pagination-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .pagination-info {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9em;
+        }
+
+        /* 添加留言加载动画 */
+        .message-loading {
+            text-align: center;
+            padding: 20px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        @keyframes loadingDots {
+            0%, 20% {
+                content: ".";
+            }
+            40%, 60% {
+                content: "..";
+            }
+            80%, 100% {
+                content: "...";
+            }
+        }
+
+        .message-loading::after {
+            content: "";
+            animation: loadingDots 1.5s infinite;
+        }
+
+        /* 添加移动端适配样式 */
+        @media screen and (max-width: 768px) {
+            /* 标题容器适配 */
+            .title-container {
+                top: 10px;
+                width: 90%;
+                padding: 12px 15px;
+            }
+
+            .title-en {
+                font-size: 1.3em;
+                letter-spacing: 2px;
+                margin-bottom: 8px;
+            }
+            }
+
+            .title-cn {
+                font-size: 1.1em;
+                letter-spacing: 6px;
+            }
+        }
+
+        /* 横屏适配 */
+        @media screen and (orientation: landscape) and (max-height: 600px) {
+            .title-container {
+                top: 10px;
+            }
+
+            .timer-container {
+                top: 100px;
+            }
+
+            .photo-wall {
+                margin-top: 150px;
+            }
+
+            .mood-weather-button {
+                top: 180px;
+            }
+
+            .mood-icons-container {
+                top: 240px;
+            }
+
+            .message-board {
+                margin-top: 80px;  /* 横屏时设置更小的上边距 */
+            }
+
+            .stickman-animation {
+                transform: scale(0.6);
+            }
+        }
     </style>
 </head>
 <body>
@@ -1883,6 +2197,15 @@
                 保存留言
             </button>
             <div class="messages-container" id="messagesContainer"></div>
+            <div class="pagination">
+                <button class="pagination-button" id="prevPageBtn" onclick="changePage(-1)">
+                    <i class="fas fa-chevron-left"></i> 上一页
+                </button>
+                <span class="pagination-info" id="pageInfo">第 1 页</span>
+                <button class="pagination-button" id="nextPageBtn" onclick="changePage(1)">
+                    下一页 <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
         </div>
     </div>
 
@@ -1952,8 +2275,20 @@
 
         let currentDeleteId = null;
 
-        // 修改加载消息函数
+        // 分页相关变量
+        let currentPage = 1;
+        const messagesPerPage = 5;
+
+        // 修改加载消息函数以支持分页
         window.loadMessages = function() {
+            const messagesContainer = document.getElementById('messagesContainer');
+            const pageInfo = document.getElementById('pageInfo');
+            const prevPageBtn = document.getElementById('prevPageBtn');
+            const nextPageBtn = document.getElementById('nextPageBtn');
+            
+            // 显示加载动画
+            messagesContainer.innerHTML = '<div class="message-loading">加载中</div>';
+
             onValue(messagesRef, (snapshot) => {
                 const messages = [];
                 snapshot.forEach((childSnapshot) => {
@@ -1962,12 +2297,26 @@
                         ...childSnapshot.val()
                     });
                 });
-                
+
                 // 按时间倒序排序
                 messages.sort((a, b) => new Date(b.date) - new Date(a.date));
-                
-                const messagesContainer = document.getElementById('messagesContainer');
-                messagesContainer.innerHTML = messages.map(msg => `
+
+                // 计算分页
+                const totalMessages = messages.length;
+                const totalPages = Math.ceil(totalMessages / messagesPerPage);
+                const start = (currentPage - 1) * messagesPerPage;
+                const end = start + messagesPerPage;
+                const paginatedMessages = messages.slice(start, end);
+
+                // 更新页面信息
+                pageInfo.textContent = `第 ${currentPage} / ${totalPages} 页`;
+
+                // 更新按钮状态
+                prevPageBtn.disabled = currentPage === 1;
+                nextPageBtn.disabled = currentPage === totalPages;
+
+                // 渲染消息
+                messagesContainer.innerHTML = paginatedMessages.map(msg => `
                     <div class="message-item" data-id="${msg.id}">
                         <div class="message-content">${msg.content}</div>
                         <div class="message-date">
@@ -1977,15 +2326,19 @@
                             <i class="fas fa-trash-alt"></i>
                         </div>
                     </div>
-                `).join('');
+                `).join('') || '<div style="text-align: center; color: rgba(255,255,255,0.6);">暂无留言</div>';
+            });
+        }
 
-                // 添加新消息提示动画
-                const newMessage = messagesContainer.firstElementChild;
-                if (newMessage) {
-                    newMessage.style.animation = 'none';
-                    newMessage.offsetHeight; // 触发重绘
-                    newMessage.style.animation = 'fadeIn 0.5s ease';
-                }
+        // 修改翻页函数
+        window.changePage = function(direction) {
+            currentPage += direction;
+            loadMessages();
+            
+            // 平滑滚动到留言板顶部
+            document.querySelector('.message-board').scrollIntoView({ 
+                behavior: 'smooth',
+                block: 'start'
             });
         }
 
