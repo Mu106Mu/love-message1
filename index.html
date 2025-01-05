@@ -3450,6 +3450,9 @@
             const buttonText = foldButton.querySelector('.button-text');
             const icon = foldButton.querySelector('i');
             const photoItems = document.querySelectorAll('.photo-item');
+            const moodButton = document.querySelector('.mood-weather-button');
+            const moodHistory = document.querySelector('.mood-history-panel');
+            const moodIcons = document.querySelector('.mood-icons-container');
             
             if (!window.AppState.isPhotoWallFolded) {
                 // 折叠动画
@@ -3470,6 +3473,13 @@
                     icon.classList.add('fa-chevron-right');
                     icon.classList.remove('fa-chevron-left');
                     buttonText.textContent = '展开照片墙';
+                    
+                    // 显示心情相关元素
+                    moodButton.style.display = 'flex';
+                    moodHistory.style.display = 'block';
+                    if (moodIcons.classList.contains('show')) {
+                        moodIcons.style.display = 'flex';
+                    }
                 }, photoItems.length * 100 + 300);
 
             } else {
@@ -3487,6 +3497,11 @@
                 icon.classList.add('fa-chevron-left');
                 icon.classList.remove('fa-chevron-right');
                 buttonText.textContent = '收起照片墙';
+                
+                // 隐藏心情相关元素
+                moodButton.style.display = 'none';
+                moodHistory.style.display = 'none';
+                moodIcons.style.display = 'none';
             }
             
             window.AppState.isPhotoWallFolded = !window.AppState.isPhotoWallFolded;
