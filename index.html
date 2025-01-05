@@ -2131,7 +2131,7 @@
         <div class="photo-item">
             <div class="photo-card">
                 <div class="photo-front">
-                    <img src="./photo/1.jpg" alt="Photo 1">
+                    <img src="./photo/1.JPG" alt="Photo 1">
                 </div>
                 <div class="photo-back">
                     每一次见到你，我的心跳都会加速，就像第一次见面时那样悸动。
@@ -2141,7 +2141,7 @@
         <div class="photo-item">
             <div class="photo-card">
                 <div class="photo-front">
-                    <img src="./photo/2.jpg" alt="Photo 2">
+                    <img src="./photo/2.JPG" alt="Photo 2">
                 </div>
                 <div class="photo-back">
                     坐在摩天轮，世界仿佛是我们的，然后我们拥有了彼此，就已经拥有世界。
@@ -2151,7 +2151,7 @@
         <div class="photo-item">
             <div class="photo-card">
                 <div class="photo-front">
-                    <img src="./photo/3.jpg" alt="Photo 3">
+                    <img src="./photo/3.JPG" alt="Photo 3">
                 </div>
                 <div class="photo-back">
                     陪伴是我们给彼此最好的礼物。
@@ -2161,7 +2161,7 @@
         <div class="photo-item">
             <div class="photo-card">
                 <div class="photo-front">
-                    <img src="./photo/4.jpg" alt="Photo 4">
+                    <img src="./photo/4.JPG" alt="Photo 4">
                 </div>
                 <div class="photo-back">
                     和你在一起的每一分，每一秒，都是超级幸福的。
@@ -2171,7 +2171,7 @@
         <div class="photo-item">
             <div class="photo-card">
                 <div class="photo-front">
-                    <img src="./photo/5.jpg" alt="Photo 5">
+                    <img src="./photo/5.JPG" alt="Photo 5">
                 </div>
                 <div class="photo-back">
                     遇见你是我生命中最美好的意外，感谢命运让我们相遇，谁想分开我们，那就给ta竖你手上的友好手势。
@@ -2181,7 +2181,7 @@
         <div class="photo-item">
             <div class="photo-card">
                 <div class="photo-front">
-                    <img src="./photo/6.jpg" alt="Photo 6">
+                    <img src="./photo/6.JPG" alt="Photo 6">
                 </div>
                 <div class="photo-back">
                     和你在一起的每一刻都像是一场甜蜜的冒险，满惊喜和期待。
@@ -2191,7 +2191,7 @@
         <div class="photo-item">
             <div class="photo-card">
                 <div class="photo-front">
-                    <img src="./photo/7.jpg" alt="Photo 7">
+                    <img src="./photo/7.JPG" alt="Photo 7">
                 </div>
                 <div class="photo-back">
                     无论晴天还是雨天，只要有你在身边，每一都是最甜美的日子。
@@ -2201,7 +2201,7 @@
         <div class="photo-item">
             <div class="photo-card">
                 <div class="photo-front">
-                    <img src="./photo/8.jpg" alt="Photo 8">
+                    <img src="./photo/8.JPG" alt="Photo 8">
                 </div>
                 <div class="photo-back">
                     希望未来的每一天，我们都能一起看日出日落，数星星看月亮
@@ -2211,7 +2211,7 @@
         <div class="photo-item">
             <div class="photo-card">
                 <div class="photo-front">
-                    <img src="./photo/9.jpg" alt="Photo 9">
+                    <img src="./photo/9.JPG" alt="Photo 9">
                 </div>
                 <div class="photo-back">
                     夫妻相，在这一刻，具象化了！
@@ -2589,7 +2589,7 @@
                 window.AppState.music = music;
                 window.AppState.music.volume = 1.0;
                 window.loadSong(window.AppState.currentSongIndex);
-
+                
                 // 添加音频事件监听
                 window.AppState.music.addEventListener('ended', window.nextSong);
                 window.AppState.music.addEventListener('error', (e) => {
@@ -2644,7 +2644,7 @@
             // 修改照片墙的照片路径
             const photos = document.querySelectorAll('.photo-front img');
             photos.forEach((photo, index) => {
-                photo.src = `${window.AppState.basePath}/photo/${index + 1}.jpg`;
+                photo.src = `${window.AppState.basePath}/photo/${index + 1}.JPG`;
             });
 
             // 初始化音频
