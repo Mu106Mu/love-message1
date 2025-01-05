@@ -508,6 +508,18 @@
             display: none;
             opacity: 0;
             transition: opacity 0.5s ease;
+            padding-top: 60px; /* 为返回按钮留出空间 */
+        }
+
+        /* 移除第二页的标题和计时器相关样式 */
+        #secondPage .title-container,
+        #secondPage .timer-container {
+            display: none;
+        }
+
+        /* 调整留言板位置 */
+        #secondPage .message-board {
+            margin-top: 20px;
         }
 
         .second-page.active {
@@ -1820,17 +1832,15 @@
             }
 
             /* 第二页适配 */
-            #secondPage .title-container {
-                top: 10px;
-            }
-
+            #secondPage .title-container,
             #secondPage .timer-container {
-                top: 75px;
+                display: none;
             }
 
-            .message-board {
-                margin-top: 140px;
-                width: 90%;
+            /* 调整留言板位置 */
+            #secondPage .message-board {
+                margin-top: 60px;
+                width: 92%;
                 padding: 15px;
             }
 
@@ -1963,8 +1973,79 @@
                 margin-top: 120px;
                 grid-template-columns: repeat(4, 1fr);
             }
+
+            #secondPage .message-board {
+                margin-top: 50px;
+            }
         }
     </style>
+    <script>
+        // 心情相关功能
+        function toggleMoodIcons() {
+            const iconContainer = document.querySelector('.mood-icons-container');
+            const icons = document.querySelectorAll('.mood-icon');
+            
+            const isMoodIconsVisible = iconContainer.classList.contains('show');
+            
+            if (!isMoodIconsVisible) {
+                iconContainer.classList.add('show');
+                icons.forEach((icon, index) => {
+                    setTimeout(() => {
+                        icon.classList.add('show');
+                    }, index * 100);
+                });
+            } else {
+                icons.forEach((icon) => {
+                    icon.classList.remove('show');
+                });
+                setTimeout(() => {
+                    iconContainer.classList.remove('show');
+                }, 500);
+            }
+        }
+
+        function selectMood(mood) {
+            const moodMessages = {
+                happy: '耶耶耶，宝贝开心，我开心',
+                angry: '妖魔鬼怪快离开，妖魔鬼怪快离开',
+                sad: '我是你的港湾，在你累了烦了的时候，我会张开双臂拥抱着你!',
+                okay: '还好还好，就刚刚好，让它更好'
+            };
+
+            const moodClasses = {
+                happy: 'mood-happy',
+                angry: 'mood-angry',
+                sad: 'mood-sad'
+            };
+
+            // 移除所有心情类
+            document.body.classList.remove('mood-happy', 'mood-angry', 'mood-sad');
+
+            // 如果不是"还好还好"，添加对应的类
+            if (mood !== 'okay') {
+                document.body.classList.add(moodClasses[mood]);
+            }
+
+            // 显示弹窗
+            const modal = document.getElementById('moodModal');
+            const modalText = document.getElementById('moodModalText');
+            modalText.textContent = moodMessages[mood];
+            modal.classList.add('show');
+
+            // 收起心情图标
+            toggleMoodIcons();
+        }
+
+        function closeMoodModal() {
+            const modal = document.getElementById('moodModal');
+            modal.classList.remove('show');
+
+            // 如果不是"还好还好"，延迟一段时间后恢复原始背景
+            setTimeout(() => {
+                document.body.classList.remove('mood-happy', 'mood-angry', 'mood-sad');
+            }, 500);
+        }
+    </script>
 </head>
 <body>
     <div id="loginPage">
@@ -2148,16 +2229,7 @@
 
     <div class="second-page" id="secondPage">
         <button class="back-button" onclick="hideSecondPage()">← 返回</button>
-        <div class="title-container">
-            <div class="title-en">The secret place for MU and KAI</div>
-            <div class="title-cn">我们的秘密基地</div>
-        </div>
         
-        <div class="timer-container">
-            <div class="timer-title">我们的故事持续时间：</div>
-            <div class="timer" id="timer2"></div>
-        </div>
-
         <div class="message-board">
             <textarea class="message-input" placeholder="写下此刻的心情..." id="messageInput"></textarea>
             <button class="message-submit" onclick="submitMessage()">
@@ -2497,6 +2569,106 @@
     </script>
 
     <script>
+        // 全局状态管理
+        window.AppState = {
+            isPhotoWallFolded: false,
+            isMoodIconsVisible: false,
+            currentSongIndex: 0,
+            isPlaying: false,
+            music: null
+        };
+
+        // 工具函数
+        window.getTodayDate = function() {
+            const now = new Date();
+            return now.toISOString().split('T')[0];
+        };
+
+        // 照片墙折叠功能
+        window.togglePhotoWall = function() {
+            const photoWall = document.querySelector('.photo-wall');
+            const foldButton = document.querySelector('.fold-button');
+            const buttonText = foldButton.querySelector('.button-text');
+            const icon = foldButton.querySelector('i');
+            const photoItems = document.querySelectorAll('.photo-item');
+            
+            if (!window.AppState.isPhotoWallFolded) {
+                // 折叠动画
+                photoWall.classList.add('folding');
+                
+                // 为每个照片项添加延迟动画
+                photoItems.forEach((item, index) => {
+                    setTimeout(() => {
+                        item.style.opacity = '0';
+                        item.style.transform = 'scale(0.8)';
+                    }, index * 100);
+                });
+
+                // 等待所有照片动画完成后，添加folded类
+                setTimeout(() => {
+                    photoWall.classList.add('folded');
+                    photoWall.classList.remove('folding');
+                    icon.classList.add('fa-chevron-right');
+                    icon.classList.remove('fa-chevron-left');
+                    buttonText.textContent = '展开照片墙';
+                }, photoItems.length * 100 + 300);
+
+            } else {
+                // 展开动画
+                photoWall.classList.remove('folded');
+                
+                // 为每个照片项添加延迟动画
+                photoItems.forEach((item, index) => {
+                    setTimeout(() => {
+                        item.style.opacity = '1';
+                        item.style.transform = 'scale(1)';
+                    }, index * 100);
+                });
+
+                icon.classList.add('fa-chevron-left');
+                icon.classList.remove('fa-chevron-right');
+                buttonText.textContent = '收起照片墙';
+            }
+            
+            window.AppState.isPhotoWallFolded = !window.AppState.isPhotoWallFolded;
+        };
+
+        // 音乐播放器相关代码
+        window.initAudio = function() {
+            window.AppState.music = document.getElementById('bgMusic');
+            if (window.AppState.music) {
+                window.AppState.music.volume = 1.0;
+                loadSong(window.AppState.currentSongIndex);
+            }
+        };
+
+        window.toggleMusic = function() {
+            const music = window.AppState.music;
+            const musicPlayer = document.querySelector('.music-player');
+            
+            if (window.AppState.isPlaying) {
+                music.pause();
+                musicPlayer.classList.remove('playing');
+            } else {
+                if (music.readyState < 2) {
+                    music.load();
+                }
+                
+                const playPromise = music.play();
+                if (playPromise !== undefined) {
+                    playPromise
+                        .then(() => {
+                            musicPlayer.classList.add('playing');
+                        })
+                        .catch(error => {
+                            console.error('播放失败:', error);
+                            alert('音乐播放失败，请检查音频文件是否正确');
+                        });
+                }
+            }
+            window.AppState.isPlaying = !window.AppState.isPlaying;
+        };
+
         // 在页面加载前就检查登录状态
         (function() {
             const isLoggedInSession = sessionStorage.getItem('isLoggedIn');
@@ -2600,8 +2772,10 @@
                 `<span>${minutes.toString().padStart(2, '0')}</span> 分钟 ` +
                 `<span>${seconds.toString().padStart(2, '0')}</span> 秒`;
 
-            document.getElementById('timer').innerHTML = timerHTML;
-            document.getElementById('timer2').innerHTML = timerHTML;
+            const timerElement = document.getElementById('timer');
+            if (timerElement) {
+                timerElement.innerHTML = timerHTML;
+            }
         }
 
         // 立即更新一次
@@ -2610,6 +2784,7 @@
         setInterval(updateTimer, 1000);
 
         // 音乐播放器相关代码
+        let music;
         const songs = [
             { path: './music/1.mp3', title: 'Never Say Good Bye' },
             { path: './music/2.mp3', title: 'no idea' },
@@ -2618,81 +2793,21 @@
 
         let currentSongIndex = 0;
         let isPlaying = false;
-        const music = document.getElementById('bgMusic');
-        const musicPlayer = document.querySelector('.music-player');
-        const musicTitle = document.getElementById('musicTitle');
-
-        // 确保音频元素已加载
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('DOM加载完成');
-            music.load();  // 强制加载音频
-        });
-
-        // 修改播放切换函数
-        function toggleMusic() {
-            console.log('点击播放按钮');
-            console.log('当前播放状态:', isPlaying);
-            console.log('当前音频源:', music.src);
-            console.log('音频元素状态:', music.readyState);
-            console.log('音频是否已加载:', music.networkState);
-            
-            try {
-                if (isPlaying) {
-                    console.log('尝试暂停');
-                    music.pause();
-                    musicPlayer.classList.remove('playing');
-                } else {
-                    console.log('尝试播放');
-                    // 确保音频已加载
-                    if (music.readyState < 2) {  // HAVE_CURRENT_DATA
-                        console.log('音频尚未加载完成，新加载');
-                        music.load();
-                    }
-                    
-                    const playPromise = music.play();
-                    if (playPromise !== undefined) {
-                        playPromise
-                            .then(() => {
-                                console.log('播放成功');
-                                musicPlayer.classList.add('playing');
-                            })
-                            .catch(error => {
-                                console.error('播放失败:', error);
-                                // 显示错误信息
-                                alert('音乐播放失败，请检查音频文件是否正确');
-                            });
-                    }
-                }
-                isPlaying = !isPlaying;
-            } catch (error) {
-                console.error('播放器操作错误:', error);
+        
+        // 初始化音频
+        function initAudio() {
+            music = document.getElementById('bgMusic');
+            if (music) {
+                music.volume = 1.0;  // 设置音量
+                loadSong(currentSongIndex);  // 加载第一首歌
             }
         }
 
-        // 添加音频事件监听
-        music.addEventListener('play', () => {
-            console.log('音频开始播放');
-            musicPlayer.classList.add('playing');
+        // 确保在DOM加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM加载完成');
+            initAudio();
         });
-
-        music.addEventListener('pause', () => {
-            console.log('音频暂停');
-            musicPlayer.classList.remove('playing');
-        });
-
-        music.addEventListener('error', (e) => {
-            console.error('音频错误:', e);
-            console.log('错误详情:', music.error);
-        });
-
-        // 初始化音频
-        function initAudio() {
-            music.volume = 1.0;  // 设置音量
-            loadSong(currentSongIndex);  // 加载第一首歌
-        }
-
-        // 页面加载完成后初始化
-        window.addEventListener('load', initAudio);
 
         function loadSong(index) {
             const song = songs[index];
@@ -2872,131 +2987,6 @@
             }
         });
 
-        // 添加照片墙折叠功能
-        let isPhotoWallFolded = false;
-        window.togglePhotoWall = function() {
-            const photoWall = document.querySelector('.photo-wall');
-            const foldButton = document.querySelector('.fold-button');
-            const buttonText = foldButton.querySelector('.button-text');
-            const icon = foldButton.querySelector('i');
-            const photoItems = document.querySelectorAll('.photo-item');
-            
-            if (!isPhotoWallFolded) {
-                // 折叠动画
-                photoWall.classList.add('folding');
-                
-                // 为每个照片项添加延迟动画
-                photoItems.forEach((item, index) => {
-                    setTimeout(() => {
-                        item.style.opacity = '0';
-                        item.style.transform = 'scale(0.8)';
-                    }, index * 100);
-                });
-
-                // 等待所有照片动画完成后，添加folded类
-                setTimeout(() => {
-                    photoWall.classList.add('folded');
-                    photoWall.classList.remove('folding');
-                    icon.classList.add('fa-chevron-right');
-                    icon.classList.remove('fa-chevron-left');
-                    buttonText.textContent = '展开照片墙';
-                }, photoItems.length * 100 + 300);
-
-            } else {
-                // 展开动画
-                photoWall.classList.remove('folded');
-                
-                // 为每个照片项添加延迟动画
-                photoItems.forEach((item, index) => {
-                    setTimeout(() => {
-                        item.style.opacity = '1';
-                        item.style.transform = 'scale(1)';
-                    }, index * 100);
-                });
-
-                icon.classList.add('fa-chevron-left');
-                icon.classList.remove('fa-chevron-right');
-                buttonText.textContent = '收起照片墙';
-            }
-            
-            isPhotoWallFolded = !isPhotoWallFolded;
-        }
-
-        // 添加心情图标切换功能
-        let isMoodIconsVisible = false;
-        window.toggleMoodIcons = function() {
-            const iconContainer = document.querySelector('.mood-icons-container');
-            const icons = document.querySelectorAll('.mood-icon');
-            
-            if (!isMoodIconsVisible) {
-                iconContainer.classList.add('show');
-                icons.forEach((icon, index) => {
-                    setTimeout(() => {
-                        icon.classList.add('show');
-                    }, index * 100);
-                });
-            } else {
-                icons.forEach((icon) => {
-                    icon.classList.remove('show');
-                });
-                setTimeout(() => {
-                    iconContainer.classList.remove('show');
-                }, 500);
-            }
-            
-            isMoodIconsVisible = !isMoodIconsVisible;
-        }
-
-        window.selectMood = function(mood) {
-            const moodMessages = {
-                happy: '耶耶耶，宝贝开心，我开心',
-                angry: '妖魔鬼怪快离开，妖魔鬼怪快离开',
-                sad: '我是你的港湾，在你累了烦了的时候，我会张开双臂拥抱着你!',
-                okay: '还好还好，就刚刚好，让它更好'
-            };
-
-            const moodClasses = {
-                happy: 'mood-happy',
-                angry: 'mood-angry',
-                sad: 'mood-sad'
-            };
-
-            // 移除所有心情类
-            document.body.classList.remove('mood-happy', 'mood-angry', 'mood-sad');
-
-            // 如果不是"还好还好"，添加对应的类
-            if (mood !== 'okay') {
-                document.body.classList.add(moodClasses[mood]);
-            }
-
-            // 显示弹窗
-            const modal = document.getElementById('moodModal');
-            const modalText = document.getElementById('moodModalText');
-            modalText.textContent = moodMessages[mood];
-            modal.classList.add('show');
-
-            // 记录心情
-            const today = getTodayDate();
-            const todayMoodRef = ref(database, `moodHistory/${today}`);
-            push(todayMoodRef, {
-                mood: mood,
-                time: new Date().toISOString()
-            });
-
-            // 收起心情图标
-            toggleMoodIcons();
-        }
-
-        window.closeMoodModal = function() {
-            const modal = document.getElementById('moodModal');
-            modal.classList.remove('show');
-
-            // 如果不是"还好还好"，延迟一段时间后恢复原始背景
-            setTimeout(() => {
-                document.body.classList.remove('mood-happy', 'mood-angry', 'mood-sad');
-            }, 500);
-        }
-
         // 添加彩蛋爱心功能
         class EasterEgg {
             constructor() {
@@ -3121,6 +3111,91 @@
 
         // 创建彩蛋实例
         const easterEgg = new EasterEgg();
+
+        // 音乐控制函数
+        window.nextSong = function() {
+            window.AppState.currentSongIndex = (window.AppState.currentSongIndex + 1) % songs.length;
+            loadSong(window.AppState.currentSongIndex);
+        };
+
+        window.prevSong = function() {
+            window.AppState.currentSongIndex = (window.AppState.currentSongIndex - 1 + songs.length) % songs.length;
+            loadSong(window.AppState.currentSongIndex);
+        };
+
+        window.loadSong = function(index) {
+            const song = songs[index];
+            const music = window.AppState.music;
+            const musicTitle = document.getElementById('musicTitle');
+            const musicPlayer = document.querySelector('.music-player');
+
+            if (!music) return;
+
+            music.src = song.path;
+            music.load();
+            musicTitle.textContent = song.title;
+            musicTitle.classList.add('show');
+            
+            if (window.AppState.isPlaying) {
+                music.play().then(() => {
+                    musicPlayer.classList.add('playing');
+                }).catch(error => {
+                    console.error('播放失败:', error);
+                });
+            }
+
+            setTimeout(() => {
+                musicTitle.classList.remove('show');
+            }, 3000);
+        };
+
+        // 初始化音频事件监听
+        document.addEventListener('DOMContentLoaded', function() {
+            const music = window.AppState.music;
+            const musicPlayer = document.querySelector('.music-player');
+
+            if (music) {
+                // 自动播放下一首
+                music.addEventListener('ended', window.nextSong);
+
+                // 添加音频事件监听
+                music.addEventListener('play', () => {
+                    console.log('音频开始播放');
+                    musicPlayer.classList.add('playing');
+                });
+
+                music.addEventListener('pause', () => {
+                    console.log('音频暂停');
+                    musicPlayer.classList.remove('playing');
+                });
+
+                music.addEventListener('error', (e) => {
+                    console.error('音频错误:', e);
+                    console.log('错误详情:', music.error);
+                });
+
+                // 添加加载状态监听
+                music.addEventListener('loadstart', () => {
+                    console.log('开始加载音频');
+                });
+
+                music.addEventListener('canplay', () => {
+                    console.log('音频可以播放');
+                });
+
+                music.addEventListener('canplaythrough', () => {
+                    console.log('音频可以畅播放');
+                });
+
+                music.addEventListener('stalled', () => {
+                    console.log('音频加载已停止');
+                });
+
+                music.addEventListener('suspend', () => {
+                    console.log('音频加载已暂停');
+                });
+            }
+        });
     </script>
 </body>
 </html>
