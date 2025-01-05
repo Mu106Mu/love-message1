@@ -508,8 +508,29 @@
             display: none;
             opacity: 0;
             transition: opacity 0.5s ease;
-            padding-top: 20px; /* 减小顶部padding */
-            overflow-y: auto; /* 添加滚动 */
+            padding-top: 20px;
+            overflow-y: auto; /* 第二页使用独立滚动条 */
+            scrollbar-width: thin; /* Firefox */
+            scrollbar-color: rgba(255, 255, 255, 0.3) rgba(255, 255, 255, 0.1); /* Firefox */
+        }
+
+        /* 第二页滚动条样式 */
+        .second-page::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .second-page::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+        }
+
+        .second-page::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+        }
+
+        .second-page::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.5);
         }
 
         /* 移除第二页的标题和计时器相关样式 */
@@ -3392,11 +3413,13 @@
 
         function showSecondPage() {
             document.getElementById('secondPage').classList.add('active');
+            document.body.style.overflow = 'hidden'; // 隐藏主页滚动条
             loadMessages();
         }
 
         function hideSecondPage() {
             document.getElementById('secondPage').classList.remove('active');
+            document.body.style.overflow = 'auto'; // 恢复主页滚动条
         }
 
         // 支持按回车发送
