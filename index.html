@@ -1764,36 +1764,36 @@
         @media screen and (max-width: 768px) {
             /* 标题容器适配 */
             .title-container {
-                top: 15px;
+                top: 10px;
                 width: 85%;
-                padding: 10px;
+                padding: 8px 12px;
             }
 
             .title-en {
-                font-size: 1.2em;
+                font-size: 1em;
                 letter-spacing: 2px;
-                margin-bottom: 5px;
+                margin-bottom: 4px;
             }
 
             .title-cn {
-                font-size: 1em;
-                letter-spacing: 4px;
+                font-size: 0.9em;
+                letter-spacing: 3px;
             }
 
             /* 计时器容器适配 */
             .timer-container {
-                top: 85px;
+                top: 70px;
                 width: 85%;
-                padding: 10px;
+                padding: 8px 12px;
             }
 
             .timer-title {
-                font-size: 0.9em;
-                margin-bottom: 5px;
+                font-size: 0.85em;
+                margin-bottom: 4px;
             }
 
             .timer {
-                font-size: 0.85em;
+                font-size: 0.8em;
             }
 
             /* 隐藏左右装饰照片 */
@@ -1817,19 +1817,24 @@
 
             /* 心情按钮适配 */
             .mood-weather-button {
-                top: 160px;
-                padding: 8px 20px;
-                font-size: 0.9em;
+                top: 130px;
+                padding: 6px 15px;
+                font-size: 0.85em;
+                border-radius: 15px;
             }
 
             .mood-icons-container {
-                top: 210px;
-                gap: 12px;
+                top: 175px;
+                gap: 10px;
             }
 
             .mood-icon {
-                width: 40px;
-                height: 40px;
+                width: 35px;
+                height: 35px;
+            }
+
+            .mood-icon i {
+                font-size: 16px;
             }
 
             /* 第二页适配 */
@@ -1871,35 +1876,45 @@
 
             /* 分页按钮适配 */
             .pagination {
-                gap: 8px;
-                margin-top: 15px;
+                gap: 6px;
+                margin: 10px 0;
             }
 
             .pagination-button {
-                padding: 6px 12px;
+                padding: 4px 10px;
                 font-size: 0.8em;
+                border-radius: 12px;
             }
 
             .pagination-info {
-                font-size: 0.8em;
+                font-size: 0.75em;
             }
 
             /* 音乐播放器适配 */
             .music-player {
-                bottom: 15px;
-                right: 15px;
                 width: 35px;
                 height: 35px;
+                bottom: 20px;
+                right: 20px;
+            }
+
+            .music-player i {
+                font-size: 16px;
             }
 
             .music-controls {
-                bottom: 60px;
-                right: 15px;
+                bottom: 65px;
+                right: 20px;
+                gap: 8px;
             }
 
             .music-control-btn {
                 width: 25px;
                 height: 25px;
+            }
+
+            .music-control-btn i {
+                font-size: 12px;
             }
 
             /* 登录页面适配 */
@@ -1920,63 +1935,44 @@
 
         /* 超小屏幕适配 */
         @media screen and (max-width: 380px) {
-            .photo-wall {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 8px;
-            }
-
-            .photo-item {
-                width: 100px;
-                height: 100px;
-            }
-
-            .mood-icons-container {
-                flex-wrap: wrap;
-                justify-content: center;
-                width: 80%;
-                gap: 10px;
-            }
-
-            .mood-icon {
-                width: 35px;
-                height: 35px;
-            }
-
-            .message-board {
-                width: 95%;
-                padding: 12px;
-            }
-        }
-
-        /* 横屏适配 */
-        @media screen and (orientation: landscape) and (max-height: 600px) {
             .title-container {
-                top: 8px;
+                padding: 6px 10px;
             }
 
             .timer-container {
-                top: 65px;
+                padding: 6px 10px;
             }
 
             .mood-weather-button {
-                top: 120px;
+                padding: 5px 12px;
+                font-size: 0.8em;
             }
 
-            .mood-icons-container {
-                top: 170px;
+            .mood-icon {
+                width: 30px;
+                height: 30px;
             }
 
-            .message-board {
-                margin-top: 120px;
+            .mood-icon i {
+                font-size: 14px;
             }
 
-            .photo-wall {
-                margin-top: 120px;
-                grid-template-columns: repeat(4, 1fr);
+            .music-player {
+                width: 30px;
+                height: 30px;
             }
 
-            #secondPage .message-board {
-                margin-top: 50px;
+            .music-player i {
+                font-size: 14px;
+            }
+
+            .music-control-btn {
+                width: 22px;
+                height: 22px;
+            }
+
+            .music-control-btn i {
+                font-size: 10px;
             }
         }
     </style>
@@ -2576,8 +2572,84 @@
             isMoodIconsVisible: false,
             currentSongIndex: 0,
             isPlaying: false,
-            music: null
+            music: null,
+            basePath: location.hostname.includes('github.io') ? '/love-message1' : ''
         };
+
+        // 音乐播放器相关代码
+        window.songs = [
+            { path: window.AppState.basePath + '/music/1.mp3', title: 'Never Say Good Bye' },
+            { path: window.AppState.basePath + '/music/2.mp3', title: 'no idea' },
+            { path: window.AppState.basePath + '/music/3.mp3', title: '分身情人' }
+        ];
+
+        window.initAudio = function() {
+            const music = document.getElementById('bgMusic');
+            if (music) {
+                window.AppState.music = music;
+                window.AppState.music.volume = 1.0;
+                window.loadSong(window.AppState.currentSongIndex);
+
+                // 添加音频事件监听
+                window.AppState.music.addEventListener('ended', window.nextSong);
+                window.AppState.music.addEventListener('error', (e) => {
+                    console.error('音频加载错误:', e);
+                });
+            }
+        };
+
+        window.loadSong = function(index) {
+            if (!window.AppState.music) return;
+            
+            const song = window.songs[index];
+            console.log('加载歌曲:', song.path);
+            
+            window.AppState.music.src = song.path;
+            window.AppState.music.load();
+            
+            const musicTitle = document.getElementById('musicTitle');
+            if (musicTitle) {
+                musicTitle.textContent = song.title;
+                musicTitle.classList.add('show');
+                
+                setTimeout(() => {
+                    musicTitle.classList.remove('show');
+                }, 3000);
+            }
+            
+            if (window.AppState.isPlaying) {
+                const playPromise = window.AppState.music.play();
+                if (playPromise !== undefined) {
+                    playPromise.then(() => {
+                        const musicPlayer = document.querySelector('.music-player');
+                        if (musicPlayer) {
+                            musicPlayer.classList.add('playing');
+                        }
+                    }).catch(error => {
+                        console.error('播放失败:', error);
+                    });
+                }
+            }
+        };
+
+        // 修改照片路径
+        document.addEventListener('DOMContentLoaded', function() {
+            // 修改左右两侧的照片路径
+            const leftPhoto = document.querySelector('.photo-container-left img');
+            const rightPhoto = document.querySelector('.photo-container-right img');
+            
+            if (leftPhoto) leftPhoto.src = `${window.AppState.basePath}/photo/0.png`;
+            if (rightPhoto) rightPhoto.src = `${window.AppState.basePath}/photo/-1.png`;
+            
+            // 修改照片墙的照片路径
+            const photos = document.querySelectorAll('.photo-front img');
+            photos.forEach((photo, index) => {
+                photo.src = `${window.AppState.basePath}/photo/${index + 1}.jpg`;
+            });
+
+            // 初始化音频
+            window.initAudio();
+        });
 
         // 工具函数
         window.getTodayDate = function() {
@@ -2632,15 +2704,6 @@
             }
             
             window.AppState.isPhotoWallFolded = !window.AppState.isPhotoWallFolded;
-        };
-
-        // 音乐播放器相关代码
-        window.initAudio = function() {
-            window.AppState.music = document.getElementById('bgMusic');
-            if (window.AppState.music) {
-                window.AppState.music.volume = 1.0;
-                loadSong(window.AppState.currentSongIndex);
-            }
         };
 
         window.toggleMusic = function() {
