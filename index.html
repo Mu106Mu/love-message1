@@ -508,7 +508,8 @@
             display: none;
             opacity: 0;
             transition: opacity 0.5s ease;
-            padding-top: 60px; /* 为返回按钮留出空间 */
+            padding-top: 20px; /* 减小顶部padding */
+            overflow-y: auto; /* 添加滚动 */
         }
 
         /* 移除第二页的标题和计时器相关样式 */
@@ -568,7 +569,7 @@
             position: relative;
             max-width: 800px;
             width: 90%;
-            margin: 250px auto 0;
+            margin: 80px auto 0;
             padding: 35px;
             background: rgba(255, 255, 255, 0.12);
             border-radius: 20px;
