@@ -583,6 +583,7 @@
             transform: scale(1.05);
         }
 
+        /* 留言板容器样式优化 */
         .message-board {
             position: relative;
             max-width: 800px;
@@ -594,8 +595,15 @@
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.3);
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
         }
 
+        .message-board:hover {
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* 留言输入框样式优化 */
         .message-input {
             width: 100%;
             min-height: 120px;
@@ -615,14 +623,18 @@
         .message-input:focus {
             border-color: rgba(255, 255, 255, 0.5);
             box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
         }
 
-        .message-input::placeholder {
-            color: rgba(255, 255, 255, 0.6);
+        /* 发送按钮样式优化 */
+        .message-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
         }
 
-        .message-submit {
-            padding: 12px 30px;
+        .message-submit, .voice-record {
+            padding: 12px 25px;
             background: rgba(255, 255, 255, 0.2);
             border: 2px solid rgba(255, 255, 255, 0.3);
             border-radius: 25px;
@@ -630,28 +642,88 @@
             font-size: 1.1em;
             cursor: pointer;
             transition: all 0.3s ease;
-            display: inline-flex;
+            display: flex;
             align-items: center;
             gap: 8px;
+            position: relative;
+            overflow: hidden;
         }
 
-        .message-submit:hover {
+        .message-submit:hover, .voice-record:hover {
             background: rgba(255, 255, 255, 0.3);
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
 
-        .message-submit:active {
+        .message-submit:active, .voice-record:active {
             transform: translateY(0);
         }
 
-        .messages-container {
-            margin-top: 30px;
-            max-height: 500px;
-            overflow-y: auto;
-            padding-right: 10px;
+        /* 发送按钮动画效果 */
+        .message-submit::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 5px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            opacity: 0;
+            transition: all 0.5s ease;
         }
 
+        .message-submit.sending::after {
+            animation: sendRipple 0.8s ease-out;
+        }
+
+        @keyframes sendRipple {
+            0% {
+                transform: translate(-50%, -50%) scale(0);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(20);
+                opacity: 0;
+            }
+        }
+
+        /* 语音录制按钮样式 */
+        .voice-record {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .voice-record.recording {
+            background: rgba(255, 0, 0, 0.3);
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        /* 留言加载动画 */
+        .message-loading {
+            text-align: center;
+            padding: 20px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .message-loading::after {
+            content: "...";
+            animation: loading 1.5s infinite;
+        }
+
+        @keyframes loading {
+            0% { content: "."; }
+            33% { content: ".."; }
+            66% { content: "..."; }
+        }
+
+        /* 留言项样式优化 */
         .message-item {
             background: rgba(255, 255, 255, 0.1);
             padding: 25px;
@@ -673,44 +745,47 @@
             font-size: 1.1em;
             line-height: 1.6;
             margin-bottom: 10px;
-            word-wrap: break-word;
         }
 
-        .message-date {
-            font-size: 0.9em;
+        /* 语音消息样式 */
+        .voice-message {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .voice-message i {
+            font-size: 1.2em;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .voice-message .duration {
             color: rgba(255, 255, 255, 0.7);
-            font-style: italic;
+            font-size: 0.9em;
         }
 
-        /* 自定义滚动条样式 */
-        .messages-container::-webkit-scrollbar {
-            width: 8px;
+        .voice-wave {
+            display: flex;
+            align-items: center;
+            gap: 2px;
         }
 
-        .messages-container::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 4px;
+        .wave-bar {
+            width: 2px;
+            height: 15px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 1px;
+            animation: waveAnimation 1s ease infinite;
         }
 
-        .messages-container::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 4px;
-            transition: all 0.3s ease;
-        }
-
-        .messages-container::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 255, 255, 0.5);
-        }
-
-        @keyframes fadeIn {
-            from { 
-                opacity: 0; 
-                transform: translateY(20px); 
-            }
-            to { 
-                opacity: 1; 
-                transform: translateY(0); 
-            }
+        @keyframes waveAnimation {
+            0% { height: 5px; }
+            50% { height: 15px; }
+            100% { height: 5px; }
         }
 
         /* 添加切换按钮 */
@@ -3254,6 +3329,160 @@
                 }
             });
         });
+
+        // 在script标签中添加
+        let mediaRecorder = null;
+        let audioChunks = [];
+        let recordingTimer = null;
+        let recordingDuration = 0;
+
+        // 语音录制相关函数
+        async function toggleVoiceRecord() {
+            const voiceButton = document.querySelector('.voice-record');
+            const voiceModal = document.getElementById('voiceRecordModal');
+            
+            if (!mediaRecorder) {
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    mediaRecorder = new MediaRecorder(stream);
+                    
+                    mediaRecorder.ondataavailable = (event) => {
+                        audioChunks.push(event.data);
+                    };
+                    
+                    mediaRecorder.onstop = () => {
+                        const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                        saveVoiceMessage(audioBlob);
+                        audioChunks = [];
+                    };
+                    
+                    // 开始录音
+                    mediaRecorder.start();
+                    voiceButton.classList.add('recording');
+                    voiceModal.classList.add('show');
+                    startRecordingTimer();
+                    
+                } catch (err) {
+                    console.error('录音失败:', err);
+                    alert('无法访问麦克风，请检查权限设置');
+                }
+            } else {
+                stopRecording();
+            }
+        }
+
+        function startRecordingTimer() {
+            const timerDisplay = document.querySelector('.voice-timer');
+            recordingDuration = 0;
+            
+            recordingTimer = setInterval(() => {
+                recordingDuration++;
+                const minutes = Math.floor(recordingDuration / 60);
+                const seconds = recordingDuration % 60;
+                timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                
+                // 限制录音时长为60秒
+                if (recordingDuration >= 60) {
+                    stopRecording();
+                }
+            }, 1000);
+        }
+
+        function stopRecording() {
+            if (mediaRecorder && mediaRecorder.state === 'recording') {
+                mediaRecorder.stop();
+                mediaRecorder.stream.getTracks().forEach(track => track.stop());
+                mediaRecorder = null;
+                
+                clearInterval(recordingTimer);
+                document.querySelector('.voice-record').classList.remove('recording');
+                document.getElementById('voiceRecordModal').classList.remove('show');
+            }
+        }
+
+        function saveVoiceMessage(audioBlob) {
+            // 创建音频URL
+            const audioUrl = URL.createObjectURL(audioBlob);
+            
+            // 创建新的语音消息元素
+            const messageItem = document.createElement('div');
+            messageItem.className = 'message-item';
+            messageItem.innerHTML = `
+                <div class="voice-message" onclick="playVoiceMessage('${audioUrl}')">
+                    <i class="fas fa-play"></i>
+                    <div class="voice-wave">
+                        ${Array(5).fill('<div class="wave-bar"></div>').join('')}
+                    </div>
+                    <span class="duration">${formatDuration(recordingDuration)}</span>
+                </div>
+                <div class="message-date">
+                    <i class="far fa-clock"></i> ${new Date().toLocaleString()}
+                </div>
+            `;
+            
+            // 添加到消息容器
+            const messagesContainer = document.getElementById('messagesContainer');
+            messagesContainer.insertBefore(messageItem, messagesContainer.firstChild);
+            
+            // 保存到数据库
+            saveVoiceMessageToDatabase(audioBlob);
+        }
+
+        function formatDuration(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = seconds % 60;
+            return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+        }
+
+        // 播放语音消息
+        function playVoiceMessage(audioUrl) {
+            const audio = new Audio(audioUrl);
+            audio.play();
+        }
+
+        // 修改提交消息函数，添加发送动画
+        window.submitMessage = function() {
+            const input = document.getElementById('messageInput');
+            const content = input.value.trim();
+            
+            if (!content) {
+                alert('请输入留言内容');
+                return;
+            }
+
+            // 添加发送动画
+            const submitButton = document.querySelector('.message-submit');
+            submitButton.classList.add('sending');
+            submitButton.style.pointerEvents = 'none';
+            
+            // 创建新消息元素
+            const messageItem = document.createElement('div');
+            messageItem.className = 'message-item';
+            messageItem.style.opacity = '0';
+            messageItem.innerHTML = `
+                <div class="message-content">${content}</div>
+                <div class="message-date">
+                    <i class="far fa-clock"></i> ${new Date().toLocaleString()}
+                </div>
+            `;
+            
+            // 添加到消息容器
+            const messagesContainer = document.getElementById('messagesContainer');
+            messagesContainer.insertBefore(messageItem, messagesContainer.firstChild);
+            
+            // 触发动画
+            setTimeout(() => {
+                messageItem.style.opacity = '1';
+                messageItem.style.transform = 'translateY(0)';
+            }, 100);
+            
+            // 重置按钮状态
+            setTimeout(() => {
+                submitButton.classList.remove('sending');
+                submitButton.style.pointerEvents = 'auto';
+                input.value = '';
+            }, 800);
+        };
     </script>
 </head>
 <body>
@@ -3451,11 +3680,20 @@
         
         <div class="message-board">
             <textarea class="message-input" placeholder="写下此刻的心情..." id="messageInput"></textarea>
+            <div class="message-controls">
             <button class="message-submit" onclick="submitMessage()">
                 <i class="fas fa-paper-plane"></i>
-                保存留言
+                    <span>发送留言</span>
             </button>
-            <div class="messages-container" id="messagesContainer"></div>
+                <button class="voice-record" onclick="toggleVoiceRecord()">
+                    <i class="fas fa-microphone"></i>
+                    <span>语音留言</span>
+                </button>
+            </div>
+            <div class="messages-container" id="messagesContainer">
+                <!-- 留言加载动画 -->
+                <div class="message-loading">加载中</div>
+            </div>
             <div class="pagination">
                 <button class="pagination-button" id="prevPageBtn" onclick="changePage(-1)">
                     <i class="fas fa-chevron-left"></i> 上一页
@@ -3510,6 +3748,24 @@
     <div class="mood-history-panel">
         <div class="mood-history-title">今日心情记录</div>
         <div class="mood-history-list" id="moodHistoryList"></div>
+    </div>
+
+    <!-- 语音录制提示框 -->
+    <div class="voice-record-modal" id="voiceRecordModal">
+        <div class="voice-record-content">
+            <div class="voice-wave">
+                <div class="wave-bar"></div>
+                <div class="wave-bar"></div>
+                <div class="wave-bar"></div>
+                <div class="wave-bar"></div>
+                <div class="wave-bar"></div>
+            </div>
+            <div class="voice-timer">00:00</div>
+            <div class="voice-controls">
+                <button class="voice-cancel">取消</button>
+                <button class="voice-send">发送</button>
+            </div>
+        </div>
     </div>
 
     <script type="module">
@@ -3639,25 +3895,38 @@
                 return;
             }
 
-            // 添加提交动画效果
+            // 添加发送动画
             const submitButton = document.querySelector('.message-submit');
+            submitButton.classList.add('sending');
             submitButton.style.pointerEvents = 'none';
-            submitButton.style.opacity = '0.7';
-
-            push(messagesRef, {
-                content: content,
-                date: new Date().toLocaleString()
-            }).then(() => {
-                input.value = ''; // 清空输入框
-                // 恢复按钮状态
+            
+            // 创建新消息元素
+            const messageItem = document.createElement('div');
+            messageItem.className = 'message-item';
+            messageItem.style.opacity = '0';
+            messageItem.innerHTML = `
+                <div class="message-content">${content}</div>
+                <div class="message-date">
+                    <i class="far fa-clock"></i> ${new Date().toLocaleString()}
+                </div>
+            `;
+            
+            // 添加到消息容器
+            const messagesContainer = document.getElementById('messagesContainer');
+            messagesContainer.insertBefore(messageItem, messagesContainer.firstChild);
+            
+            // 触发动画
+            setTimeout(() => {
+                messageItem.style.opacity = '1';
+                messageItem.style.transform = 'translateY(0)';
+            }, 100);
+            
+            // 重置按钮状态
+            setTimeout(() => {
+                submitButton.classList.remove('sending');
                 submitButton.style.pointerEvents = 'auto';
-                submitButton.style.opacity = '1';
-            }).catch(error => {
-                console.error('提交留言失败:', error);
-                alert('提交留言失败，请重试');
-                submitButton.style.pointerEvents = 'auto';
-                submitButton.style.opacity = '1';
-            });
+                input.value = '';
+            }, 800);
         }
 
         // 添加心情记录相关功能
