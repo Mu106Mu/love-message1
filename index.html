@@ -3371,109 +3371,22 @@
         // 修改照片墙交互逻辑
         document.addEventListener('DOMContentLoaded', function() {
             const photoItems = document.querySelectorAll('.photo-item');
-            const isMobile = document.body.classList.contains('mobile-view');
-
-            // 图片加载优化
+            
             photoItems.forEach(item => {
-                const img = item.querySelector('img');
-                if (img) {
-                    // 添加加载动画
-                    img.style.opacity = '0';
-                    img.style.transition = 'opacity 0.3s ease';
-                    
-                    img.onload = function() {
-                        img.style.opacity = '1';
-                        img.classList.add('loaded');
-                    };
-                    
-                    // 添加错误处理
-                    img.onerror = function() {
-                        img.src = './photo/default.jpg';  // 设置默认图片
-                    };
-                }
+                const card = item.querySelector('.photo-card');
                 
-                if (isMobile) {
-                    // 移动端触摸处理
-                    let touchStartTime;
-                    let touchStartX;
-                    let touchStartY;
-                    let isMoving = false;
-                    let card = item.querySelector('.photo-card');
-                    
-                    item.addEventListener('touchstart', function(e) {
-                        touchStartTime = Date.now();
-                        touchStartX = e.touches[0].clientX;
-                        touchStartY = e.touches[0].clientY;
-                        isMoving = false;
-                    }, { passive: true });
-                    
-                    item.addEventListener('touchmove', function(e) {
-                        if (!isMoving) {
-                            const moveX = Math.abs(e.touches[0].clientX - touchStartX);
-                            const moveY = Math.abs(e.touches[0].clientY - touchStartY);
-                            if (moveX > 5 || moveY > 5) {
-                                isMoving = true;
-                            }
+                // 简化点击处理
+                item.addEventListener('click', function(e) {
+                    e.stopPropagation(); // 阻止事件冒泡
+                    if (card) {
+                        card.classList.toggle('flipped');
+                        // 添加触感反馈
+                        if ('vibrate' in navigator) {
+                            navigator.vibrate(50);
                         }
-                    }, { passive: true });
-                    
-                    item.addEventListener('touchend', function(e) {
-                        const touchEndTime = Date.now();
-                        const touchDuration = touchEndTime - touchStartTime;
-                        
-                        if (!isMoving && touchDuration < 300) {
-                            if (card) {
-                                // 检查是否已经在翻转中
-                                if (!card.classList.contains('flipping')) {
-                                    card.classList.add('flipping');
-                                    card.classList.toggle('flipped');
-                                    
-                                    // 添加触感反馈
-                                    if ('vibrate' in navigator) {
-                                        navigator.vibrate(50);
-                                    }
-                                    
-                                    // 翻转动画结束后移除标记
-                                    setTimeout(() => {
-                                        card.classList.remove('flipping');
-                                    }, 400); // 与CSS动画时间相匹配
-                                }
-                            }
-                        }
-                    }, { passive: true });
-                    
-                    // 双击还原
-                    let lastTap = 0;
-                    item.addEventListener('touchend', function(e) {
-                        const currentTime = Date.now();
-                        const tapLength = currentTime - lastTap;
-                        if (tapLength < 300 && tapLength > 0) {
-                            if (card && card.classList.contains('flipped')) {
-                                card.classList.remove('flipped');
-                                if ('vibrate' in navigator) {
-                                    navigator.vibrate([30, 50]);
-                                }
-                            }
-                            e.preventDefault();
-                        }
-                        lastTap = currentTime;
-                    });
-                }
-            });
-            
-            // 优化图片预加载
-            function preloadImages() {
-                const imageUrls = Array.from(document.querySelectorAll('.photo-front img'))
-                    .map(img => img.src);
-                    
-                imageUrls.forEach(url => {
-                    const img = new Image();
-                    img.src = url;
+                    }
                 });
-            }
-            
-            // 延迟预加载图片，优先加载可见区域的图片
-            setTimeout(preloadImages, 1000);
+            });
         });
 
         // 音乐播放器相关代码
@@ -3484,16 +3397,10 @@
             
             if (music) {
                 if (music.paused) {
-                    const playPromise = music.play();
-                    if (playPromise !== undefined) {
-                        playPromise.then(() => {
+                    music.play();
                             musicPlayer.classList.add('playing');
                             musicIcon.classList.remove('fa-music');
                             musicIcon.classList.add('fa-pause');
-                        }).catch(error => {
-                            console.error('播放失败:', error);
-                        });
-                    }
                 } else {
                     music.pause();
                     musicPlayer.classList.remove('playing');
@@ -3502,6 +3409,33 @@
                 }
             }
         };
+
+        // 页面加载时自动播放音乐
+        document.addEventListener('DOMContentLoaded', function() {
+            const music = document.getElementById('bgMusic');
+            const musicPlayer = document.querySelector('.music-player');
+            
+            if (music) {
+                // 尝试自动播放
+                const playPromise = music.play();
+                if (playPromise !== undefined) {
+                    playPromise.then(() => {
+                        musicPlayer.classList.add('playing');
+                        const musicIcon = musicPlayer.querySelector('i');
+                        musicIcon.classList.remove('fa-music');
+                        musicIcon.classList.add('fa-pause');
+                    }).catch(error => {
+                        console.log('自动播放失败，需要用户交互:', error);
+                    });
+                }
+            }
+            
+            // 简化音乐播放器点击处理
+            musicPlayer.addEventListener('click', function(e) {
+                e.stopPropagation();
+                toggleMusic();
+            });
+        });
 
         // 修改音乐播放器的移动端交互
         document.addEventListener('DOMContentLoaded', function() {
