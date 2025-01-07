@@ -2750,6 +2750,57 @@
             transform: scale(0.95);
             transition: transform 0.2s;
         }
+
+        /* 访问量计数器样式 */
+        .visit-counter {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 8px 20px;
+            border-radius: 20px;
+            color: white;
+            font-size: 0.9em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .visit-counter:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(-50%) translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .visit-counter i {
+            color: #ffd700;
+            text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+        }
+
+        .visit-count {
+            font-family: 'Playfair Display', serif;
+            color: #ffd700;
+            font-weight: 500;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+            min-width: 20px;
+            display: inline-block;
+            text-align: center;
+        }
+
+        @media screen and (max-width: 768px) {
+            .visit-counter {
+                bottom: 20px;
+                padding: 6px 15px;
+                font-size: 0.8em;
+            }
+        }
     </style>
     <script>
         // 心情相关功能
@@ -2922,6 +2973,11 @@
                         music.play().catch(error => {
                             console.error('自动播放失败:', error);
                         });
+                    }
+
+                    // 更新访问量
+                    if (typeof updateVisitCount === 'function') {
+                        updateVisitCount();
                     }
                 }, 500);
             } else {
@@ -3483,6 +3539,42 @@
                 input.value = '';
             }, 800);
         };
+
+        // 将updateVisitCount函数暴露给全局
+        window.updateVisitCount = updateVisitCount;
+
+        // 保存语音消息到数据库
+        async function saveVoiceMessageToDatabase(audioBlob) {
+            try {
+                // 将音频数据转换为base64字符串
+                const reader = new FileReader();
+                reader.readAsDataURL(audioBlob);
+                
+                reader.onloadend = async function() {
+                    const base64Audio = reader.result;
+                    
+                    // 创建新的消息对象
+                    const messageData = {
+                        type: 'voice',
+                        content: base64Audio,
+                        date: new Date().toLocaleString(),
+                        duration: recordingDuration
+                    };
+                    
+                    // 保存到Firebase数据库
+                    const app = window.firebaseApp;
+                    const database = window.firebaseDatabase;
+                    const messagesRef = window.messagesRef;
+                    await push(messagesRef, messageData);
+                }
+            } catch (error) {
+                console.error('保存语音消息失败:', error);
+                alert('保存语音消息失败，请重试');
+            }
+        }
+
+        // 将saveVoiceMessageToDatabase函数暴露给全局
+        window.saveVoiceMessageToDatabase = saveVoiceMessageToDatabase;
     </script>
 </head>
 <body>
@@ -3671,6 +3763,13 @@
         </div>
     </div>
 
+    <!-- 在next-page-button之前添加 -->
+    <div class="visit-counter">
+        <i class="fas fa-eye"></i>
+        <span>访问量：</span>
+        <span class="visit-count" id="visitCount">0</span>
+    </div>
+
     <button class="next-page-button" onclick="showSecondPage()">
         下一页 →
     </button>
@@ -3685,10 +3784,6 @@
                 <i class="fas fa-paper-plane"></i>
                     <span>发送留言</span>
             </button>
-                <button class="voice-record" onclick="toggleVoiceRecord()">
-                    <i class="fas fa-microphone"></i>
-                    <span>语音留言</span>
-                </button>
             </div>
             <div class="messages-container" id="messagesContainer">
                 <!-- 留言加载动画 -->
@@ -3787,6 +3882,19 @@
         const app = initializeApp(firebaseConfig);
         const database = getDatabase(app);
         const messagesRef = ref(database, 'messages');
+        const visitsRef = ref(database, 'visits');
+
+        // 将必要的变量和函数暴露到全局
+        window.firebaseApp = app;
+        window.firebaseDatabase = database;
+        window.messagesRef = messagesRef;
+        window.visitsRef = visitsRef;
+        window.firebasePush = push;
+        window.firebaseSet = set;
+        window.firebaseGet = get;
+        window.firebaseRemove = remove;
+        window.firebaseOnValue = onValue;
+        window.firebaseRef = ref;
 
         let currentDeleteId = null;
 
@@ -4054,6 +4162,51 @@
 
         // 启动自动清理定时器
         scheduleMoodHistoryCleanup();
+
+        // 更新访问量函数
+        async function updateVisitCount() {
+            try {
+                const snapshot = await get(visitsRef);
+                let visits = 0;
+                
+                if (snapshot.exists()) {
+                    visits = snapshot.val();
+                }
+                
+                // 增加访问量
+                visits++;
+                
+                // 更新数据库
+                await set(visitsRef, visits);
+                
+                // 更新显示
+                const visitCountElement = document.getElementById('visitCount');
+                if (visitCountElement) {
+                    // 添加动画效果
+                    visitCountElement.style.transform = 'scale(1.2)';
+                    visitCountElement.textContent = visits.toLocaleString();
+                    setTimeout(() => {
+                        visitCountElement.style.transform = 'scale(1)';
+                    }, 300);
+                }
+            } catch (error) {
+                console.error('更新访问量失败:', error);
+            }
+        }
+
+        // 监听访问量变化
+        onValue(visitsRef, (snapshot) => {
+            if (snapshot.exists()) {
+                const visits = snapshot.val();
+                const visitCountElement = document.getElementById('visitCount');
+                if (visitCountElement) {
+                    visitCountElement.textContent = visits.toLocaleString();
+                }
+            }
+        });
+
+        // 将updateVisitCount函数暴露给全局
+        window.updateVisitCount = updateVisitCount;
     </script>
 
     <script>
@@ -4543,6 +4696,11 @@
                         music.play().catch(error => {
                             console.error('自动播放失败:', error);
                         });
+                    }
+
+                    // 更新访问量
+                    if (typeof updateVisitCount === 'function') {
+                        updateVisitCount();
                     }
                 }, 500);
             } else {
