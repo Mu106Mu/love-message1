@@ -2972,7 +2972,20 @@
             
             // 添加点击事件
             let isCreatingBurst = false;
-            easterEggHeart.addEventListener('click', function(e) {
+            
+            // 为彩蛋爱心添加独立的触摸事件
+            easterEggHeart.addEventListener('touchstart', function(e) {
+                e.stopPropagation();  // 阻止事件冒泡
+                handleEasterEggClick(e);
+            }, { passive: false });
+            
+            easterEggHeart.addEventListener('mousedown', function(e) {
+                e.stopPropagation();  // 阻止事件冒泡
+                handleEasterEggClick(e);
+            });
+            
+            function handleEasterEggClick(e) {
+                e.preventDefault();  // 阻止默认行为
                 console.log('彩蛋爱心被点击');
                 
                 if (isCreatingBurst) return;
@@ -3034,8 +3047,8 @@
                 setTimeout(() => {
                     hearts.forEach(heart => heart.remove());
                     isCreatingBurst = false;
-                }, 8000); // 增加到8秒
-            });
+                }, 8000);
+            }
         });
 
         // 添加自动登录功能
