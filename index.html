@@ -1572,35 +1572,30 @@
             z-index: 100;
             touch-action: none;
             will-change: transform;
-            transform: translate(-50%, 0) rotate(-90deg);  /* 添加90度逆时针旋转 */
-        }
-
-        .heart::before,
-        .heart::after {
-            content: '';
-            position: absolute;
-            width: 15px;
-            height: 25px;
-            background: #ff4b4b;
-            border-radius: 15px 15px 0 0;
-            transform-origin: 100% 100%;
-            transition: all 0.3s ease;
+            transform: translate(-50%, 0);
+            font-size: 30px;  /* 调整emoji大小 */
+            line-height: 1;
+            text-align: center;
         }
 
         .heart::before {
-            left: 15px;
-            transform: rotate(-45deg);
+            content: '❤️';  /* 使用emoji爱心 */
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
         }
 
-        .heart::after {
-            left: 0;
-            transform: rotate(45deg);
+        /* 修改心跳动画 */
+        @keyframes heartBeat {
+            0% { transform: translate(-50%, 0) scale(1); }
+            50% { transform: translate(-50%, 0) scale(1.2); }
+            100% { transform: translate(-50%, 0) scale(1); }
         }
 
         /* 修改拖动时的样式 */
         .heart.dragging {
             animation: none;
-            transform: translate(-50%, 0) rotate(-90deg);  /* 保持90度逆时针旋转 */
         }
 
         /* 表白文字 */
