@@ -2637,16 +2637,13 @@
         .mobile-view .photo-wall {
             margin-top: 160px;
             grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            width: 94%;
-            padding: 0 10px;
+            gap: 15px;
+            width: 92%;
         }
 
         .mobile-view .photo-item {
-            width: 100%;  /* 改为相对宽度 */
-            height: 0;
-            padding-bottom: 100%;  /* 保持正方形比例 */
-            position: relative;
+            width: 140px;
+            height: 140px;
             perspective: 1000px;
             cursor: pointer;
             margin: auto;
@@ -2654,202 +2651,28 @@
         }
 
         .mobile-view .photo-card {
-            position: absolute;
-            top: 0;
-            left: 0;
+            position: relative;
             width: 100%;
             height: 100%;
             transform-style: preserve-3d;
-            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .mobile-view .photo-card.flipped {
+            transform: rotateY(180deg);
         }
 
         .mobile-view .photo-front,
         .mobile-view .photo-back {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            backface-visibility: hidden;
-            border-radius: 12px;
-            overflow: hidden;
+            padding: 10px;
+            font-size: 0.9em;
+            line-height: 1.4;
         }
 
-        .mobile-view .photo-back {
-            padding: 12px;
-            font-size: 0.85em;
-            line-height: 1.5;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            background: rgba(255, 255, 255, 0.95);
-            transform: rotateY(180deg);
-        }
-
-        /* 添加触摸反馈效果 */
+        /* 添加点击反馈效果 */
         .mobile-view .photo-item:active {
             transform: scale(0.95);
             transition: transform 0.2s;
-        }
-
-        /* 添加触摸涟漪效果 */
-        .mobile-view .photo-item::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .mobile-view .photo-item:active::after {
-            animation: ripple 0.6s ease-out;
-        }
-
-        @keyframes ripple {
-            0% {
-                width: 0;
-                height: 0;
-                opacity: 0.5;
-            }
-            100% {
-                width: 200%;
-                height: 200%;
-                opacity: 0;
-            }
-        }
-
-        /* 优化图片加载 */
-        .mobile-view .photo-front img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transform: scale(1.05);  /* 稍微放大以避免边缘空白 */
-            transition: transform 0.3s ease;
-        }
-
-        .mobile-view .photo-front img.loaded {
-            transform: scale(1);
-        }
-
-        /* 优化移动端心情选择器 */
-        .mobile-view .mood-weather-button {
-            top: 110px;
-            padding: 8px 15px;
-            font-size: 0.8em;
-            border-radius: 20px;
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(5px);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            transform: translateX(-50%);
-        }
-
-        .mobile-view .mood-icons-container {
-            top: 155px;
-            gap: 15px;
-            padding: 10px;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(8px);
-            border-radius: 25px;
-            transform: translateX(-50%) scale(0.8);
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .mobile-view .mood-icons-container.show {
-            transform: translateX(-50%) scale(1);
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .mobile-view .mood-icon {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.15);
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            transition: all 0.3s ease;
-        }
-
-        .mobile-view .mood-icon:active {
-            transform: scale(0.9);
-        }
-
-        /* 优化移动端音乐播放器 */
-        .mobile-view .music-player {
-            bottom: 20px;
-            right: 20px;
-            width: 40px;
-            height: 40px;
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(8px);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .mobile-view .music-controls {
-            bottom: 70px;
-            right: 20px;
-            flex-direction: column;
-            gap: 10px;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(8px);
-            padding: 8px;
-            border-radius: 20px;
-            transform: translateY(10px);
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .mobile-view .music-controls.show {
-            transform: translateY(0);
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .mobile-view .music-control-btn {
-            width: 32px;
-            height: 32px;
-            background: rgba(255, 255, 255, 0.15);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-        }
-
-        .mobile-view .music-control-btn:active {
-            transform: scale(0.9);
-        }
-
-        .mobile-view .music-title {
-            right: 70px;
-            bottom: 25px;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(8px);
-            padding: 5px 12px;
-            border-radius: 15px;
-            font-size: 0.8em;
-            transform: translateX(10px);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .mobile-view .music-title.show {
-            transform: translateX(0);
-            opacity: 1;
-        }
-
-        /* 添加移动端触摸反馈 */
-        @media (hover: none) {
-            .mobile-view .mood-icon:active,
-            .mobile-view .music-control-btn:active,
-            .mobile-view .music-player:active {
-                transform: scale(0.9);
-                transition: transform 0.2s;
-            }
         }
     </style>
     <script>
@@ -3370,182 +3193,66 @@
 
         // 修改照片墙交互逻辑
         document.addEventListener('DOMContentLoaded', function() {
+            const isMobile = document.body.classList.contains('mobile-view');
             const photoItems = document.querySelectorAll('.photo-item');
-            
+
             photoItems.forEach(item => {
                 const card = item.querySelector('.photo-card');
+                const easterEggHeart = item.querySelector('.easter-egg-heart');
                 
-                // 简化点击处理
-                item.addEventListener('click', function(e) {
-                    e.stopPropagation(); // 阻止事件冒泡
-                    if (card) {
+                // 移除之前的事件监听器
+                item.removeEventListener('mouseenter', handleHover);
+                item.removeEventListener('mouseleave', handleHover);
+                
+                if (isMobile) {
+                    // 移动端使用点击切换
+                    item.addEventListener('click', function(e) {
+                        // 如果点击的是彩蛋爱心，不触发翻转
+                        if (e.target.closest('.easter-egg-heart')) {
+                            e.stopPropagation();  // 阻止事件冒泡
+                            return;
+                        }
+                        
+                        e.preventDefault();
                         card.classList.toggle('flipped');
-                        // 添加触感反馈
+                        
+                        // 添加触感反馈（如果设备支持）
                         if ('vibrate' in navigator) {
                             navigator.vibrate(50);
                         }
-                    }
-                });
-            });
-        });
-
-        // 修改音乐播放器相关代码
-        window.toggleMusic = function() {
-            const music = document.getElementById('bgMusic');
-            const musicPlayer = document.querySelector('.music-player');
-            const musicIcon = musicPlayer.querySelector('i');
-            
-            if (music) {
-                if (music.paused) {
-                    const playPromise = music.play();
-                    if (playPromise !== undefined) {
-                        playPromise.then(() => {
-                            musicPlayer.classList.add('playing');
-                            musicIcon.classList.remove('fa-music');
-                            musicIcon.classList.add('fa-pause');
-                        }).catch(error => {
-                            console.log('播放失败，需要用户交互:', error);
+                    });
+                    
+                    // 为彩蛋爱心添加单独的点击事件
+                    if (easterEggHeart) {
+                        easterEggHeart.addEventListener('click', function(e) {
+                            e.stopPropagation();  // 阻止事件冒泡
+                            // 这里是原有的彩蛋点击处理逻辑
+                            console.log('彩蛋爱心被点击');
+                            // ... 其他彩蛋逻辑 ...
                         });
                     }
+                    
+                    // 添加触摸开始事件
+                    item.addEventListener('touchstart', function() {
+                        item.style.transform = 'scale(0.95)';
+                    });
+                    
+                    // 添加触摸结束事件
+                    item.addEventListener('touchend', function() {
+                        item.style.transform = 'scale(1)';
+                    });
                 } else {
-                    music.pause();
-                    musicPlayer.classList.remove('playing');
-                    musicIcon.classList.remove('fa-pause');
-                    musicIcon.classList.add('fa-music');
+                    // 桌面端保持悬停效果
+                    item.addEventListener('mouseenter', function() {
+                        card.classList.add('flipped');
+                    });
+                    
+                    item.addEventListener('mouseleave', function() {
+                        card.classList.remove('flipped');
+                    });
                 }
-            }
-        };
-
-        // 页面加载时初始化音频
-        document.addEventListener('DOMContentLoaded', function() {
-            const music = document.getElementById('bgMusic');
-            const musicPlayer = document.querySelector('.music-player');
-            
-            if (music && musicPlayer) {
-                // 设置初始音量
-                music.volume = 1.0;
-                
-                // 添加音频事件监听
-                music.addEventListener('ended', function() {
-                    nextSong();
-                });
-                
-                // 简化音乐播放器点击处理
-                musicPlayer.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    toggleMusic();
-                });
-                
-                // 加载第一首歌
-                loadSong(0);
-            }
+            });
         });
-
-        // 修改音乐播放器的移动端交互
-        document.addEventListener('DOMContentLoaded', function() {
-            const musicPlayer = document.querySelector('.music-player');
-            const musicControls = document.querySelector('.music-controls');
-            const musicTitle = document.getElementById('musicTitle');
-            const isMobile = document.body.classList.contains('mobile-view');
-            
-            if (isMobile) {
-                // 移动端长按显示控制面板
-                let pressTimer;
-                let isLongPress = false;
-                
-                musicPlayer.addEventListener('touchstart', function(e) {
-                    pressTimer = setTimeout(function() {
-                        isLongPress = true;
-                        musicControls.classList.add('show');
-                        
-                        // 添加触感反馈
-                        if ('vibrate' in navigator) {
-                            navigator.vibrate([50]);
-                        }
-                    }, 500);
-                }, { passive: true });
-                
-                musicPlayer.addEventListener('touchend', function(e) {
-                    clearTimeout(pressTimer);
-                    if (!isLongPress) {
-                        toggleMusic();
-                    }
-                    isLongPress = false;
-                });
-                
-                // 点击其他区域隐藏控制面板
-                document.addEventListener('touchstart', function(e) {
-                    if (!musicControls.contains(e.target) && !musicPlayer.contains(e.target)) {
-                        musicControls.classList.remove('show');
-                    }
-                }, { passive: true });
-                
-                // 优化音乐标题显示
-                function showMusicTitle(title) {
-                    musicTitle.textContent = title;
-                    musicTitle.classList.add('show');
-                    
-                    setTimeout(() => {
-                        musicTitle.classList.remove('show');
-                    }, 2000);
-                }
-                
-                // 修改音乐切换函数
-                window.prevSong = function() {
-                    currentSongIndex = (currentSongIndex - 1 + songs.length) % songs.length;
-                    loadSong(currentSongIndex);
-                    showMusicTitle(songs[currentSongIndex].title);
-                    
-                    // 自动播放新歌曲
-                    const music = document.getElementById('bgMusic');
-                    if (music) {
-                        const playPromise = music.play();
-                        if (playPromise !== undefined) {
-                            playPromise.then(() => {
-                                musicPlayer.classList.add('playing');
-                                const musicIcon = musicPlayer.querySelector('i');
-                                musicIcon.classList.remove('fa-music');
-                                musicIcon.classList.add('fa-pause');
-                            }).catch(error => {
-                                console.error('播放失败:', error);
-                            });
-                        }
-                    }
-                    
-                    if ('vibrate' in navigator) {
-                        navigator.vibrate(30);
-                    }
-                };
-                
-                window.nextSong = function() {
-                    currentSongIndex = (currentSongIndex + 1) % songs.length;
-                    loadSong(currentSongIndex);
-                    showMusicTitle(songs[currentSongIndex].title);
-                    
-                    // 自动播放新歌曲
-                    const music = document.getElementById('bgMusic');
-                    if (music) {
-                        const playPromise = music.play();
-                        if (playPromise !== undefined) {
-                            playPromise.then(() => {
-                                musicPlayer.classList.add('playing');
-                                const musicIcon = musicPlayer.querySelector('i');
-                                musicIcon.classList.remove('fa-music');
-                                musicIcon.classList.add('fa-pause');
-                            }).catch(error => {
-                                console.error('播放失败:', error);
-                            });
-                        }
-                    }
-                    
-                    if ('vibrate' in navigator) {
-                        navigator.vibrate(30);
-                    }
-                };
-            }
-        });
-
-        // ... existing code ...
     </script>
 </head>
 <body>
@@ -4092,9 +3799,9 @@
 
         // 音乐播放器相关代码
         window.songs = [
-            { path: './music/1.mp3', title: 'Never Say Good Bye' },
-            { path: './music/2.mp3', title: 'no idea' },
-            { path: './music/3.mp3', title: '分身情人' }
+            { path: window.AppState.basePath + '/music/1.mp3', title: 'Never Say Good Bye' },
+            { path: window.AppState.basePath + '/music/2.mp3', title: 'no idea' },
+            { path: window.AppState.basePath + '/music/3.mp3', title: '分身情人' }
         ];
 
         window.initAudio = function() {
@@ -4233,6 +3940,33 @@
             }
             
             window.AppState.isPhotoWallFolded = !window.AppState.isPhotoWallFolded;
+        };
+
+        window.toggleMusic = function() {
+            const music = window.AppState.music;
+            const musicPlayer = document.querySelector('.music-player');
+            
+            if (window.AppState.isPlaying) {
+                music.pause();
+                musicPlayer.classList.remove('playing');
+            } else {
+                if (music.readyState < 2) {
+                    music.load();
+                }
+                
+                const playPromise = music.play();
+                if (playPromise !== undefined) {
+                    playPromise
+                        .then(() => {
+                            musicPlayer.classList.add('playing');
+                        })
+                        .catch(error => {
+                            console.error('播放失败:', error);
+                            alert('音乐播放失败，请检查音频文件是否正确');
+                        });
+                }
+            }
+            window.AppState.isPlaying = !window.AppState.isPlaying;
         };
 
         // 在页面加载前就检查登录状态
