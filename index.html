@@ -3389,7 +3389,7 @@
             });
         });
 
-        // 音乐播放器相关代码
+        // 修改音乐播放器相关代码
         window.toggleMusic = function() {
             const music = document.getElementById('bgMusic');
             const musicPlayer = document.querySelector('.music-player');
@@ -3397,10 +3397,16 @@
             
             if (music) {
                 if (music.paused) {
-                    music.play();
+                    const playPromise = music.play();
+                    if (playPromise !== undefined) {
+                        playPromise.then(() => {
                             musicPlayer.classList.add('playing');
                             musicIcon.classList.remove('fa-music');
                             musicIcon.classList.add('fa-pause');
+                        }).catch(error => {
+                            console.log('播放失败，需要用户交互:', error);
+                        });
+                    }
                 } else {
                     music.pause();
                     musicPlayer.classList.remove('playing');
@@ -3410,31 +3416,29 @@
             }
         };
 
-        // 页面加载时自动播放音乐
+        // 页面加载时初始化音频
         document.addEventListener('DOMContentLoaded', function() {
             const music = document.getElementById('bgMusic');
             const musicPlayer = document.querySelector('.music-player');
             
-            if (music) {
-                // 尝试自动播放
-                const playPromise = music.play();
-                if (playPromise !== undefined) {
-                    playPromise.then(() => {
-                        musicPlayer.classList.add('playing');
-                        const musicIcon = musicPlayer.querySelector('i');
-                        musicIcon.classList.remove('fa-music');
-                        musicIcon.classList.add('fa-pause');
-                    }).catch(error => {
-                        console.log('自动播放失败，需要用户交互:', error);
-                    });
-                }
+            if (music && musicPlayer) {
+                // 设置初始音量
+                music.volume = 1.0;
+                
+                // 添加音频事件监听
+                music.addEventListener('ended', function() {
+                    nextSong();
+                });
+                
+                // 简化音乐播放器点击处理
+                musicPlayer.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    toggleMusic();
+                });
+                
+                // 加载第一首歌
+                loadSong(0);
             }
-            
-            // 简化音乐播放器点击处理
-            musicPlayer.addEventListener('click', function(e) {
-                e.stopPropagation();
-                toggleMusic();
-            });
         });
 
         // 修改音乐播放器的移动端交互
@@ -4088,9 +4092,9 @@
 
         // 音乐播放器相关代码
         window.songs = [
-            { path: window.AppState.basePath + '/music/1.mp3', title: 'Never Say Good Bye' },
-            { path: window.AppState.basePath + '/music/2.mp3', title: 'no idea' },
-            { path: window.AppState.basePath + '/music/3.mp3', title: '分身情人' }
+            { path: './music/1.mp3', title: 'Never Say Good Bye' },
+            { path: './music/2.mp3', title: 'no idea' },
+            { path: './music/3.mp3', title: '分身情人' }
         ];
 
         window.initAudio = function() {
