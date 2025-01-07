@@ -1657,6 +1657,7 @@
             opacity: 0;
             transition: all 0.3s ease;
             will-change: transform, opacity;
+            animation: floatHeart 3s ease-in-out infinite;
         }
 
         .easter-egg-heart::before,
@@ -1670,6 +1671,7 @@
             transform-origin: 100% 100%;
             filter: drop-shadow(0 0 5px rgba(255, 75, 75, 0.5));
             will-change: transform;
+            transition: all 0.3s ease;
         }
 
         .easter-egg-heart::before {
@@ -1684,7 +1686,16 @@
 
         .photo-back.has-easter-egg .easter-egg-heart {
             opacity: 1;
-            animation: heartBeat 1s infinite;
+            animation: heartBeat 1s infinite, floatHeart 3s ease-in-out infinite;
+        }
+
+        .easter-egg-heart:hover {
+            transform: translate(-50%, -50%) scale(1.1);
+            filter: brightness(1.2);
+        }
+
+        .easter-egg-heart:active {
+            transform: translate(-50%, -50%) scale(0.9);
         }
 
         /* 添加爆炸爱心样式 */
@@ -1693,21 +1704,51 @@
             pointer-events: none;
             z-index: 9997;
             will-change: transform, opacity;
+            filter: drop-shadow(0 0 3px rgba(255, 75, 75, 0.3));
         }
 
-        @keyframes heartBeat {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
+        .burst-heart::before,
+        .burst-heart::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: currentColor;
+            border-radius: 50% 50% 0 0;
+            transform-origin: 100% 100%;
         }
 
-        @keyframes burstFloat {
+        .burst-heart::before {
+            left: 50%;
+            transform: rotate(-45deg);
+        }
+
+        .burst-heart::after {
+            left: 0;
+            transform: rotate(45deg);
+        }
+
+        @keyframes heartRain {
             0% {
-                transform: translate(0, 0) scale(1);
+                transform: translate(var(--startX), -50px) scale(1) rotate(var(--rotate));
                 opacity: 1;
             }
+            50% {
+                opacity: 0.8;
+                transform: translate(
+                    calc(var(--startX) + var(--swayX)), 
+                    calc(50vh + var(--delay) * 200px)
+                ) 
+                scale(var(--scale)) 
+                rotate(calc(var(--rotate) + var(--spinSpeed) * 180deg));
+            }
             100% {
-                transform: translate(var(--tx), var(--ty)) scale(0);
+                transform: translate(
+                    calc(var(--startX) + var(--swayX) * 2), 
+                    calc(100vh + 50px)
+                ) 
+                scale(var(--scale)) 
+                rotate(calc(var(--rotate) + var(--spinSpeed) * 360deg));
                 opacity: 0;
             }
         }
@@ -2865,32 +2906,44 @@
                 if (isCreatingBurst) return;
                 isCreatingBurst = true;
                 
-                const rect = e.target.getBoundingClientRect();
-                const startX = rect.left + rect.width / 2;
-                const startY = rect.top + rect.height / 2;
-                
                 const fragment = document.createDocumentFragment();
                 const hearts = [];
+                const colors = [
+                    '#ff6b6b', '#ff8787', '#ffa5a5', '#ff4b4b',
+                    '#ff3d3d', '#ff8fa3', '#ff7096', '#ff5c8a'
+                ];
                 
-                for (let i = 0; i < 50; i++) {
+                // 创建更多的爱心
+                for (let i = 0; i < 200; i++) {
                     const heart = document.createElement('div');
                     heart.className = 'burst-heart';
                     
-                    const angle = (Math.random() * 360) * (Math.PI / 180);
-                    const distance = Math.random() * Math.min(window.innerWidth, window.innerHeight) * 0.8;
-                    const tx = Math.cos(angle) * distance;
-                    const ty = Math.sin(angle) * distance;
+                    // 随机参数
+                    const startX = Math.random() * window.innerWidth;
+                    const scale = 0.3 + Math.random() * 0.7;
+                    const rotate = Math.random() * 360;
+                    const delay = Math.random() * 3;
+                    const swayX = -50 + Math.random() * 100;
+                    const spinSpeed = -2 + Math.random() * 4;
+                    const duration = 4 + Math.random() * 4;
+                    const color = colors[Math.floor(Math.random() * colors.length)];
                     
                     heart.style.cssText = `
-                        left: ${startX}px;
-                        top: ${startY}px;
-                        width: ${20 + Math.random() * 20}px;
-                        height: ${20 + Math.random() * 20}px;
-                        --tx: ${tx}px;
-                        --ty: ${ty}px;
-                        animation: burstFloat ${1 + Math.random()}s ease-out forwards;
-                        background: ${`hsl(${Math.random() * 40 + 340}, 100%, 65%)`};
-                        clip-path: path('M12 21.593c-5.63-5.539-11-10.297-11-14.402 0-3.791 3.068-5.191 5.281-5.191 1.312 0 4.151.501 5.719 4.457 1.59-3.968 4.464-4.447 5.726-4.447 2.54 0 5.274 1.621 5.274 5.181 0 4.069-5.136 8.625-11 14.402m5.726-20.583c-2.203 0-4.446 1.042-5.726 3.238-1.285-2.206-3.522-3.248-5.719-3.248-3.183 0-6.281 2.187-6.281 6.191 0 4.661 5.571 9.429 12 15.809 6.43-6.38 12-11.148 12-15.809 0-4.011-3.095-6.181-6.274-6.181');
+                        left: 0;
+                        top: 0;
+                        width: ${15 + Math.random() * 15}px;
+                        height: ${15 + Math.random() * 15}px;
+                        color: ${color};
+                        opacity: 0;
+                        --startX: ${startX}px;
+                        --scale: ${scale};
+                        --rotate: ${rotate}deg;
+                        --delay: ${delay};
+                        --swayX: ${swayX}px;
+                        --spinSpeed: ${spinSpeed};
+                        animation: heartRain ${duration}s ease-in forwards;
+                        animation-delay: ${delay}s;
+                        filter: drop-shadow(0 0 3px ${color}40);
                     `;
                     
                     hearts.push(heart);
@@ -2899,10 +2952,17 @@
                 
                 document.body.appendChild(fragment);
                 
+                // 添加点击反馈动画
+                easterEggHeart.style.transform = 'translate(-50%, -50%) scale(0.9)';
+                setTimeout(() => {
+                    easterEggHeart.style.transform = 'translate(-50%, -50%) scale(1)';
+                }, 150);
+                
+                // 延长动画持续时间
                 setTimeout(() => {
                     hearts.forEach(heart => heart.remove());
                     isCreatingBurst = false;
-                }, 2000);
+                }, 8000); // 增加到8秒
             });
         });
     </script>
