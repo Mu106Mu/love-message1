@@ -64,7 +64,7 @@
 
         .title-container {
             position: fixed;
-            top: 40px;
+            top: 30px;  /* 调整标题位置 */
             left: 50%;
             transform: translateX(-50%);
             text-align: center;
@@ -144,7 +144,7 @@
 
         .timer-container {
             position: fixed;
-            top: 180px;
+            top: 200px;  /* 从180px增加到200px，增加与标题的距离 */
             left: 50%;
             transform: translateX(-50%);
             text-align: center;
@@ -1476,7 +1476,7 @@
         /* 火柴人动画容器 */
         .stickman-animation {
             position: fixed;
-            top: 50%;
+            top: 60%;  /* 调整整体位置 */
             left: 50%;
             transform: translate(-50%, -50%);
             width: 300px;
@@ -1828,9 +1828,9 @@
         @media screen and (max-width: 768px) {
             /* 标题容器适配 */
             .title-container {
-                top: 10px;
+                top: 20px;
                 width: 85%;
-                padding: 8px 12px;
+                padding: 15px 20px;
             }
 
             .title-en {
@@ -1846,9 +1846,9 @@
 
             /* 计时器容器适配 */
             .timer-container {
-                top: 70px;
+                top: 170px;  /* 从150px增加到170px，保持移动端的合适间距 */
                 width: 85%;
-                padding: 8px 12px;
+                padding: 12px 20px;
             }
 
             .timer-title {
@@ -2564,62 +2564,32 @@
         @media screen and (max-width: 768px) {
             /* 折叠按钮优化 */
             .fold-button {
-                padding: 8px 15px;
-                font-size: 0.9em;
-                border-radius: 15px;
-                left: 10px;
+                padding: 6px 12px;
+                font-size: 0.8em;
+                border-radius: 12px;
+                left: 8px;
             }
 
             .fold-button i {
-                font-size: 0.8em;
+                font-size: 0.7em;
             }
 
             /* 心情记录面板优化 */
             .mood-history-panel {
-                width: 150px;
-                padding: 12px;
-                right: 10px;
-            }
-
-            .mood-history-title {
-                font-size: 0.9em;
-                margin-bottom: 10px;
-            }
-
-            .mood-record {
-                padding: 6px;
-                gap: 6px;
-            }
-
-            .mood-record-icon {
-                width: 24px;
-                height: 24px;
-            }
-
-            .mood-record-time {
-                font-size: 0.8em;
-            }
-        }
-
-        /* 超小屏幕优化 */
-        @media screen and (max-width: 380px) {
-            .fold-button {
-                padding: 6px 12px;
-                font-size: 0.8em;
-            }
-
-            .mood-history-panel {
                 width: 130px;
                 padding: 10px;
+                right: 8px;
             }
 
             .mood-history-title {
                 font-size: 0.8em;
+                margin-bottom: 8px;
             }
 
             .mood-record {
                 padding: 5px;
                 gap: 5px;
+                margin-bottom: 5px;
             }
 
             .mood-record-icon {
@@ -2629,6 +2599,37 @@
 
             .mood-record-time {
                 font-size: 0.75em;
+            }
+        }
+
+        /* 超小屏幕优化 */
+        @media screen and (max-width: 380px) {
+            .fold-button {
+                padding: 5px 10px;
+                font-size: 0.75em;
+            }
+
+            .mood-history-panel {
+                width: 120px;
+                padding: 8px;
+            }
+
+            .mood-history-title {
+                font-size: 0.75em;
+            }
+
+            .mood-record {
+                padding: 4px;
+                gap: 4px;
+            }
+
+            .mood-record-icon {
+                width: 18px;
+                height: 18px;
+            }
+
+            .mood-record-time {
+                font-size: 0.7em;
             }
         }
 
