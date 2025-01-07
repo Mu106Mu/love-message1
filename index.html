@@ -2708,6 +2708,16 @@
             }
         }
 
+        // 添加一个简单的加密函数
+        function encrypt(text) {
+            return btoa(text).split('').reverse().join('');
+        }
+
+        // 添加一个解密函数
+        function decrypt(encoded) {
+            return atob(encoded.split('').reverse().join(''));
+        }
+
         // 修改登录函数
         function login() {
             if (!selectedDevice) {
@@ -2715,7 +2725,6 @@
                 loginError.textContent = "请先选择浏览设备~";
                 loginError.classList.add('show');
                 
-                // 添加输入框晃动效果
                 const deviceSelection = document.querySelector('.device-selection');
                 deviceSelection.style.animation = 'shake 0.5s ease';
                 setTimeout(() => {
@@ -2731,6 +2740,20 @@
             const loginError = document.getElementById('loginError');
             
             if (username === '0621' && password === '1006') {
+                // 如果选择了"记住我"，保存加密后的登录信息
+                if (rememberMe) {
+                    const loginInfo = {
+                        username: encrypt(username),
+                        password: encrypt(password),
+                        device: selectedDevice,
+                        timestamp: new Date().getTime()
+                    };
+                    localStorage.setItem('loginInfo', JSON.stringify(loginInfo));
+                } else {
+                    // 如果没有选择"记住我"，清除保存的登录信息
+                    localStorage.removeItem('loginInfo');
+                }
+                
                 // 保存设备选择
                 localStorage.setItem('selectedDevice', selectedDevice);
                 
@@ -2964,6 +2987,43 @@
                     isCreatingBurst = false;
                 }, 8000); // 增加到8秒
             });
+        });
+
+        // 添加自动登录功能
+        document.addEventListener('DOMContentLoaded', function() {
+            // 检查是否有保存的登录信息
+            const savedLoginInfo = localStorage.getItem('loginInfo');
+            if (savedLoginInfo) {
+                try {
+                    const loginInfo = JSON.parse(savedLoginInfo);
+                    const now = new Date().getTime();
+                    // 检查登录信息是否在30天内
+                    if (now - loginInfo.timestamp < 30 * 24 * 60 * 60 * 1000) {
+                        // 解密用户名和密码
+                        const username = decrypt(loginInfo.username);
+                        const password = decrypt(loginInfo.password);
+                        
+                        // 自动填充表单
+                        document.getElementById('username').value = username;
+                        document.getElementById('password').value = password;
+                        document.getElementById('rememberMe').checked = true;
+                        
+                        // 选择保存的设备
+                        if (loginInfo.device) {
+                            selectDevice(loginInfo.device);
+                        }
+                        
+                        // 自动登录
+                        login();
+                    } else {
+                        // 如果登录信息过期，清除保存的信息
+                        localStorage.removeItem('loginInfo');
+                    }
+                } catch (error) {
+                    console.error('解析保存的登录信息时出错:', error);
+                    localStorage.removeItem('loginInfo');
+                }
+            }
         });
     </script>
 </head>
@@ -3929,6 +3989,20 @@
             const loginError = document.getElementById('loginError');
             
             if (username === '0621' && password === '1006') {
+                // 如果选择了"记住我"，保存加密后的登录信息
+                if (rememberMe) {
+                    const loginInfo = {
+                        username: encrypt(username),
+                        password: encrypt(password),
+                        device: selectedDevice,
+                        timestamp: new Date().getTime()
+                    };
+                    localStorage.setItem('loginInfo', JSON.stringify(loginInfo));
+                } else {
+                    // 如果没有选择"记住我"，清除保存的登录信息
+                    localStorage.removeItem('loginInfo');
+                }
+                
                 // 保存设备选择
                 localStorage.setItem('selectedDevice', selectedDevice);
                 
