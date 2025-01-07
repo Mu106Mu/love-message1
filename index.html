@@ -2813,6 +2813,98 @@
                 document.body.classList.add(savedDevice === 'mobile' ? 'mobile-view' : 'desktop-view');
             }
         });
+
+        // 添加彩蛋爱心功能
+        document.addEventListener('DOMContentLoaded', function() {
+            // 添加调试日志
+            console.log('开始初始化彩蛋功能');
+            
+            const photoItems = document.querySelectorAll('.photo-item');
+            console.log('找到照片数量:', photoItems.length);
+            
+            if (photoItems.length === 0) {
+                console.error('没有找到照片元素');
+                return;
+            }
+            
+            // 清除之前可能存在的彩蛋
+            photoItems.forEach(item => {
+                const photoBack = item.querySelector('.photo-back');
+                if (photoBack) {
+                    photoBack.classList.remove('has-easter-egg');
+                    const existingHeart = photoBack.querySelector('.easter-egg-heart');
+                    if (existingHeart) {
+                        existingHeart.remove();
+                    }
+                }
+            });
+            
+            // 随机选择一个新的照片
+            const randomIndex = Math.floor(Math.random() * photoItems.length);
+            console.log('选中的照片索引:', randomIndex);
+            
+            const selectedPhotoBack = photoItems[randomIndex].querySelector('.photo-back');
+            if (!selectedPhotoBack) {
+                console.error('在选中的照片中没有找到 photo-back 元素');
+                return;
+            }
+            
+            // 创建彩蛋爱心
+            const easterEggHeart = document.createElement('div');
+            easterEggHeart.className = 'easter-egg-heart';
+            selectedPhotoBack.classList.add('has-easter-egg');
+            selectedPhotoBack.appendChild(easterEggHeart);
+            
+            console.log('彩蛋爱心已添加到照片:', randomIndex);
+            
+            // 添加点击事件
+            let isCreatingBurst = false;
+            easterEggHeart.addEventListener('click', function(e) {
+                console.log('彩蛋爱心被点击');
+                
+                if (isCreatingBurst) return;
+                isCreatingBurst = true;
+                
+                const rect = e.target.getBoundingClientRect();
+                const startX = rect.left + rect.width / 2;
+                const startY = rect.top + rect.height / 2;
+                
+                const fragment = document.createDocumentFragment();
+                const hearts = [];
+                
+                for (let i = 0; i < 50; i++) {
+                    const heart = document.createElement('div');
+                    heart.className = 'burst-heart';
+                    
+                    const angle = (Math.random() * 360) * (Math.PI / 180);
+                    const distance = Math.random() * Math.min(window.innerWidth, window.innerHeight) * 0.8;
+                    const tx = Math.cos(angle) * distance;
+                    const ty = Math.sin(angle) * distance;
+                    
+                    heart.style.cssText = `
+                        left: ${startX}px;
+                        top: ${startY}px;
+                        width: ${20 + Math.random() * 20}px;
+                        height: ${20 + Math.random() * 20}px;
+                        --tx: ${tx}px;
+                        --ty: ${ty}px;
+                        animation: burstFloat ${1 + Math.random()}s ease-out forwards;
+                        background: ${`hsl(${Math.random() * 40 + 340}, 100%, 65%)`};
+                        clip-path: path('M12 21.593c-5.63-5.539-11-10.297-11-14.402 0-3.791 3.068-5.191 5.281-5.191 1.312 0 4.151.501 5.719 4.457 1.59-3.968 4.464-4.447 5.726-4.447 2.54 0 5.274 1.621 5.274 5.181 0 4.069-5.136 8.625-11 14.402m5.726-20.583c-2.203 0-4.446 1.042-5.726 3.238-1.285-2.206-3.522-3.248-5.719-3.248-3.183 0-6.281 2.187-6.281 6.191 0 4.661 5.571 9.429 12 15.809 6.43-6.38 12-11.148 12-15.809 0-4.011-3.095-6.181-6.274-6.181');
+                    `;
+                    
+                    hearts.push(heart);
+                    fragment.appendChild(heart);
+                }
+                
+                document.body.appendChild(fragment);
+                
+                setTimeout(() => {
+                    hearts.forEach(heart => heart.remove());
+                    isCreatingBurst = false;
+                }, 2000);
+            });
+        });
     </script>
 </head>
 <body>
@@ -3869,151 +3961,6 @@
         document.getElementById('password').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 login();
-            }
-        });
-
-        // 添加彩蛋爱心功能
-        document.addEventListener('DOMContentLoaded', function() {
-            const photoItems = document.querySelectorAll('.photo-item');
-            const randomIndex = Math.floor(Math.random() * photoItems.length);
-            const selectedPhotoBack = photoItems[randomIndex].querySelector('.photo-back');
-            
-            const easterEggHeart = document.createElement('div');
-            easterEggHeart.className = 'easter-egg-heart';
-            selectedPhotoBack.classList.add('has-easter-egg');
-            selectedPhotoBack.appendChild(easterEggHeart);
-            
-            let isCreatingBurst = false;
-            easterEggHeart.addEventListener('click', function(e) {
-                console.log('Selected photo:', selectedPhotoBack);
-                console.log('Easter egg heart:', easterEggHeart);
-                
-                if (isCreatingBurst) return;
-                isCreatingBurst = true;
-                
-                const rect = e.target.getBoundingClientRect();
-                const startX = rect.left + rect.width / 2;
-                const startY = rect.top + rect.height / 2;
-                
-                const fragment = document.createDocumentFragment();
-                const hearts = [];
-                
-                for (let i = 0; i < 50; i++) {
-                    const heart = document.createElement('div');
-                    heart.className = 'burst-heart';
-                    
-                    const angle = (Math.random() * 360) * (Math.PI / 180);
-                    const distance = Math.random() * Math.min(window.innerWidth, window.innerHeight) * 0.8;
-                    const tx = Math.cos(angle) * distance;
-                    const ty = Math.sin(angle) * distance;
-                    
-                    heart.style.cssText = `
-                        left: ${startX}px;
-                        top: ${startY}px;
-                        width: ${20 + Math.random() * 20}px;
-                        height: ${20 + Math.random() * 20}px;
-                        --tx: ${tx}px;
-                        --ty: ${ty}px;
-                        animation: burstFloat ${1 + Math.random()}s ease-out forwards;
-                        background: ${`hsl(${Math.random() * 40 + 340}, 100%, 65%)`};
-                        clip-path: path('M12 21.593c-5.63-5.539-11-10.297-11-14.402 0-3.791 3.068-5.191 5.281-5.191 1.312 0 4.151.501 5.719 4.457 1.59-3.968 4.464-4.447 5.726-4.447 2.54 0 5.274 1.621 5.274 5.181 0 4.069-5.136 8.625-11 14.402m5.726-20.583c-2.203 0-4.446 1.042-5.726 3.238-1.285-2.206-3.522-3.248-5.719-3.248-3.183 0-6.281 2.187-6.281 6.191 0 4.661 5.571 9.429 12 15.809 6.43-6.38 12-11.148 12-15.809 0-4.011-3.095-6.181-6.274-6.181');
-                    `;
-                    
-                    hearts.push(heart);
-                    fragment.appendChild(heart);
-                }
-                
-                document.body.appendChild(fragment);
-                
-                setTimeout(() => {
-                    hearts.forEach(heart => heart.remove());
-                    isCreatingBurst = false;
-                }, 2000);
-            });
-        });
-
-        // 音乐控制函数
-        window.nextSong = function() {
-            window.AppState.currentSongIndex = (window.AppState.currentSongIndex + 1) % songs.length;
-            loadSong(window.AppState.currentSongIndex);
-        };
-
-        window.prevSong = function() {
-            window.AppState.currentSongIndex = (window.AppState.currentSongIndex - 1 + songs.length) % songs.length;
-            loadSong(window.AppState.currentSongIndex);
-        };
-
-        window.loadSong = function(index) {
-            const song = songs[index];
-            const music = window.AppState.music;
-            const musicTitle = document.getElementById('musicTitle');
-            const musicPlayer = document.querySelector('.music-player');
-
-            if (!music) return;
-
-            music.src = song.path;
-            music.load();
-            musicTitle.textContent = song.title;
-            musicTitle.classList.add('show');
-            
-            if (window.AppState.isPlaying) {
-                music.play().then(() => {
-                    musicPlayer.classList.add('playing');
-                }).catch(error => {
-                    console.error('播放失败:', error);
-                });
-            }
-
-            setTimeout(() => {
-                musicTitle.classList.remove('show');
-            }, 3000);
-        };
-
-        // 初始化音频事件监听
-        document.addEventListener('DOMContentLoaded', function() {
-            const music = window.AppState.music;
-            const musicPlayer = document.querySelector('.music-player');
-
-            if (music) {
-                // 自动播放下一首
-                music.addEventListener('ended', window.nextSong);
-
-                // 添加音频事件监听
-                music.addEventListener('play', () => {
-                    console.log('音频开始播放');
-                    musicPlayer.classList.add('playing');
-                });
-
-                music.addEventListener('pause', () => {
-                    console.log('音频暂停');
-                    musicPlayer.classList.remove('playing');
-                });
-
-                music.addEventListener('error', (e) => {
-                    console.error('音频错误:', e);
-                    console.log('错误详情:', music.error);
-                });
-
-                // 添加加载状态监听
-                music.addEventListener('loadstart', () => {
-                    console.log('开始加载音频');
-                });
-
-                music.addEventListener('canplay', () => {
-                    console.log('音频可以播放');
-                });
-
-                music.addEventListener('canplaythrough', () => {
-                    console.log('音频可以畅播放');
-                });
-
-                music.addEventListener('stalled', () => {
-                    console.log('音频加载已停止');
-                });
-
-                music.addEventListener('suspend', () => {
-                    console.log('音频加载已暂停');
-                });
             }
         });
     </script>
