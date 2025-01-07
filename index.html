@@ -1488,11 +1488,11 @@
         /* 火柴人样式 */
         .stickman {
             position: absolute;
-            left: 30px;
+            left: 50%;
             bottom: 40px;
             width: 50px;
             height: 80px;
-            animation: walkToLove 4s linear infinite;
+            transform: translate(-50%, 0);
         }
 
         /* 火柴人身体部分 */
@@ -1562,11 +1562,17 @@
         /* 爱心样式 */
         .heart {
             position: absolute;
-            right: 30px;
-            bottom: 60px;
+            left: 50%;
+            bottom: 80px;  /* 调整到火柴人怀里的位置 */
             width: 30px;
             height: 30px;
             animation: heartBeat 1s ease infinite;
+            cursor: move;
+            user-select: none;
+            z-index: 100;
+            touch-action: none;
+            will-change: transform;
+            transform: translate(-50%, 0);
         }
 
         .heart::before,
@@ -1577,18 +1583,23 @@
             height: 25px;
             background: #ff4b4b;
             border-radius: 15px 15px 0 0;
+            transform-origin: 100% 100%;
+            transition: all 0.3s ease;
         }
 
         .heart::before {
             left: 15px;
             transform: rotate(-45deg);
-            transform-origin: 0 100%;
         }
 
         .heart::after {
             left: 0;
             transform: rotate(45deg);
-            transform-origin: 100% 100%;
+        }
+
+        /* 添加拖动时的效果 */
+        .heart.dragging {
+            animation: none;
         }
 
         /* 表白文字 */
@@ -2624,6 +2635,48 @@
                 font-size: 0.75em;
             }
         }
+
+        /* 修改照片墙的移动端样式 */
+        .mobile-view .photo-wall {
+            margin-top: 160px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            width: 92%;
+        }
+
+        .mobile-view .photo-item {
+            width: 140px;
+            height: 140px;
+            perspective: 1000px;
+            cursor: pointer;
+            margin: auto;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .mobile-view .photo-card {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .mobile-view .photo-card.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .mobile-view .photo-front,
+        .mobile-view .photo-back {
+            padding: 10px;
+            font-size: 0.9em;
+            line-height: 1.4;
+        }
+
+        /* 添加点击反馈效果 */
+        .mobile-view .photo-item:active {
+            transform: scale(0.95);
+            transition: transform 0.2s;
+        }
     </style>
     <script>
         // 心情相关功能
@@ -3024,6 +3077,150 @@
                     localStorage.removeItem('loginInfo');
                 }
             }
+        });
+
+        // 修改拖动和追随逻辑
+        document.addEventListener('DOMContentLoaded', function() {
+            const heart = document.querySelector('.heart');
+            const stickman = document.querySelector('.stickman');
+            let isDragging = false;
+            let startX = 0;
+            let startY = 0;
+            let offsetX = 0;
+            let offsetY = 0;
+
+            // 禁用原有的walkToLove动画
+            if (stickman) {
+                stickman.style.animation = 'none';
+            }
+
+            function dragStart(e) {
+                if (e.target === heart || e.target.parentElement === heart) {
+                    isDragging = true;
+                    heart.classList.add('dragging');
+                    heart.style.animation = 'none';
+
+                    // 记录鼠标/触摸起始位置
+                    if (e.type === "touchstart") {
+                        startX = e.touches[0].clientX - offsetX;
+                        startY = e.touches[0].clientY - offsetY;
+                    } else {
+                        startX = e.clientX - offsetX;
+                        startY = e.clientY - offsetY;
+                    }
+                }
+            }
+
+            function drag(e) {
+                if (isDragging) {
+                    e.preventDefault();
+                    
+                    // 计算新位置
+                    if (e.type === "touchmove") {
+                        offsetX = e.touches[0].clientX - startX;
+                        offsetY = e.touches[0].clientY - startY;
+                    } else {
+                        offsetX = e.clientX - startX;
+                        offsetY = e.clientY - startY;
+                    }
+
+                    // 更新爱心位置
+                    heart.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+                    
+                    // 计算火柴人到爱心的方向和距离
+                    const heartRect = heart.getBoundingClientRect();
+                    const stickmanRect = stickman.getBoundingClientRect();
+                    
+                    const dx = heartRect.left - stickmanRect.left;
+                    const dy = heartRect.top - stickmanRect.top;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    // 计算移动速度（距离越远移动越快）
+                    const speed = Math.min(0.05, distance / 5000);
+                    
+                    // 更新火柴人位置
+                    const moveX = dx * speed;
+                    const moveY = dy * speed;
+                    
+                    // 应用火柴人位置
+                    stickman.style.transform = `translate(${moveX}px, ${moveY}px)`;
+                    
+                    // 根据距离调整手臂和腿部动画速度
+                    const animationDuration = Math.max(0.3, Math.min(1, distance / 500));
+                    document.querySelectorAll('.stickman-arm-left, .stickman-arm-right, .stickman-leg-left, .stickman-leg-right').forEach(el => {
+                        el.style.animationDuration = animationDuration + 's';
+                    });
+                }
+            }
+
+            function dragEnd() {
+                isDragging = false;
+                heart.classList.remove('dragging');
+                heart.style.animation = 'heartBeat 1s ease infinite';
+                
+                // 重置位置到火柴人怀里
+                offsetX = 0;
+                offsetY = 0;
+                heart.style.transform = 'translate(-50%, 0)';
+                stickman.style.transform = 'translate(-50%, 0)';
+            }
+
+            // 添加事件监听
+            heart.addEventListener('mousedown', dragStart, false);
+            heart.addEventListener('touchstart', dragStart, false);
+            
+            document.addEventListener('mousemove', drag, false);
+            document.addEventListener('touchmove', drag, false);
+            
+            document.addEventListener('mouseup', dragEnd, false);
+            document.addEventListener('touchend', dragEnd, false);
+            document.addEventListener('mouseleave', dragEnd, false);
+        });
+
+        // 修改照片墙交互逻辑
+        document.addEventListener('DOMContentLoaded', function() {
+            const isMobile = document.body.classList.contains('mobile-view');
+            const photoItems = document.querySelectorAll('.photo-item');
+
+            photoItems.forEach(item => {
+                const card = item.querySelector('.photo-card');
+                
+                // 移除之前的事件监听器
+                item.removeEventListener('mouseenter', handleHover);
+                item.removeEventListener('mouseleave', handleHover);
+                
+                if (isMobile) {
+                    // 移动端使用点击切换
+                    item.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        card.classList.toggle('flipped');
+                        
+                        // 添加触感反馈（如果设备支持）
+                        if ('vibrate' in navigator) {
+                            navigator.vibrate(50);
+                        }
+                    });
+                    
+                    // 添加触摸开始事件
+                    item.addEventListener('touchstart', function() {
+                        item.style.transform = 'scale(0.95)';
+                    });
+                    
+                    // 添加触摸结束事件
+                    item.addEventListener('touchend', function() {
+                        item.style.transform = 'scale(1)';
+                    });
+                } else {
+                    // 桌面端保持悬停效果
+                    item.addEventListener('mouseenter', function() {
+                        card.classList.add('flipped');
+                    });
+                    
+                    item.addEventListener('mouseleave', function() {
+                        card.classList.remove('flipped');
+                    });
+                }
+            });
         });
     </script>
 </head>
