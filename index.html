@@ -3397,36 +3397,67 @@
                     let touchStartTime;
                     let touchStartX;
                     let touchStartY;
+                    let isMoving = false;
+                    let card = item.querySelector('.photo-card');
                     
                     item.addEventListener('touchstart', function(e) {
                         touchStartTime = Date.now();
                         touchStartX = e.touches[0].clientX;
                         touchStartY = e.touches[0].clientY;
+                        isMoving = false;
+                    }, { passive: true });
+                    
+                    item.addEventListener('touchmove', function(e) {
+                        if (!isMoving) {
+                            const moveX = Math.abs(e.touches[0].clientX - touchStartX);
+                            const moveY = Math.abs(e.touches[0].clientY - touchStartY);
+                            if (moveX > 5 || moveY > 5) {
+                                isMoving = true;
+                            }
+                        }
                     }, { passive: true });
                     
                     item.addEventListener('touchend', function(e) {
                         const touchEndTime = Date.now();
                         const touchDuration = touchEndTime - touchStartTime;
                         
-                        const touchEndX = e.changedTouches[0].clientX;
-                        const touchEndY = e.changedTouches[0].clientY;
-                        
-                        const distanceX = Math.abs(touchEndX - touchStartX);
-                        const distanceY = Math.abs(touchEndY - touchStartY);
-                        
-                        // 如果触摸时间小于300ms且移动距离小于10px，认为是点击
-                        if (touchDuration < 300 && distanceX < 10 && distanceY < 10) {
-                            const card = item.querySelector('.photo-card');
+                        if (!isMoving && touchDuration < 300) {
                             if (card) {
-                        card.classList.toggle('flipped');
-                        
-                                // 添加触感反馈
-                        if ('vibrate' in navigator) {
-                            navigator.vibrate(50);
-                        }
+                                // 检查是否已经在翻转中
+                                if (!card.classList.contains('flipping')) {
+                                    card.classList.add('flipping');
+                                    card.classList.toggle('flipped');
+                                    
+                                    // 添加触感反馈
+                                    if ('vibrate' in navigator) {
+                                        navigator.vibrate(50);
+                                    }
+                                    
+                                    // 翻转动画结束后移除标记
+                                    setTimeout(() => {
+                                        card.classList.remove('flipping');
+                                    }, 400); // 与CSS动画时间相匹配
+                                }
                             }
                         }
                     }, { passive: true });
+                    
+                    // 双击还原
+                    let lastTap = 0;
+                    item.addEventListener('touchend', function(e) {
+                        const currentTime = Date.now();
+                        const tapLength = currentTime - lastTap;
+                        if (tapLength < 300 && tapLength > 0) {
+                            if (card && card.classList.contains('flipped')) {
+                                card.classList.remove('flipped');
+                                if ('vibrate' in navigator) {
+                                    navigator.vibrate([30, 50]);
+                                }
+                            }
+                            e.preventDefault();
+                        }
+                        lastTap = currentTime;
+                    });
                 }
             });
             
@@ -3446,6 +3477,33 @@
         });
 
         // 音乐播放器相关代码
+        window.toggleMusic = function() {
+            const music = document.getElementById('bgMusic');
+            const musicPlayer = document.querySelector('.music-player');
+            const musicIcon = musicPlayer.querySelector('i');
+            
+            if (music) {
+                if (music.paused) {
+                    const playPromise = music.play();
+                    if (playPromise !== undefined) {
+                        playPromise.then(() => {
+                            musicPlayer.classList.add('playing');
+                            musicIcon.classList.remove('fa-music');
+                            musicIcon.classList.add('fa-pause');
+                        }).catch(error => {
+                            console.error('播放失败:', error);
+                        });
+                    }
+                } else {
+                    music.pause();
+                    musicPlayer.classList.remove('playing');
+                    musicIcon.classList.remove('fa-pause');
+                    musicIcon.classList.add('fa-music');
+                }
+            }
+        };
+
+        // 修改音乐播放器的移动端交互
         document.addEventListener('DOMContentLoaded', function() {
             const musicPlayer = document.querySelector('.music-player');
             const musicControls = document.querySelector('.music-controls');
@@ -3500,6 +3558,22 @@
                     loadSong(currentSongIndex);
                     showMusicTitle(songs[currentSongIndex].title);
                     
+                    // 自动播放新歌曲
+                    const music = document.getElementById('bgMusic');
+                    if (music) {
+                        const playPromise = music.play();
+                        if (playPromise !== undefined) {
+                            playPromise.then(() => {
+                                musicPlayer.classList.add('playing');
+                                const musicIcon = musicPlayer.querySelector('i');
+                                musicIcon.classList.remove('fa-music');
+                                musicIcon.classList.add('fa-pause');
+                            }).catch(error => {
+                                console.error('播放失败:', error);
+                            });
+                        }
+                    }
+                    
                     if ('vibrate' in navigator) {
                         navigator.vibrate(30);
                     }
@@ -3510,30 +3584,26 @@
                     loadSong(currentSongIndex);
                     showMusicTitle(songs[currentSongIndex].title);
                     
+                    // 自动播放新歌曲
+                    const music = document.getElementById('bgMusic');
+                    if (music) {
+                        const playPromise = music.play();
+                        if (playPromise !== undefined) {
+                            playPromise.then(() => {
+                                musicPlayer.classList.add('playing');
+                                const musicIcon = musicPlayer.querySelector('i');
+                                musicIcon.classList.remove('fa-music');
+                                musicIcon.classList.add('fa-pause');
+                            }).catch(error => {
+                                console.error('播放失败:', error);
+                            });
+                        }
+                    }
+                    
                     if ('vibrate' in navigator) {
                         navigator.vibrate(30);
                     }
                 };
-                
-                // 添加音量控制手势
-                let startY = 0;
-                let currentVolume = 1;
-                
-                musicPlayer.addEventListener('touchstart', function(e) {
-                    startY = e.touches[0].clientY;
-                    currentVolume = music.volume;
-                }, { passive: true });
-                
-                musicPlayer.addEventListener('touchmove', function(e) {
-                    if (isLongPress) {
-                        const deltaY = startY - e.touches[0].clientY;
-                        const newVolume = Math.max(0, Math.min(1, currentVolume + deltaY / 200));
-                        music.volume = newVolume;
-                        
-                        // 显示音量指示
-                        showMusicTitle(`音量: ${Math.round(newVolume * 100)}%`);
-                    }
-                }, { passive: true });
             }
         });
 
@@ -4225,33 +4295,6 @@
             }
             
             window.AppState.isPhotoWallFolded = !window.AppState.isPhotoWallFolded;
-        };
-
-        window.toggleMusic = function() {
-            const music = window.AppState.music;
-            const musicPlayer = document.querySelector('.music-player');
-            
-            if (window.AppState.isPlaying) {
-                music.pause();
-                musicPlayer.classList.remove('playing');
-            } else {
-                if (music.readyState < 2) {
-                    music.load();
-                }
-                
-                const playPromise = music.play();
-                if (playPromise !== undefined) {
-                    playPromise
-                        .then(() => {
-                            musicPlayer.classList.add('playing');
-                        })
-                        .catch(error => {
-                            console.error('播放失败:', error);
-                            alert('音乐播放失败，请检查音频文件是否正确');
-                        });
-                }
-            }
-            window.AppState.isPlaying = !window.AppState.isPlaying;
         };
 
         // 在页面加载前就检查登录状态
